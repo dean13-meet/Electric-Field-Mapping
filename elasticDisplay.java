@@ -21,21 +21,21 @@ public class elasticDisplay extends Display{
 		slider.setBounds(width/2-100, height/2-35, 200, 70);
 		add(slider);
 		slider.setVisible(true);
-		
+
 		Button startPause = d.getBallStart().getClone();
 		startPause.setText("Click to Start/Pause Ball Pit");
 		startPause.setBounds(width/2-200, height/2-25-50, 400, 50);
-		
+
 		add(startPause);
-		
-		
+
+
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
+
 }

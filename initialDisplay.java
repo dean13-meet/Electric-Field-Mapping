@@ -53,8 +53,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	//Balls are in here only while they are being created using creation window.
 	public ArrayList<Point> verticesOfBeingAddedInAnimate;//Temp representation of vertecies of being added inanimate
 	public ArrayList<inanimateObject> inAnimates;
-	
-	
+
+
 
 	public String[] presets;
 	private JComboBox<String> presetCB;
@@ -143,7 +143,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		*/
 		add(elasticWallsButton);
 		elasticWallsButton.setVisible(true);
-		
+
 		String[] voltageOnOff = {"Voltage: Off", "Voltage: On"};
 		Voltage = new Button (new VoltageOnOff(this), voltageOnOff,height/9 +425, width/20, 100, 50);
 		add(Voltage);
@@ -285,7 +285,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		gg.setStroke(new BasicStroke(3));
 		g.setColor(new Color(0,Math.min(255*elasticity/100, 255),0));
 		g.drawRect(width/6, height/6, width*2/3, height*5/6 - height/10);
-		
+
 		gg.setStroke(new BasicStroke(1));
 		g.setColor(Color.BLACK);
 		lastvolume=width*height;
@@ -961,7 +961,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 					else { //addOrEditBoolean = true, but spaceFree = false.
 						messages.addMessage("Cannot add ball here, space is already occupied by another ball.",
 								onScreenMessage.CENTER);}
-					
+
 				}
 				else {//addOrEditBoolean = false.
 					if(!spaceFree) {

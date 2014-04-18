@@ -114,7 +114,7 @@ class slideElasticWalls extends ButtonCommands{
 					}
 					hostProgram.framesId.remove("Change Elasticity");
 					hostProgram.frames.remove(changeElasticityF);
-					
+
 				}});
 
 			Display changeElasticityD = new elasticDisplay(changeElasticityF.getWidth(), changeElasticityF.getHeight(), changeElasticityF, hostProgram, newD);

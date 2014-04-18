@@ -1,7 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Line2D;
- 
+
 
 public class Ball {
 	private double x, y;

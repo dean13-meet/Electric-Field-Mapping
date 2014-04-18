@@ -6,7 +6,7 @@ import javax.swing.event.ChangeListener;
 public class elasticChangeListener implements ChangeListener {
 
 	private final initialDisplay d;
-	
+
 	public elasticChangeListener(initialDisplay d){
 		this.d = d;
 	}
