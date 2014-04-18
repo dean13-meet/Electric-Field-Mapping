@@ -5,11 +5,11 @@ import java.awt.geom.Line2D;
 
 public class Ball {
 	private double x, y;
-	public double mySize, mass, dx, dy, charge, acceleration, accelerationD;
+	public double mySize, mass, dx, dy, charge, acceleration, accelerationD; // TODO: use a more descriptive variable name
 	public boolean hitWall;
 	public initialDisplay d;
 	private Color color = Color.GREEN;
-	public static final Color defualtColor = Color.green;
+	public static final Color defaultColor = Color.green;
 
 	public Force force = new Force();
 	Line2D.Double forceVector;
@@ -32,8 +32,6 @@ public class Ball {
 	public double getRadius() {
 		return mySize/2;
 	}
-
-
 	public double getXSpeed() {
 		return dx;
 	}
@@ -46,80 +44,9 @@ public class Ball {
 	public double getYSpeed() {
 		return dy;
 	}
-
-	public void draw(Graphics g) {
-		double xx = x-getRadius();
-		double yy = y-getRadius();
-		g.setColor(color);
-		g.fillOval((int) xx, (int) yy, (int) mySize, (int) mySize);
-	}
-
-	public void update(Graphics g, int width, int height, int tickLength) {
-		wallcollisions(width, height);
-		updateAcceleration();
-		updateForceVector();
-		//g.drawLine((int)forceVector.x1, (int)forceVector.y1, (int)forceVector.x2, (int)forceVector.y2);
-		dx+=Math.cos(accelerationD)*acceleration*tickLength/1000;
-		dy+=Math.sin(accelerationD)*acceleration*tickLength/1000;
-		x = (x+dx*tickLength/1000);
-		y = (y+dy*tickLength/1000);
-	}
-
-	public void updateAcceleration() {
-		acceleration = force.magnitude/mass;
-		accelerationD = force.direction;
-	}
-	public void updateForceVector() {
-		forceVector = new Line2D.Double(x, y, x +
-				Math.cos(force.direction)*force.magnitude,
-				y + Math.sin(force.direction)*force.magnitude);
-	}
-
-	public void wallcollisions(int width, int height) {
-		hitWall = false;
-		int radius = (int) getRadius();
-		/*
-		 * checks collisions with walls
-		 */
-
-		if (x+radius >= width*5/6) {
-			if(dx>0)dx = -dx *d.elasticity/100;//If walls are inelastic, and ball is trying to move right.
-			hitWall = true;
-		}
-		if (x-radius <= width/6 + 3) {
-			if(dx<0)dx = -dx * d.elasticity/100;//If ball is trying to move left.
-			hitWall = true;
-		}
-		if (y+radius >= height*9/10) {
-			if(dy>0)dy = -dy * d.elasticity/100;//If ball is trying to move down.
-			hitWall = true;
-		}
-		if (y-radius <= height/6 + 3) {
-			if(dy<0)dy = -dy *d.elasticity/100;//If ball is trying to move up.
-			hitWall = true;
-		}
-
-		/*
-		 * makes sure balls wont escape if they glitch out
-		 */
-		if (x <= width*5/6) {
-			x+=radius;
-		}
-		if (x >= width/6 + 3) {
-			x-=radius;
-		}
-		if(y >= height*9/10) {
-			y-=radius;
-		}
-		if(y <= height/6 + 3) {
-			y+=radius;
-		}
-	}
-
 	public double getSpeed() {
 		return Math.pow(Math.pow(dx, 2) + Math.pow(dy, 2), 0.5);
 	}
-
 	public double getY() {
 		return y;
 	}
@@ -158,4 +85,78 @@ public class Ball {
 		return mass + " " + x + " " + y + " " + dx + " " + dy + " " + charge;
 	}
 
+	/**
+	 * Draws balls on the display
+	 */
+	public void draw(Graphics g) {
+		double xx = x-getRadius();
+		double yy = y-getRadius();
+		g.setColor(color);
+		g.fillOval((int) xx, (int) yy, (int) mySize, (int) mySize);
+	}
+
+	public void update(Graphics g, int width, int height, int tickLength) {
+		wallcollisions(width, height);
+		updateAcceleration();
+		updateForceVector();
+		dx += Math.cos(accelerationD) * acceleration * tickLength/1000;
+		dy += Math.sin(accelerationD) * acceleration * tickLength/1000;
+		x = (x+dx*tickLength/1000);
+		y = (y+dy*tickLength/1000);
+	}
+
+	/**
+	 * Updates acceleration of Ball
+	 */
+	public void updateAcceleration() {
+		acceleration = force.magnitude/mass;
+		accelerationD = force.direction;
+	}
+
+	/**
+	 * Updates the force vector of the Ball
+	 */
+	public void updateForceVector() {
+		forceVector = new Line2D.Double(x, y, x +
+		Math.cos(force.direction)*force.magnitude,
+		y + Math.sin(force.direction)*force.magnitude);
+	}
+
+	// TODO: move to physics class
+	public void wallcollisions(int width, int height) {
+		hitWall = false;
+		int radius = (int) getRadius();
+		// checks collisions with walls
+
+		if (x+radius >= width*5/6) {
+			if(dx>0)dx = -dx *d.elasticity/100;//If walls are inelastic, and ball is trying to move right.
+			hitWall = true;
+		}
+		if (x-radius <= width/6 + 3) {
+			if(dx<0)dx = -dx * d.elasticity/100;//If ball is trying to move left.
+			hitWall = true;
+		}
+		if (y+radius >= height*9/10) {
+			if(dy>0)dy = -dy * d.elasticity/100;//If ball is trying to move down.
+			hitWall = true;
+		}
+		if (y-radius <= height/6 + 3) {
+			if(dy<0)dy = -dy *d.elasticity/100;//If ball is trying to move up.
+			hitWall = true;
+		}
+
+		// makes sure balls wont escape if they glitch out
+		if (x <= width*5/6) {
+			x+=radius;
+		}
+		if (x >= width/6 + 3) {
+			x-=radius;
+		}
+		if(y >= height*9/10) {
+			y-=radius;
+		}
+		if(y <= height/6 + 3) {
+			y+=radius;
+		}
+	}
 }

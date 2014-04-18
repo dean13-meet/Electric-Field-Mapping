@@ -23,9 +23,9 @@ public class editBallDisplay extends Display{
 		init();
 	}
 
+	// TODO: no hardcoding
 	@Override
 	void init() {
-
 		xCoordL = new JLabel("X Coordinate:");
 		xCoordL.setBounds(width/3 - 175, height/8 -25, 100, 25);
 		add(xCoordL);

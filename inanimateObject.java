@@ -45,6 +45,7 @@ public class inanimateObject {
 		return shape;
 	}
 
+	// TODO: move to calculations or physics class since it may be unnecessary to make two different classes for calculations
 	private Point calcCentroid() {
 		/*
 		 * The centroid in equaly distributed polygons (equal density everywhere) is also

@@ -12,6 +12,8 @@ import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+// TODO: consider splitting each class into different file, though
+
 public abstract class ButtonCommands {
 	Display d;
 	ButtonCommands(Display d) {
@@ -192,7 +194,7 @@ class updateBallCommand extends ButtonCommands {
 	}
 	@Override
 	void execute(int caseNum) {
-		b.setColor(Ball.defualtColor);
+		b.setColor(Ball.defaultColor);
 		newD.ballarray.set(ballIndex, b);
 		if (b.mass == 0) {
 			int index = newD.ballarray.indexOf(b);
