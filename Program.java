@@ -18,6 +18,8 @@ public class Program {
 	JFrame initialF = new JFrame(); // TODO: use a more descriptive variable name
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	// TODO: make constants file and move constants
+	double width = screenSize.getWidth();
+	double height = screenSize.getHeight();
 	final int DISPLAY_WIDTH = (int) (screenSize.getWidth()/1.2);
 	final int DISPLAY_HEIGHT = (int) (screenSize.getHeight()/1.2);
 	final int xOffSet = 10;
