@@ -250,9 +250,9 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		File directory = new File("Save Data");
 		File[] files = directory.listFiles();
 		if (files != null && files.length != 0) {
-			String[] filenames = new String[files.length-1];
+			String[] filenames = new String[files.length];
 			for (int i = 0; i < filenames.length; i++) {
-				if (files[i].getName() == "README.md")
+				if (files[i].getName().equals("README.md"))
 					continue;
 				filenames[i] = files[i].getName();
 			}
