@@ -54,8 +54,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	public ArrayList<Point> verticesOfBeingAddedInAnimate;//Temp representation of vertecies of being added inanimate
 	public ArrayList<inanimateObject> inAnimates;
 
-
-
 	public String[] presets;
 	private JComboBox<String> presetCB;
 	public String presetSelected;
@@ -250,20 +248,20 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		File directory = new File("Save Data");
 		File[] files = directory.listFiles();
 		if (files != null && files.length != 0) {
-			String[] filenames = new String[files.length];
-			for (int i = 0; i < filenames.length; i++) {
-				if (files[i].getName().equals("README.md"))
-					continue;
-				filenames[i] = files[i].getName();
+			ArrayList<String> filenames = new ArrayList<String>();
+			for (int i = 0; i < files.length; i++) {
+				if (!files[i].getName().equals("README.md")) {
+					filenames.add(files[i].getName());
+				}
 			}
-			return filenames;
+			return filenames.toArray();
 		}
 		return new String[] {""};
 	}
 
 	public void paintComponent(Graphics g) {
 		presetSelected = presets[presetCB.getSelectedIndex()];
-		if(presets.length != getAllFiles().length) {//More presets where saved
+		if(presets.length != getAllFiles().length) { //More presets where saved
 			presets = getAllFiles();
 			remove(presetCB);
 			presetCB = new JComboBox<String>(presets);
