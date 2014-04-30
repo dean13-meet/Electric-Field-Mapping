@@ -193,7 +193,7 @@ class updateBallCommand extends ButtonCommands {
 	}
 	@Override
 	void execute(int caseNum) {
-		b.setColor(Ball.defualtColor);
+		b.setColor(Ball.defaultColor);
 		newD.ballarray.set(ballIndex, b);
 		if (b.mass == 0) {
 			int index = newD.ballarray.indexOf(b);

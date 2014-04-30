@@ -1016,7 +1016,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 									}
 									hostProgram.framesId.remove("Edit Ball");
 									hostProgram.frames.remove(editBallF);
-									ballInSpace.setColor(Ball.defualtColor);
+									ballInSpace.setColor(Ball.defaultColor);
 								}});
 
 							Display editBallD = new editBallDisplay(editBallF.getWidth(), editBallF.getHeight(),

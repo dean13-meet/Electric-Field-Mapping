@@ -12,7 +12,7 @@ public class Ball {
 	public boolean hitWall;
 	public initialDisplay d;
 	private Color color = Color.GREEN;
-	public static final Color defualtColor = Color.green;
+	public static final Color defaultColor = Color.green;
 
 	public Force force = new Force();
 	Line2D.Double forceVector;
