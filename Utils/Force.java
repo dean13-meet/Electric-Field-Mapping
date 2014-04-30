@@ -28,6 +28,7 @@ public class Force {
 		return Math.sin(direction)*magnitude;
 	}
 
+	// TODO: move to separate physics class
 	public void add(Force f) {
 		double myX = this.getX();
 		double hisX = f.getX();
