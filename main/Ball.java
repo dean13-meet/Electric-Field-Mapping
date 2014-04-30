@@ -1,6 +1,9 @@
+package main;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Line2D;
+
+import Utils.Force;
 
 
 public class Ball {

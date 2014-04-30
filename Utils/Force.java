@@ -1,13 +1,20 @@
+package Utils;
+import main.Ball;
+
+
+
 public class Force {
 	public double magnitude;
 	public double direction;
+	public final static double permitivity_of_free_space = 8.85418782 * Math.pow(10, -12);
+	public final static double k = 8.987551787368176*Math.pow(10, 9);
 
 	//direction in radians going counter clockwise starting at 0 degrees (positive x axis)
-	Force(double magnitude, double direction) {
+	public Force(double magnitude, double direction) {
 		this.magnitude = magnitude;
 		this.direction = direction;
 	}
-	Force() {
+	public Force() {
 		this(0,0);
 	}
 	public String toString() {
@@ -59,5 +66,17 @@ public class Force {
 		if (newX < 0) {
 			direction = Math.atan(newY/newX) +Math.PI;
 		}
+	}
+	public static double distance(double x, double y, double x2, double y2) {
+		return Math.pow(Math.pow(x - x2, 2) + Math.pow(y - y2, 2), 0.5);
+	}
+	/**
+	 * Calculates the potential energy between two balls.
+	 * @param ball
+	 * @param ball2
+	 * @return
+	 */
+	public static double CalculatePotentialEnergy(Ball ball, Ball ball2) {
+		return Force.k*ball.charge*ball2.charge/Force.distance(ball.getX(), ball2.getX(), ball.getY(), ball2.getY());
 	}
 }
