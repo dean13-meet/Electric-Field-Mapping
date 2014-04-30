@@ -1,13 +1,11 @@
-APCS Independent Project - Electric Field Simulator
+APCS_Independent_Project
 ========================
 
-Authors: Dean, Ophir, William, and Lilia
+Dean, Ophir, and William's Independent Project
 
-Project: A simulator of interactions between electrical charges in an electric field.
+Read me.
 
+Notes To Self: 
 
-Future Development:
-
-1.) Work on documentation and rewriting old code
-
+1.) Work on documentation
 2.) Collision sound

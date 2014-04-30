@@ -61,7 +61,7 @@ public class Button extends JButton implements ActionListener, Cloneable{
 	public void simulateClick() {
 		actionPerformed(new ActionEvent(this, 0, ""));
 	}
-
+	
 	public Button getClone(){
 		try {
 			return (Button) this.clone();

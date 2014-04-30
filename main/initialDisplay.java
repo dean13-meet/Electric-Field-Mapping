@@ -17,6 +17,8 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Robot;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -31,19 +33,17 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.SwingWorker;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 import javax.swing.JSlider;
 
-<<<<<<< HEAD:main/initialDisplay.java
 import Utils.Force;
-=======
-// TODO: consider memory issues with Java and accessing system level info
-// TODO: consider making a debugging boolean, log levels
->>>>>>> FETCH_HEAD:initialDisplay.java
 
 public class initialDisplay extends Display implements MouseListener, MouseMotionListener {
 	public onScreenMessage messages;
@@ -58,6 +58,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	//Balls are in here only while they are being created using creation window.
 	public ArrayList<Point> verticesOfBeingAddedInAnimate;//Temp representation of vertecies of being added inanimate
 	public ArrayList<inanimateObject> inAnimates;
+	
+	
 
 	public String[] presets;
 	private JComboBox<String> presetCB;
@@ -108,12 +110,11 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	//double elasticWalls; // 0 <= elasticity <= 1
 	private Thread voltageCalcThread;
 
-	public initialDisplay(int width, int height, JFrame f, Program program) {
-		super(width, height, f, program);
+	public initialDisplay(int w, int h, JFrame f, Program program) {
+		super(w, h, f, program);
 		init();
 	}
 
-	// TODO: encapsulate
 	public void init() {
 		//hostProgram.closeAllFrames();//Closes stuff like "Add New Ball"...
 		if(hostProgram.getJFrameById("Add Ball")!=null)
@@ -147,7 +148,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		*/
 		add(elasticWallsButton);
 		elasticWallsButton.setVisible(true);
-
+		
 		String[] voltageOnOff = {"Voltage: Off", "Voltage: On"};
 		Voltage = new Button (new VoltageOnOff(this), voltageOnOff,height/9 +425, width/20, 100, 50);
 		add(Voltage);
@@ -202,7 +203,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		voltageBarMin.setBounds(voltageBarX + 55, voltageBarY + voltageBarLength-50, 50, 75);
 		add(voltageBarMin);
 
-		// TODO: encapsulate
 		for (int i = 0; i<2; i++) {
 			for (int j = 0; j<3; j++) {
 				ballarray.add(new Ball(this,0.00015, width/2-135+i*30, height/6+65+j*30, 0, 0, Math.max((Math.random()*100/1000000), 200/1000000)));
@@ -254,13 +254,13 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		File directory = new File("Save Data");
 		File[] files = directory.listFiles();
 		if (files != null && files.length != 0) {
-			ArrayList<String> filenames = new ArrayList<String>();
-			for (int i = 0; i < files.length; i++) {
-				if (!files[i].getName().equals("README.md")) {
-					filenames.add(files[i].getName());
-				}
+			String[] filenames = new String[files.length-1];
+			for (int i = 0; i < filenames.length; i++) {
+				if (files[i].getName() == "README.md")
+					continue;
+				filenames[i] = files[i].getName();
 			}
-			return filenames.toArray();
+			return filenames;
 		}
 		return new String[] {""};
 	}
@@ -268,7 +268,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	
 	public void paintComponent(Graphics g) {
 		presetSelected = presets[presetCB.getSelectedIndex()];
-		if(presets.length != getAllFiles().length) { //More presets where saved
+		if(presets.length != getAllFiles().length) {//More presets where saved
 			presets = getAllFiles();
 			remove(presetCB);
 			presetCB = new JComboBox<String>(presets);
@@ -290,7 +290,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		gg.setStroke(new BasicStroke(3));
 		g.setColor(new Color(0,Math.min(255*elasticity/100, 255),0));
 		g.drawRect(width/6, height/6, width*2/3, height*5/6 - height/10);
-
+		
 		gg.setStroke(new BasicStroke(1));
 		g.setColor(Color.BLACK);
 		lastvolume=width*height;
@@ -303,12 +303,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,  RenderingHints.VALUE_ANTIALIAS_ON);
 		if (paintloop) {
-			try {
-				Thread.sleep(TIME_BETWEEN_REPLOTS);
-				timeCounter+=TIME_BETWEEN_REPLOTS;
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			
+			long beginPaintLoopTime = System.currentTimeMillis();
 
 			if(toAdd!=null&&!toAdd.isEmpty()) {
 				addBallsFromQueue();
@@ -318,7 +314,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			}
 			
 			if(voltageCalcing) {
-<<<<<<< HEAD:main/initialDisplay.java
 				if (null == voltageCalcThread || !voltageCalcThread.isAlive()) {
 					voltageCalcThread = new Thread(new Runnable() {
 						
@@ -333,10 +328,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 					});
 					voltageCalcThread.start();
 				}
-=======
-				// TODO: move to separate thread using Runnable class
-				calcVoltage();
->>>>>>> FETCH_HEAD:initialDisplay.java
 			}
 			
 			if(drawVoltage) {
@@ -348,7 +339,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				System.out.println("Time to draw grid: " + (startScale - startGrid));
 				System.out.println("Time to draw scale: " + (endScale - startScale));
 			}
-			// TODO: check if drawBalls is necessary
 			if(drawBalls) {
 				for(inanimateObject j : inAnimates){
 					j.draw(g);
@@ -360,9 +350,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 					updateJLabel(chargeDisplay.get(i), i);
 				}
 				for(int i = 0; i < pendingBalls.size(); i++) {
-					// TODO: make it so that null is never in array
-					if(pendingBalls.get(i) != null) {
-						//There may be nulls in pendingBalls.
+					if(pendingBalls.get(i) != null) {//There may be nulls in pendingBalls.
 						//For issues described when adding the balls through adding new ball window,
 						//when a pending ball is 'removed' from the list, it is not truly removed,
 						//rather it is set to null.
@@ -384,6 +372,19 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 					g.drawLine(current.x, current.y, next.x, next.y);
 				}
 			}
+			
+			
+			System.out.println("TOT TIME TAKEN: " + (System.currentTimeMillis()-beginPaintLoopTime));
+			if(System.currentTimeMillis()-beginPaintLoopTime<TIME_BETWEEN_REPLOTS){
+			try {
+				Thread.sleep(TIME_BETWEEN_REPLOTS - (System.currentTimeMillis()-beginPaintLoopTime));
+				
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+			
+			timeCounter+=TIME_BETWEEN_REPLOTS;
 			repaint();
 		}
 		repaint();
@@ -528,14 +529,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		//System.out.println(totE);
 	}
 
-<<<<<<< HEAD:main/initialDisplay.java
-=======
-	private double CalculatePotentialEnergy(Ball ball, Ball ball2) {
-		return k*ball.charge*ball2.charge/distance(ball.getX(), ball2.getX(), ball.getY(), ball2.getY());
-	}
-
-	// TODO: ensure that this isn't being called every time calcs are updated
->>>>>>> FETCH_HEAD:initialDisplay.java
 	private void updateVoltageScaleText(ArrayList<Double> list) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<html> Max: ");
@@ -612,8 +605,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		}
 	}
 
-	// TODO: Calculate as if there are num_of_pixels/100 then set every 100 pixels to the same color. You can then check how long this is taking with a timer and then slowly make the boxes smaller until it takes x amount of time to render.
-	// TODO: move to different thread using Runnable class
 	private void drawVoltageGrid(Graphics g) {
 		// Copying the reference to the current voltageValue matrix so that if it gets
 		// replaced by calcVoltage() we don't get screwed.
@@ -749,14 +740,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	private double calculateVoltage (inanimateObject o, Point point){
 		return o.getCharge()/Force.distance(o.getCentroid().x, o.getCentroid().y, point.x, point.y)/(4*Math.PI*Force.permitivity_of_free_space);
 	}
-<<<<<<< HEAD:main/initialDisplay.java
-=======
-	private double distance(double x, double y, double x2, double y2) {
-		return Math.pow(Math.pow(x - x2, 2) + Math.pow(y - y2, 2), 0.5);
-	}
-
-	// TODO: consider moving to separate thread
->>>>>>> FETCH_HEAD:initialDisplay.java
 	private void calculateElectricFieldOnScreen() {
 		for(int x = width/6+5; x < width*5/6-10; x+=pixel) {
 			for (int y = height/6+5; y <height*5/6 + height/10-30; y+=pixel) {
@@ -764,7 +747,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				for(int i = 0; i <ballarray.size(); i++) {
 					Ball ball = ballarray.get(i);
 
-					electricField[x][y].add(calculateElectricField(ball, new Point (x, y)));
+					electricField[x][y].add(calculateElectricField(ball,  new Point (x, y)));
 				}
 			}
 		}
@@ -1012,7 +995,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 					else { //addOrEditBoolean = true, but spaceFree = false.
 						messages.addMessage("Cannot add ball here, space is already occupied by another ball.",
 								onScreenMessage.CENTER);}
-
+					
 				}
 				else {//addOrEditBoolean = false.
 					if(!spaceFree) {
@@ -1033,7 +1016,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 									}
 									hostProgram.framesId.remove("Edit Ball");
 									hostProgram.frames.remove(editBallF);
-									ballInSpace.setColor(Ball.defaultColor);
+									ballInSpace.setColor(Ball.defualtColor);
 								}});
 
 							Display editBallD = new editBallDisplay(editBallF.getWidth(), editBallF.getHeight(),
