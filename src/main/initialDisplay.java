@@ -410,9 +410,10 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			
 			
 			//System.out.println("TOT TIME TAKEN: " + (System.currentTimeMillis()-beginPaintLoopTime));
-			if(System.currentTimeMillis()-beginPaintLoopTime<TIME_BETWEEN_REPLOTS){
+			long timeTaken = System.currentTimeMillis()-beginPaintLoopTime;
+			if(timeTaken<TIME_BETWEEN_REPLOTS){
 			try {
-				Thread.sleep(TIME_BETWEEN_REPLOTS - (System.currentTimeMillis()-beginPaintLoopTime));
+				Thread.sleep(TIME_BETWEEN_REPLOTS - timeTaken);
 				
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -643,7 +644,11 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	private void drawVoltageGrid(Graphics g) {
 		// Copying the reference to the current voltageValue matrix so that if it gets
 		// replaced by calcVoltage() we don't get screwed.
-		double[][] voltageValue = this.voltageValue;
+		double[][] voltageValue = new double[this.voltageValue.length][];
+		for(int i = 0; i < voltageValue.length; i++){
+			voltageValue[i] = this.voltageValue[i].clone();
+		}
+		
 		ArrayList<Double> voltageValuesList = makeList(voltageValue);
 		Collections.sort(voltageValuesList);
 		double belowZero = getNegativeAmount(voltageValuesList);
