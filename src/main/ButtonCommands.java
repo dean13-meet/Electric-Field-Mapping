@@ -269,6 +269,19 @@ class LoadFromFile extends ButtonCommands {
 						(int) in.nextDouble(),
 						in.nextDouble(), in.nextDouble(), in.nextDouble()));
 			}
+			//Do Labels:
+			for(JLabel c : newD.chargeDisplay){
+				newD.remove(c);
+			}
+			newD.chargeDisplay.clear();
+			for(int i = 0; i < newD.ballarray.size(); i++){
+			JLabel l = new JLabel();
+			newD.chargeDisplay.add(l);
+			newD.add(l);
+			l.setVisible(true);
+			}
+			
+			
 			int numberInanimates = in.nextInt();
 			newD.inAnimates.clear();
 			for(int i = 0; i < numberInanimates; i++){
