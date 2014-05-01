@@ -296,7 +296,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	}
 
 	public void paintComponent(Graphics g) {
-		setPresetSelected(getPresets()[presetCB.getSelectedIndex()]);
+		setPresetSelected(getPresets()[presetCB.getSelectedIndex()].replaceFirst("file_", ""));
 		if(getPresets().length != getAllFiles().length) {//More presets where saved
 			setPresets(getAllFiles());
 			presetCB.removeAllItems();

@@ -14,6 +14,7 @@ public class inanimateObject {
 
 	private double charge;
 	public Polygon shape;
+	private ArrayList<Point> vertices;
 	//private final ArrayList<Point> vertices;
 	/*
 	 * Note: Vertices MUST be in circular order! E.g. for the following:
@@ -33,6 +34,7 @@ public class inanimateObject {
 		this.hostP = p;
 		this.d = d;
 		this.charge = charge;
+		this.vertices = vertices; //Used for saving to file
 		this.shape = shapeFromVertices(vertices);
 		//this.vertices = vertices;
 		this.centroid = calcCentroid();
@@ -126,5 +128,16 @@ public class inanimateObject {
 			gg.setStroke(new BasicStroke(1));
 		}
 		
+	}
+	public String toString(){
+		return getCharge() + " " + this.vertices.size() + " " + getVerteciesStrings();
+	}
+
+	private String getVerteciesStrings() {
+		String retval = "";
+		for(Point p : this.vertices){
+			retval+= p.x + " " + p.y + " ";
+		}
+		return retval;
 	}
 }

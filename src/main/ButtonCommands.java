@@ -227,12 +227,20 @@ class SaveToFile extends ButtonCommands {
 			for (Ball a : newD.ballarray) {
 				out.write(a.toString() + '\n');
 			}
+			out.write(String.valueOf(newD.inAnimates.size()) + "\n");
+			for(inanimateObject i : newD.inAnimates){
+				out.write(i.toString() + "\n");
+			}
 			out.write("ballsMoving: " + newD.ballsMoving + '\n');
 			out.write("voltageCalcing: " + newD.voltageCalcing + '\n');
 			out.write("drawVoltage: " + newD.drawVoltage + '\n');
 			out.write("drawBalls: " + newD.drawBalls + '\n');
 			out.write("elasticWalls: " + newD.elasticity + '\n');
-		} catch (IOException e) {
+			
+			
+		} 
+		
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -247,13 +255,36 @@ class LoadFromFile extends ButtonCommands {
 
 	@Override
 	void execute(int caseNum) {
-		Path file = Paths.get("Save Data/" + newD.getPresetSelected());
+		File directory = new File("Save Data/file_");
+		Path file = Paths.get(directory.getAbsolutePath() + newD.getPresetSelected());
+		
 		try (Scanner in = new Scanner(file);) {
-			int n = in.nextInt();
+			int numberBalls = in.nextInt();
 			newD.ballarray.clear();
-			for (int i = 0; i < n; i++) {
-				newD.ballarray.add(new Ball(newD, in.nextDouble(), in.nextInt(), in.nextInt(),
+			for (int i = 0; i < numberBalls; i++) {
+				
+				newD.ballarray.add(new Ball(newD, 
+						in.nextDouble(), 
+						(int) in.nextDouble(), 
+						(int) in.nextDouble(),
 						in.nextDouble(), in.nextDouble(), in.nextDouble()));
+			}
+			int numberInanimates = in.nextInt();
+			newD.inAnimates.clear();
+			for(int i = 0; i < numberInanimates; i++){
+				class vert{
+					ArrayList<Point> getVertecies(){
+						ArrayList<Point> retval = new ArrayList<Point>();
+						int numberVertecies = in.nextInt();
+						for(int i = 0 ; i < numberVertecies; i ++){
+							retval.add(new Point(in.nextInt(), in.nextInt()));
+						}
+						return retval;
+					}
+				}
+				newD.inAnimates.add(new inanimateObject(newD.hostProgram, newD, in.nextDouble(), new vert().getVertecies()));
+				
+				
 			}
 			in.next();
 			newD.ballsMoving = in.nextBoolean();
