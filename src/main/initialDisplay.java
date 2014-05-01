@@ -299,11 +299,11 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		setPresetSelected(getPresets()[presetCB.getSelectedIndex()]);
 		if(getPresets().length != getAllFiles().length) {//More presets where saved
 			setPresets(getAllFiles());
-			remove(presetCB);
-			presetCB = new JComboBox<String>(getPresets());
-			presetCB.setBounds(height/9 +925, width/20, 100, 50);
-			add(presetCB);
-			presetCB.setVisible(true);}
+			presetCB.removeAllItems();
+			for(String s: presets){
+				presetCB.addItem(s);
+			}
+			}
 
 
 		while(!messages.isEmpty()){
