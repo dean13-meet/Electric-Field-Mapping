@@ -257,11 +257,12 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		if (files != null && files.length > 0) {
 			ArrayList<String> filenames = new ArrayList<String>();
 			for (int i = 0; i < files.length; i++) {
-				if (files[i].getName().equals("README.md"))
-					continue;
+				if (files[i].getName().equals("README.md")){
+					continue;}
 				filenames.add(files[i].getName().replace("file_", ""));
+				
 			}
-			String[] fileNamesArray = new String[filenames.size()-1];
+			String[] fileNamesArray = new String[filenames.size()];
 			for(int i = 0; i < fileNamesArray.length; i++){
 				fileNamesArray[i] = filenames.get(i);
 			}
@@ -302,6 +303,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	public void paintComponent(Graphics g) {
 		setPresetSelected(getPresets()[presetCB.getSelectedIndex()].replaceFirst("file_", ""));
 		if(getPresets().length != getAllFiles().length) {//More presets where saved
+			
 			setPresets(getAllFiles());
 			presetCB.removeAllItems();
 			for(String s: presets){
