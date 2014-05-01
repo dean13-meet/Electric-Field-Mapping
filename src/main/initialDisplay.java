@@ -13,32 +13,24 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Robot;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
-import java.awt.image.ImageObserver;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.SwingWorker;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 import javax.swing.JSlider;
@@ -354,11 +346,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 						
 						@Override
 						public void run() {
-							long startVoltageCalc = System.currentTimeMillis();
 							calcVoltage();
-							long endVoltageCalc = System.currentTimeMillis();
-							long timeItTook = endVoltageCalc - startVoltageCalc;
-							//System.out.println("Time for voltage calc: " + timeItTook);
 						}
 					});
 					voltageCalcThread.start();
@@ -366,13 +354,9 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			}
 			
 			if(drawVoltage) {
-				long startGrid = System.currentTimeMillis();
+				
 				drawVoltageGrid(g);
-				long startScale = System.currentTimeMillis();
 				drawVoltageScale(g);
-				long endScale = System.currentTimeMillis();
-				//System.out.println("Time to draw grid: " + (startScale - startGrid));
-				//System.out.println("Time to draw scale: " + (endScale - startScale));
 			}
 			if(drawBalls) {
 				for(inanimateObject j : inAnimates){
@@ -495,7 +479,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 			for(int j = 0; j <ballarray.size(); j++){
 				if(k!=j){
-					Ball temp2 = ballarray.get(j);
 
 					temp.force.add(CalculateForce(ballarray.get(j), ballarray.get(k)));
 					//System.out.println("Calced: " + j + " on: " + k);
@@ -552,11 +535,11 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		}
 
 		for(int k = 0; k <ballarray.size(); k++) {
-			Ball temp = ballarray.get(k);
+			
 
 			for(int j = 0; j <ballarray.size(); j++) {
 				if(k!=j){
-					Ball temp2 = ballarray.get(j);
+					
 
 					totE+=(Force.CalculatePotentialEnergy(ballarray.get(j), ballarray.get(k)));
 				}
@@ -655,7 +638,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		double exactlyZero  = getZeroAmount(voltageValuesList);
 		double aboveZero = getPositiveAmount(voltageValuesList);
 
-		long startFillRects = System.currentTimeMillis();
+		
 
 		for(int x = width/6 +5; x < width*5/6 -10; x+=pixel) {
 			for (int y = height/6+5; y <height*5/6 + height/10 -30; y+=pixel) {
@@ -686,8 +669,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			}
 		}
 
-		long endFillRects = System.currentTimeMillis();
-		//System.out.println("Time to fill rects: " + (endFillRects - startFillRects));
+		
 		updateVoltageScaleText(voltageValuesList);
 	}
 
