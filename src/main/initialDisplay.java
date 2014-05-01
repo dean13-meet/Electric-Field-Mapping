@@ -254,14 +254,18 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		File directory = new File("Save Data");
 		//System.out.println("BDL " +directory.getAbsolutePath());
 		File[] files = directory.listFiles();
-		if (files != null && files.length != 0) {
-			String[] filenames = new String[files.length-1];
-			for (int i = 0; i < filenames.length; i++) {
-				if (files[i].getName() == "README.md")
+		if (files != null && files.length > 0) {
+			ArrayList<String> filenames = new ArrayList<String>();
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].getName().equals("README.md"))
 					continue;
-				filenames[i] = files[i].getName();
+				filenames.add(files[i].getName().replace("file_", ""));
 			}
-			return filenames;
+			String[] fileNamesArray = new String[filenames.size()-1];
+			for(int i = 0; i < fileNamesArray.length; i++){
+				fileNamesArray[i] = filenames.get(i);
+			}
+			return fileNamesArray;
 		}
 		return new String[] {""};
 	}
