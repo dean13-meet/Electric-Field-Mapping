@@ -61,9 +61,9 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	
 	
 
-	public String[] presets;
+	private String[] presets;
 	private JComboBox<String> presetCB;
-	public String presetSelected;
+	private String presetSelected;
 
 	int xdif = 0;
 	int ydif = 0;
@@ -174,8 +174,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		add(typeBallOrWall);
 		typeBallOrWall.setVisible(true);
 
-		presets = getAllFiles();
-		presetCB = new JComboBox<String>(presets);
+		setPresets(getAllFiles());
+		presetCB = new JComboBox<String>(getPresets());
 		presetCB.setBounds(height/9 +925, width/20, 100, 50);
 		add(presetCB);
 		presetCB.setVisible(true);
@@ -252,6 +252,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 	private String[] getAllFiles() {
 		File directory = new File("Save Data");
+		//System.out.println("BDL " +directory.getAbsolutePath());
 		File[] files = directory.listFiles();
 		if (files != null && files.length != 0) {
 			String[] filenames = new String[files.length-1];
@@ -266,12 +267,40 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	}
 
 	
+	/**
+	 * @return the presets
+	 */
+	public String[] getPresets() {
+		return presets;
+	}
+
+	/**
+	 * @param presets the presets to set
+	 */
+	public void setPresets(String[] presets) {
+		this.presets = presets;
+	}
+
+	/**
+	 * @return the presetSelected
+	 */
+	public String getPresetSelected() {
+		return presetSelected;
+	}
+
+	/**
+	 * @param presetSelected the presetSelected to set
+	 */
+	public void setPresetSelected(String presetSelected) {
+		this.presetSelected = presetSelected;
+	}
+
 	public void paintComponent(Graphics g) {
-		presetSelected = presets[presetCB.getSelectedIndex()];
-		if(presets.length != getAllFiles().length) {//More presets where saved
-			presets = getAllFiles();
+		setPresetSelected(getPresets()[presetCB.getSelectedIndex()]);
+		if(getPresets().length != getAllFiles().length) {//More presets where saved
+			setPresets(getAllFiles());
 			remove(presetCB);
-			presetCB = new JComboBox<String>(presets);
+			presetCB = new JComboBox<String>(getPresets());
 			presetCB.setBounds(height/9 +925, width/20, 100, 50);
 			add(presetCB);
 			presetCB.setVisible(true);}
@@ -323,7 +352,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 							calcVoltage();
 							long endVoltageCalc = System.currentTimeMillis();
 							long timeItTook = endVoltageCalc - startVoltageCalc;
-							System.out.println("Time for voltage calc: " + timeItTook);
+							//System.out.println("Time for voltage calc: " + timeItTook);
 						}
 					});
 					voltageCalcThread.start();
@@ -336,8 +365,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				long startScale = System.currentTimeMillis();
 				drawVoltageScale(g);
 				long endScale = System.currentTimeMillis();
-				System.out.println("Time to draw grid: " + (startScale - startGrid));
-				System.out.println("Time to draw scale: " + (endScale - startScale));
+				//System.out.println("Time to draw grid: " + (startScale - startGrid));
+				//System.out.println("Time to draw scale: " + (endScale - startScale));
 			}
 			if(drawBalls) {
 				for(inanimateObject j : inAnimates){
@@ -374,7 +403,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			}
 			
 			
-			System.out.println("TOT TIME TAKEN: " + (System.currentTimeMillis()-beginPaintLoopTime));
+			//System.out.println("TOT TIME TAKEN: " + (System.currentTimeMillis()-beginPaintLoopTime));
 			if(System.currentTimeMillis()-beginPaintLoopTime<TIME_BETWEEN_REPLOTS){
 			try {
 				Thread.sleep(TIME_BETWEEN_REPLOTS - (System.currentTimeMillis()-beginPaintLoopTime));
@@ -647,7 +676,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		}
 
 		long endFillRects = System.currentTimeMillis();
-		System.out.println("Time to fill rects: " + (endFillRects - startFillRects));
+		//System.out.println("Time to fill rects: " + (endFillRects - startFillRects));
 		updateVoltageScaleText(voltageValuesList);
 	}
 

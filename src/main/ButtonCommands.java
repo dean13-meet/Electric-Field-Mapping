@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.*;
 import java.nio.file.*;
@@ -218,7 +219,9 @@ class SaveToFile extends ButtonCommands {
 	void execute(int caseNum) {
 		Scanner s = new Scanner(System.in);
 		System.out.print("Please input file name: ");
-		Path file = Paths.get("Save Data/" + s.next());
+		File directory = new File("Save Data/file_");
+		Path file = Paths.get(directory.getAbsolutePath() + s.next());
+		System.out.println(file);
 		try (BufferedWriter out = Files.newBufferedWriter(file, Charset.forName("US-ASCII"))) {
 			out.write(String.valueOf(newD.ballarray.size()) + '\n');
 			for (Ball a : newD.ballarray) {
@@ -244,7 +247,7 @@ class LoadFromFile extends ButtonCommands {
 
 	@Override
 	void execute(int caseNum) {
-		Path file = Paths.get("Save Data/" + newD.presetSelected);
+		Path file = Paths.get("Save Data/" + newD.getPresetSelected());
 		try (Scanner in = new Scanner(file);) {
 			int n = in.nextInt();
 			newD.ballarray.clear();
