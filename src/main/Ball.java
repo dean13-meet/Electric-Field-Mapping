@@ -2,6 +2,7 @@ package main;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Line2D;
+import java.util.ArrayList;
 
 import Utils.Force;
 
@@ -57,15 +58,32 @@ public class Ball {
 		g.fillOval((int) xx, (int) yy, (int) mySize, (int) mySize);
 	}
 
-	public void update(Graphics g, int width, int height, int tickLength) {
+	public void update(Graphics g, int width, int height, int tickLength, ArrayList<inanimateObject> inani) {
 		wallcollisions(width, height);
 		updateAcceleration();
 		updateForceVector();
 		//g.drawLine((int)forceVector.x1, (int)forceVector.y1, (int)forceVector.x2, (int)forceVector.y2);
 		dx+=Math.cos(accelerationD)*acceleration*tickLength/1000;
 		dy+=Math.sin(accelerationD)*acceleration*tickLength/1000;
+		inanimateCollisions(inani);
 		x = (x+dx*tickLength/1000);
 		y = (y+dy*tickLength/1000);
+	}
+
+	private void inanimateCollisions(ArrayList<inanimateObject> inani) {
+		for(inanimateObject o : inani){
+			for(int i = 0; i < o.getVertecies().size(); i++){
+				Line2D l;
+				if(i<o.getVertecies().size()-1)l = new Line2D.Float(o.getVertecies().get(i), o.getVertecies().get(i+1));
+				else l = new Line2D.Float(o.getVertecies().get(i), o.getVertecies().get(0));//Gets line connecting end and start of inanimate
+				System.out.println(l.ptSegDist(getX(), getY()));
+				if(l.ptSegDist(getX(), getY())<3){//If the ball is less than 3 pixels from the line
+					dx = 0; 
+					dy = 0;
+				}
+			}
+		}
+		
 	}
 
 	public void updateAcceleration() {

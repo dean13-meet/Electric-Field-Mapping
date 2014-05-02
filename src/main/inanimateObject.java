@@ -140,4 +140,10 @@ public class inanimateObject {
 		}
 		return retval;
 	}
+
+	public ArrayList<Point> getVertecies() {
+		return vertices;
+		// TODO Auto-generated method stub
+		
+	}
 }

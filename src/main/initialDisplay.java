@@ -492,7 +492,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		}
 
 		for (int i = 0; i<ballarray.size(); i++) {
-			ballarray.get(i).update(g, width, height, TIME_BETWEEN_REPLOTS);
+			ballarray.get(i).update(g, width, height, TIME_BETWEEN_REPLOTS, inAnimates);
 			if (ballarray.get(i).hitWall == true) {
 				if (xdif<0) {
 					ballarray.get(i).setX(ballarray.get(i).getX()+xdif);
