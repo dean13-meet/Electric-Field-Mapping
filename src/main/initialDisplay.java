@@ -122,53 +122,58 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		setSize(width, height);
 		paintloop = true;
 
+		int buttonWidth = width/12;
+		int buttonHeight = Math.max(height/15, 50);
+		int rowStartX = width/7;
+		int rowStartY = height/12 - buttonHeight/2;
+		int spacingBetweenButtons = buttonWidth + 10;
 		String[] startStrs = {"Start", "Pause"};
-		ballStart = (new Button( new pauseBallMovement(this), startStrs, height/9 +75, width/20, 100, 50));
+		ballStart = (new Button( new pauseBallMovement(this), startStrs, rowStartX, rowStartY, buttonWidth, buttonHeight));
 		add(getBallStart());
 		getBallStart().setVisible(true);
 
 		String[] resetStrs = {"Reset"};
-		reset = new Button (new Reset(this), resetStrs, height/9 +225, width/20, 100, 50);
+		reset = new Button (new Reset(this), resetStrs, rowStartX + spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
 		add(reset);
 		reset.setVisible(true);
 
 		this.elasticity = 50;
 		String[] elasticWallsArray = {"Elasticity: " + this.elasticity + "%"};
-		elasticWallsButton = new Button(new slideElasticWalls(this, hostProgram), elasticWallsArray,height/9 +325, width/20, 100, 50);
+		elasticWallsButton = new Button(new slideElasticWalls(this, hostProgram), elasticWallsArray,rowStartX + 2*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
 		/*String[] elasticWallsArray = {"Update Elasticity"};
-		elasticWallsButton = new Button(new slideElasticWalls(this), elasticWallsArray,height/9 +325, width/20, 100, 50);
+		elasticWallsButton = new Button(new slideElasticWalls(this), elasticWallsArray,height/9 +325, width/20, buttonWidth, buttonHeight);
 		*/
 		add(elasticWallsButton);
 		elasticWallsButton.setVisible(true);
 		
 		String[] voltageOnOff = {"Voltage: Off", "Voltage: On"};
-		Voltage = new Button (new VoltageOnOff(this), voltageOnOff,height/9 +425, width/20, 100, 50);
+		Voltage = new Button (new VoltageOnOff(this), voltageOnOff,rowStartX + 3*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
 		add(Voltage);
 		Voltage.setVisible(true);
 
 		String[] addOrEditStrings = {"OnClick: Add", "OnClick: Edit"};
-		Voltage = new Button (new addOrEditCommand(this), addOrEditStrings,height/9 +525, width/20, 100, 50);
+		Voltage = new Button (new addOrEditCommand(this), addOrEditStrings,rowStartX + 4*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
 		add(Voltage);
 		Voltage.setVisible(true);
 
 		String[] saveToFileStrings = {"Save To File"};
-		saveToFile = new Button (new SaveToFile(this), saveToFileStrings,height/9 +625, width/20, 100, 50);
+		saveToFile = new Button (new SaveToFile(this), saveToFileStrings,rowStartX + 5*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
 		add(saveToFile);
 		saveToFile.setVisible(true);
 
 		String[] loadFromFileStrings = {"Load From File"};
-		loadFromFile = new Button (new LoadFromFile(this), loadFromFileStrings, height/9 +725, width/20, 100, 50);
+		loadFromFile = new Button (new LoadFromFile(this), loadFromFileStrings, rowStartX + 6*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
 		add(loadFromFile);
 		loadFromFile.setVisible(true);
 
 		String[] ballOrWallStrs = {"Type: Animate", "Type: Inanimate"};
-		typeBallOrWall = new Button (new ballOrWallCommand(this), ballOrWallStrs, height/9 +825, width/20, 100, 50);
+		typeBallOrWall = new Button (new ballOrWallCommand(this), ballOrWallStrs, rowStartX + 7*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
 		add(typeBallOrWall);
 		typeBallOrWall.setVisible(true);
 
 		setPresets(getAllFiles());
 		presetCB = new JComboBox<String>(getPresets());
-		presetCB.setBounds(height/9 +925, width/20, 100, 50);
+		presetCB.setBounds(rowStartX + 8*spacingBetweenButtons, rowStartY, 100, 50);
 		add(presetCB);
 		presetCB.setVisible(true);
 

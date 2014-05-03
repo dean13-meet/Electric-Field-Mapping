@@ -223,6 +223,8 @@ class SaveToFile extends ButtonCommands {
 		Path file = Paths.get(directory.getAbsolutePath() + s.next());
 		System.out.println(file);
 		try (BufferedWriter out = Files.newBufferedWriter(file, Charset.forName("US-ASCII"))) {
+			out.write("Original Width: " + newD.hostProgram.DISPLAY_WIDTH);
+			out.write("Original Height: " + newD.hostProgram.DISPLAY_HEIGHT);
 			out.write(String.valueOf(newD.ballarray.size()) + '\n');
 			for (Ball a : newD.ballarray) {
 				out.write(a.toString() + '\n');
@@ -259,14 +261,24 @@ class LoadFromFile extends ButtonCommands {
 		Path file = Paths.get(directory.getAbsolutePath() + newD.getPresetSelected());
 		
 		try (Scanner in = new Scanner(file);) {
+			while(!in.hasNextInt()){//Scrolls past text to the next int
+				in.next();
+			}
+			int originalWidth = in.nextInt();
+			while(!in.hasNextInt()){
+				in.next();
+			}
+			int originalHeight = in.nextInt();
+			final double widthRatio = (double)newD.hostProgram.DISPLAY_WIDTH/(double)originalWidth;
+			final double heightRatio = (double)newD.hostProgram.DISPLAY_HEIGHT/(double)originalHeight;
 			int numberBalls = in.nextInt();
 			newD.ballarray.clear();
 			for (int i = 0; i < numberBalls; i++) {
 				
 				newD.ballarray.add(new Ball(newD, 
 						in.nextDouble(), 
-						(int) in.nextDouble(), 
-						(int) in.nextDouble(),
+						(int) (in.nextDouble()*widthRatio), 
+						(int) (in.nextDouble()*heightRatio),
 						in.nextDouble(), in.nextDouble(), in.nextDouble()));
 			}
 			//Do Labels:
@@ -290,7 +302,7 @@ class LoadFromFile extends ButtonCommands {
 						ArrayList<Point> retval = new ArrayList<Point>();
 						int numberVertecies = in.nextInt();
 						for(int i = 0 ; i < numberVertecies; i ++){
-							retval.add(new Point(in.nextInt(), in.nextInt()));
+							retval.add(new Point((int)(in.nextInt()*widthRatio), (int)(in.nextInt()*heightRatio)));
 						}
 						return retval;
 					}

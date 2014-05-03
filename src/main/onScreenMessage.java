@@ -22,7 +22,7 @@ public class onScreenMessage {
 
 	public void addMessage(String str, Point loc) {
 		messages.add(str);
-		if(loc.equals(CENTER))loc = getCenter(str, (int)p.width, (int)p.height);
+		if(loc.equals(CENTER))loc = getCenter(str, (int)p.DISPLAY_WIDTH, (int)p.DISPLAY_HEIGHT);
 		locations.add(loc);
 	}
 

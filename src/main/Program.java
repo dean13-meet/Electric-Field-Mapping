@@ -18,8 +18,8 @@ public class Program {
 
 	JFrame initialF = new JFrame();
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	double width = screenSize.getWidth();
-	double height = screenSize.getHeight();
+	private double width = screenSize.getWidth();
+	private double height = screenSize.getHeight();
 	final int DISPLAY_WIDTH = (int) (width/1.2);
 	final int DISPLAY_HEIGHT = (int) (height/1.2);
 	final int xOffSet = 10;
@@ -37,6 +37,7 @@ public class Program {
 		initialF.add(initialD);
 		initialF.setVisible(true);
 		initialF.setResizable(false);
+		System.out.println(this.DISPLAY_WIDTH + " " + this.DISPLAY_HEIGHT);
 	}
 
 	public Display createDisplay(int x, int y, int w, int h, JFrame f, Program p) {
