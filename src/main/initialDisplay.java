@@ -35,6 +35,7 @@ import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 import javax.swing.JSlider;
 
+import Utils.ArrowHead;
 import Utils.Force;
 
 public class initialDisplay extends Display implements MouseListener, MouseMotionListener {
@@ -298,6 +299,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	}
 
 	public void paintComponent(Graphics g) {
+		
 		setPresetSelected(getPresets()[presetCB.getSelectedIndex()].replaceFirst("file_", ""));
 		if(getPresets().length != getAllFiles().length) {//More presets where saved
 			
@@ -408,9 +410,11 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				e.printStackTrace();
 			}
 		}
-			
+			ArrowHead h = new ArrowHead(135, 10, new Point (100,100));
+			h.draw(g);
 			timeCounter+=TIME_BETWEEN_REPLOTS;
 			repaint();
+			
 		}
 		repaint();
 	}
