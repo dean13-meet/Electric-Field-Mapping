@@ -179,8 +179,16 @@ public class Ball {
 		return mass + " " + x + " " + y + " " + dx + " " + dy + " " + charge;
 	}
 
-	public int getDirection() {
-		return 
+	public double getDirection() {
+		if (dx < 0)
+			return Math.atan(dy/dx) + Math.PI;
+		if (dx > 0)
+			return Math.atan(dy/dx);
+		if (dy > 0)
+			return Math.PI/2;
+		if (dy < 0) 
+			return -Math.PI/2;
+		return 0;
 	}
 
 }
