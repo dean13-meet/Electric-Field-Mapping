@@ -105,6 +105,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	
 	
 	private ArrayList<ArrowHead> arrowHeads = new ArrayList<ArrowHead>();
+	private boolean drawArrowHeads;
 
 	public initialDisplay(int w, int h, JFrame f, Program program) {
 		super(w, h, f, program);
@@ -247,6 +248,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		voltageBarMin.setVisible(false);
 		addOrEditBoolean = true;
 		ballOrWall = true;
+		drawArrowHeads = true;
 
 		repaint();
 	}
@@ -369,15 +371,25 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				drawVoltageScale(g);
 			}
 			if(drawBalls) {
+				long start = System.currentTimeMillis();
 				for(inanimateObject j : inAnimates){
 					j.draw(g);
 				}
 				for(int i = 0; i <ballarray.size(); i++) {
 					ballarray.get(i).draw(g);
-					if(this.timeCounter%(10*this.TIME_BETWEEN_REPLOTS)==0){
-						this.arrowHeads.add(new ArrowHead(ballarray.get(i).getDirection(), 10, new Point((int)ballarray.get(i).getX(), (int)ballarray.get(i).getY()))
+					if(this.timeCounter%(100*this.TIME_BETWEEN_REPLOTS)==0){
+						if(drawArrowHeads && ballsMoving)
+						this.arrowHeads.add(new ArrowHead((int) Math.toDegrees(ballarray.get(i).getDirection()), 10, new Point((int)ballarray.get(i).getX(), (int)ballarray.get(i).getY())));
 					}
 				}
+				ArrayList<ArrowHead> toRemove = new ArrayList<ArrowHead>();
+				for(ArrowHead a : arrowHeads){
+					if(a.getOpacity()<=0)toRemove.add(a);
+					else if(drawArrowHeads && ballsMoving)a.draw(g);
+				}
+				arrowHeads.removeAll(toRemove);
+				System.out.println(System.currentTimeMillis()-start + " " + ballarray.size());
+				
 				for(int i = 0; i< chargeDisplay.size(); i++) {
 					updateJLabel(chargeDisplay.get(i), i);
 				}
@@ -416,8 +428,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				e.printStackTrace();
 			}
 		}
-			ArrowHead h = new ArrowHead(45, 10, new Point (100,100));
-			h.draw(g);
+		
 			timeCounter+=TIME_BETWEEN_REPLOTS;
 			repaint();
 			

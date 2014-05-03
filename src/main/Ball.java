@@ -76,7 +76,7 @@ public class Ball {
 				Line2D l;
 				if(i<o.getVertecies().size()-1)l = new Line2D.Float(o.getVertecies().get(i), o.getVertecies().get(i+1));
 				else l = new Line2D.Float(o.getVertecies().get(i), o.getVertecies().get(0));//Gets line connecting end and start of inanimate
-				System.out.println(l.ptSegDist(getX(), getY()));
+
 				if(l.ptSegDist(getX(), getY())<3){//If the ball is less than 3 pixels from the line
 					dx = 0; 
 					dy = 0;
