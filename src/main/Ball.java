@@ -179,4 +179,8 @@ public class Ball {
 		return mass + " " + x + " " + y + " " + dx + " " + dy + " " + charge;
 	}
 
+	public int getDirection() {
+		return 
+	}
+
 }

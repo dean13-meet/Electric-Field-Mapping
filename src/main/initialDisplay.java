@@ -102,6 +102,9 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	boolean ballOrWall; //Ball - true, Wall - false.
 	//double elasticWalls; // 0 <= elasticity <= 1
 	private Thread voltageCalcThread;
+	
+	
+	private ArrayList<ArrowHead> arrowHeads = new ArrayList<ArrowHead>();
 
 	public initialDisplay(int w, int h, JFrame f, Program program) {
 		super(w, h, f, program);
@@ -371,6 +374,9 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				}
 				for(int i = 0; i <ballarray.size(); i++) {
 					ballarray.get(i).draw(g);
+					if(this.timeCounter%(10*this.TIME_BETWEEN_REPLOTS)==0){
+						this.arrowHeads.add(new ArrowHead(ballarray.get(i).getDirection(), 10, new Point((int)ballarray.get(i).getX(), (int)ballarray.get(i).getY()))
+					}
 				}
 				for(int i = 0; i< chargeDisplay.size(); i++) {
 					updateJLabel(chargeDisplay.get(i), i);
