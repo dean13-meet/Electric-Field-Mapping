@@ -656,54 +656,58 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	}
 
 	private void drawVoltageGrid(Graphics g) {
-		// Copying the reference to the current voltageValue matrix so that if it gets
-		// replaced by calcVoltage() we don't get screwed.
-		double[][] voltageValue = new double[this.voltageValue.length][];
-		for(int i = 0; i < voltageValue.length; i++){
-			voltageValue[i] = this.voltageValue[i].clone();
-		}
-
-		ArrayList<Double> voltageValuesList = makeList(voltageValue);
-		Collections.sort(voltageValuesList);
-
-		double belowZero = getNegativeAmount(voltageValuesList);
-		double exactlyZero  = getZeroAmount(voltageValuesList);
-		double aboveZero = getPositiveAmount(voltageValuesList);
-
-
-
-		for(int x = width/6 +5; x < width*5/6 -10; x+=pixel) {
-			for (int y = height/6+5; y <height*5/6 + height/10 -30; y+=pixel) {
-				double value = voltageValue[x][y];
-
-				int colorVal = 128;
-				boolean hot = false;
-
-				int valueIdx = Collections.binarySearch(voltageValuesList, value);
-				if(value < 0) {
-					colorVal = (int)((belowZero - valueIdx)/belowZero*128);
-					colorVal = Math.min(colorVal, 128);
-					hot = false;
-
-				}else if(value>0){
-					colorVal = (int)((valueIdx-belowZero+2)/aboveZero*128);
-					colorVal = Math.min(colorVal, 128);
-					hot = true;
-				}
-
-				if(!hot){
-					g.setColor(new Color(128-colorVal, 0, colorVal+127));
-				}
-				else if(hot){
-					g.setColor(new Color(colorVal+127, 0, 128-colorVal));
-				}
-
-				g.fillRect(x, y, 7, 7);
+		if(voltageValue!=null && voltageValue.length!=0 && voltageValue[0].length!=0){
+			// Copying the reference to the current voltageValue matrix so that if it gets
+			// replaced by calcVoltage() we don't get screwed.
+			double[][] voltageValue = new double[this.voltageValue.length][this.voltageValue[0].length];
+			for(int i = 0; i < voltageValue.length; i++){
+				System.arraycopy(this.voltageValue[i], 0, voltageValue[i], 0,
+	                     voltageValue[i].length);
 			}
+
+			
+			ArrayList<Double> voltageValuesList = makeList(voltageValue);
+			Collections.sort(voltageValuesList);
+
+			double belowZero = getNegativeAmount(voltageValuesList);
+			double exactlyZero  = getZeroAmount(voltageValuesList);
+			double aboveZero = getPositiveAmount(voltageValuesList);
+
+
+
+			for(int x = width/6 +5; x < width*5/6 -10; x+=pixel) {
+				for (int y = height/6+5; y <height*5/6 + height/10 -30; y+=pixel) {
+					double value = voltageValue[x][y];
+
+					int colorVal = 128;
+					boolean hot = false;
+
+					int valueIdx = Collections.binarySearch(voltageValuesList, value);
+					if(value < 0) {
+						colorVal = (int)((belowZero - valueIdx)/belowZero*128);
+						colorVal = Math.min(colorVal, 128);
+						hot = false;
+
+					}else if(value>0){
+						colorVal = (int)((valueIdx-belowZero+2)/aboveZero*128);
+						colorVal = Math.min(colorVal, 128);
+						hot = true;
+					}
+
+					if(!hot){
+						g.setColor(new Color(128-colorVal, 0, colorVal+127));
+					}
+					else if(hot){
+						g.setColor(new Color(colorVal+127, 0, 128-colorVal));
+					}
+
+					g.fillRect(x, y, 7, 7);
+				}
+			}
+
+
+			updateVoltageScaleText(voltageValuesList);
 		}
-
-
-		updateVoltageScaleText(voltageValuesList);
 	}
 
 	private int getZeroAmount(ArrayList<Double> list) {
