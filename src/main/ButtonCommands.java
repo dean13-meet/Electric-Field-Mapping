@@ -114,7 +114,7 @@ class slideElasticWalls extends ButtonCommands{
 					}
 					hostProgram.framesId.remove("Change Elasticity");
 					hostProgram.frames.remove(changeElasticityF);
-					
+
 				}});
 
 			Display changeElasticityD = new elasticDisplay(changeElasticityF.getWidth(), changeElasticityF.getHeight(), changeElasticityF, hostProgram, newD);
@@ -238,10 +238,10 @@ class SaveToFile extends ButtonCommands {
 			out.write("drawVoltage: " + newD.drawVoltage + '\n');
 			out.write("drawBalls: " + newD.drawBalls + '\n');
 			out.write("elasticWalls: " + newD.elasticity + '\n');
-			
-			
+
+
 		} 
-		
+
 		catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -259,7 +259,7 @@ class LoadFromFile extends ButtonCommands {
 	void execute(int caseNum) {
 		File directory = new File("Save Data/file_");
 		Path file = Paths.get(directory.getAbsolutePath() + newD.getPresetSelected());
-		
+
 		try (Scanner in = new Scanner(file);) {
 			while(!in.hasNextInt()){//Scrolls past text to the next int
 				in.next();
@@ -274,7 +274,7 @@ class LoadFromFile extends ButtonCommands {
 			int numberBalls = in.nextInt();
 			newD.ballarray.clear();
 			for (int i = 0; i < numberBalls; i++) {
-				
+
 				newD.ballarray.add(new Ball(newD, 
 						in.nextDouble(), 
 						(int) (in.nextDouble()*widthRatio), 
@@ -287,13 +287,13 @@ class LoadFromFile extends ButtonCommands {
 			}
 			newD.chargeDisplay.clear();
 			for(int i = 0; i < newD.ballarray.size(); i++){
-			JLabel l = new JLabel();
-			newD.chargeDisplay.add(l);
-			newD.add(l);
-			l.setVisible(true);
+				JLabel l = new JLabel();
+				newD.chargeDisplay.add(l);
+				newD.add(l);
+				l.setVisible(true);
 			}
-			
-			
+
+
 			int numberInanimates = in.nextInt();
 			newD.inAnimates.clear();
 			for(int i = 0; i < numberInanimates; i++){
@@ -308,8 +308,8 @@ class LoadFromFile extends ButtonCommands {
 					}
 				}
 				newD.inAnimates.add(new inanimateObject(newD.hostProgram, newD, in.nextDouble(), new vert().getVertecies()));
-				
-				
+
+
 			}
 			in.next();
 			newD.ballsMoving = in.nextBoolean();
@@ -366,7 +366,10 @@ class addInanimateCommand extends ButtonCommands{
 
 	@Override
 	void execute(int caseNum) {
-		d.inAnimates.add(new inanimateObject(p, d, charge, v));
+		if(v.size()>2)
+			d.inAnimates.add(new inanimateObject(p, d, charge, v));
+		else
+			d.messages.addMessage("Error: Cannot add inanimate with less than 3 vertecies!", onScreenMessage.CENTER);
 		callingFrame.dispatchEvent(new WindowEvent(callingFrame, WindowEvent.WINDOW_CLOSING));
 	}
 }
