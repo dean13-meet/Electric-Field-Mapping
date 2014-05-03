@@ -410,7 +410,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				e.printStackTrace();
 			}
 		}
-			ArrowHead h = new ArrowHead(135, 10, new Point (100,100));
+			ArrowHead h = new ArrowHead(45, 10, new Point (100,100));
 			h.draw(g);
 			timeCounter+=TIME_BETWEEN_REPLOTS;
 			repaint();
