@@ -1,0 +1,9 @@
+Original Width: 1200
+Original Height: 750
+0
+0
+ballsMoving: false
+voltageCalcing: false
+drawVoltage: false
+drawBalls: true
+elasticWalls: 50

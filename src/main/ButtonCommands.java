@@ -223,8 +223,8 @@ class SaveToFile extends ButtonCommands {
 		Path file = Paths.get(directory.getAbsolutePath() + s.next());
 		System.out.println(file);
 		try (BufferedWriter out = Files.newBufferedWriter(file, Charset.forName("US-ASCII"))) {
-			out.write("Original Width: " + newD.hostProgram.DISPLAY_WIDTH);
-			out.write("Original Height: " + newD.hostProgram.DISPLAY_HEIGHT);
+			out.write("Original Width: " + newD.hostProgram.DISPLAY_WIDTH + "\n");
+			out.write("Original Height: " + newD.hostProgram.DISPLAY_HEIGHT + "\n");
 			out.write(String.valueOf(newD.ballarray.size()) + '\n');
 			for (Ball a : newD.ballarray) {
 				out.write(a.toString() + '\n');

@@ -554,20 +554,21 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	}
 
 	private void updateVoltageScaleText(ArrayList<Double> list) {
+		if(list==null||list.size()==0)return;
 		StringBuilder sb = new StringBuilder();
 		sb.append("<html> Max: ");
 		sb.append("<br>");
 		try{
 			Double n = list.get(list.size()-1);
 			int numZerosToAdd = 0;
-			if(n >= 999) {
-				while(n>=10){
+			if(Math.abs(n) >= 999) {
+				while(Math.abs(n)>=10){
 					n/=10;
 					numZerosToAdd++;
 				}
 			}
-			else if(n<.1) {
-				while(n<1) {
+			else if(Math.abs(n)<.1) {
+				while(Math.abs(n)<1) {
 					n*=10;
 					numZerosToAdd--;
 				}
@@ -581,10 +582,12 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			}
 		}
 		catch(IndexOutOfBoundsException e) {
+			e.printStackTrace();
 		}
 
 		voltageBarMax.setText(sb.toString());
 
+	
 		sb = new StringBuilder();
 		sb.append("<html> Min: ");
 		sb.append("<br>");
@@ -614,6 +617,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		}
 		catch(IndexOutOfBoundsException e) {
 
+			e.printStackTrace();
 		}
 		voltageBarMin.setText(sb.toString());
 	}
@@ -639,6 +643,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		
 		ArrayList<Double> voltageValuesList = makeList(voltageValue);
 		Collections.sort(voltageValuesList);
+		
 		double belowZero = getNegativeAmount(voltageValuesList);
 		double exactlyZero  = getZeroAmount(voltageValuesList);
 		double aboveZero = getPositiveAmount(voltageValuesList);
@@ -670,6 +675,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				else if(hot){
 					g.setColor(new Color(colorVal+127, 0, 128-colorVal));
 				}
+				
 				g.fillRect(x, y, 7, 7);
 			}
 		}
@@ -750,6 +756,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				for(int i = 0; i <ballarray.size(); i++){
 					Ball ball = ballarray.get(i);
 					voltageValue[x][y] += calculateVoltage(ball, new Point(x, y));
+					
 				}
 				for(inanimateObject o : inAnimates){
 					voltageValue[x][y] += calculateVoltage(o, new Point(x,y));
@@ -761,11 +768,17 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	}
 
 	private double calculateVoltage(Ball ball, Point point) {
-		return ball.charge/Force.distance(ball.getX(), ball.getY(), point.x, point.y)/(4*Math.PI*Force.permitivity_of_free_space);
+		double distance = Force.distance(ball.getX(), ball.getY(), point.x, point.y);
+		if(distance!=0)//Ball does not produce voltage on itself
+		return ball.charge/distance/(4*Math.PI*Force.permitivity_of_free_space);
+		else return 0;
 	}
 
 	private double calculateVoltage (inanimateObject o, Point point){
-		return o.getCharge()/Force.distance(o.getCentroid().x, o.getCentroid().y, point.x, point.y)/(4*Math.PI*Force.permitivity_of_free_space);
+		double distance = Force.distance(o.getCentroid().x, o.getCentroid().y, point.x, point.y);
+		if(distance!=0)//Does not produce voltage on itself
+		return o.getCharge()/distance/(4*Math.PI*Force.permitivity_of_free_space);
+		else return 0;
 	}
 	private void calculateElectricFieldOnScreen() {
 		for(int x = width/6+5; x < width*5/6-10; x+=pixel) {
