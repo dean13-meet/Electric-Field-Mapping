@@ -168,16 +168,8 @@ class addOrEditCommand extends ButtonCommands{
 
 	@Override
 	void execute(int caseNum) {
-		switch(caseNum%2){
-		case 0:
-			newD.addOrEditBoolean = true;
-			//Going to add.
-			break;
-		case 1:
-			newD.addOrEditBoolean = false;
-			//Going to edit.
-			break;
-		}
+		Button b = newD.getButtonByName("toolButton");
+		newD.tool = b.getText().replace("Tool: ", "");
 	}
 }
 
@@ -364,16 +356,45 @@ class ballOrWallCommand extends ButtonCommands{
 
 	@Override
 	void execute(int caseNum) {
-		switch(caseNum%2){
-		case 0:
-			newD.ballOrWall = true;
-			//Going to ball.
-			break;
-		case 1:
-			newD.ballOrWall = false;
-			//Going to wall.
-			break;
+		Button b = newD.getButtonByName("typeButton");
+		newD.type = b.getText().replace("Type: ", "");
+		
+		Button tool = newD.getButtonByName("toolButton");//After changing the type, we will change the tool button to match the appropriate tools!
+		if(newD.type.equals("Ball")){
+			String[] toolStrings = new String[newD.ballTools.length];
+			for(int i = 0; i < toolStrings.length; i++){
+				toolStrings[i] = "Tool: " + newD.ballTools[i];
+			}
+			tool.strs = toolStrings;
+			tool.roundLength = toolStrings.length;
+			tool.timesClicked = -1;
+			//Now, set the tool being used to match one of the optional tools available
+			tool.simulateClick();
 		}
+		else if(newD.type.equals("Inanimate")){
+			String[] toolStrings = new String[newD.inanimateTools.length];
+			for(int i = 0; i < toolStrings.length; i++){
+				toolStrings[i] = "Tool: " + newD.inanimateTools[i];
+			}
+			tool.strs = toolStrings;
+			tool.roundLength = toolStrings.length;
+			tool.timesClicked = -1;
+			//Now, set the tool being used to match one of the optional tools available
+			tool.simulateClick();
+		}
+		else if(newD.type.equals("Arrow")){
+			String[] toolStrings = new String[newD.arrowTools.length];
+			for(int i = 0; i < toolStrings.length; i++){
+				toolStrings[i] = "Tool: " + newD.arrowTools[i];
+			}
+			tool.strs = toolStrings;
+			tool.roundLength = toolStrings.length;
+			tool.timesClicked = -1;
+			//Now, set the tool being used to match one of the optional tools available
+			tool.simulateClick();
+		}
+		
+		
 	}
 }
 class addInanimateCommand extends ButtonCommands{

@@ -71,13 +71,13 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	private Button reset;
 	public Button elasticWallsButton;//Must be public so other classes can edit its text when elasticity changes.
 	private Button Voltage;
-	private Button addOrEdit;
+	private Button toolButton;
 	private Button saveToFile;
 	private Button loadFromFile;
-	private Button typeBallOrWall;
-	
+	private Button typeButton;
+
 	public JSlider slideElastic;
-	
+
 
 	ArrayList<JLabel> chargeDisplay;
 	Force[][] electricField;
@@ -101,19 +101,34 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	boolean drawBalls;
 	//boolean elasticWalls;
 	public int elasticity;
-	boolean addOrEditBoolean;//Add - true, Edit - false.
-	boolean ballOrWall; //Ball - true, Wall - false.
 	public boolean drawArrowHeads;
+	public String type = "";
+	public String tool = "";
+	/*
+	 * Types:
+	 * 
+	 * Ball - Tools: Add: Place, Add: Drag, Edit: Popup, Edit: Drag, Delete, Select
+	 * Inanimate - Tools: Add: Place, Add: Drag, Edit: Popup, Edit: Drag, Delete, Select
+	 * Arrow - Tools: Select
+	 * 
+	 */
+	
+	
+	public final String[] types = {"Ball", "Inanimate", "Arrow"};
+	public final String[] ballTools = {"Add: Place", "Add: Drag", "Edit: Popup", "Edit: Drag", "Delete", "Select"};
+	public final String[] inanimateTools = {"Add: Place", "Add: Drag", "Edit: Popup", "Edit: Drag", "Delete", "Select"};
+	public final String[] arrowTools = {"Select"};
+	
 	private Thread voltageCalcThread;
 
 
 	private ArrayList<ArrowHead> arrowHeads = new ArrayList<ArrowHead>();
-	
+
 	private long lastAddedBallTime = System.currentTimeMillis();
 	private long minTimeToAddNewBall = 100;//Minimum time (in miliSec) between adding balls on drag
-	
 
-	
+
+
 	public initialDisplay(int w, int h, JFrame f, Program program) {
 		super(w, h, f, program);
 		init();
@@ -163,16 +178,23 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		add(Voltage);
 		Voltage.setVisible(true);
 
-		String[] ballOrWallStrs = {"Type: Animate", "Type: Inanimate"};
-		typeBallOrWall = new Button ("typeBallOrWall", new ballOrWallCommand(this), ballOrWallStrs, rowStartX + 4*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
-		add(typeBallOrWall);
-		typeBallOrWall.setVisible(true);
+		String[] typeStrings = new String[types.length];
+		for(int i = 0; i < typeStrings.length; i++){
+			typeStrings[i] = "Type: " + types[i];
+		}
+		typeButton = new Button ("typeButton", new ballOrWallCommand(this), typeStrings, rowStartX + 4*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
+		add(typeButton);
+		typeButton.setVisible(true);
+
 		
-		String[] addOrEditStrings = {"OnClick: Add", "OnClick: Edit"};
-		addOrEdit = new Button ("addOrEdit", new addOrEditCommand(this), addOrEditStrings,rowStartX + 5*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
-		add(addOrEdit);
-		addOrEdit.setVisible(true);
-		
+		String[] toolStrings = new String[ballTools.length];
+		for(int i = 0; i < toolStrings.length; i++){
+			toolStrings[i] = "Tool: " + ballTools[i];
+		}
+		toolButton = new Button ("toolButton", new addOrEditCommand(this), toolStrings,rowStartX + 5*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
+		add(toolButton);
+		toolButton.setVisible(true);
+
 		String[] saveToFileStrings = {"Save To File"};
 		saveToFile = new Button ("saveToFile", new SaveToFile(this), saveToFileStrings,rowStartX + 6*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
 		add(saveToFile);
@@ -254,21 +276,21 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		drawBalls = true;
 		voltageBarMax.setVisible(false);
 		voltageBarMin.setVisible(false);
-		addOrEditBoolean = true;
-		ballOrWall = true;
+		tool = "Add";
+		type = "Ball";
 		drawArrowHeads = true;
 
-	
+
 		buttons.add(ballStart);
 		buttons.add(reset);
 		buttons.add(elasticWallsButton);
 		buttons.add(Voltage);
-		buttons.add(addOrEdit);
+		buttons.add(toolButton);
 		buttons.add(saveToFile);
 		buttons.add(loadFromFile);
-		buttons.add(typeBallOrWall);
-		
-		
+		buttons.add(typeButton);
+
+
 		repaint();
 	}
 
@@ -679,10 +701,10 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			double[][] voltageValue = new double[this.voltageValue.length][this.voltageValue[0].length];
 			for(int i = 0; i < voltageValue.length; i++){
 				System.arraycopy(this.voltageValue[i], 0, voltageValue[i], 0,
-	                     voltageValue[i].length);
+						voltageValue[i].length);
 			}
 
-			
+
 			ArrayList<Double> voltageValuesList = makeList(voltageValue);
 			Collections.sort(voltageValuesList);
 
@@ -932,7 +954,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		}
 		return true;
 	}
-	
+
 	public Button getButtonByName(String name){
 		for(Button b : this.buttons){
 			if(b.name.equals(name))return b;
@@ -953,8 +975,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 					spaceFree = false;
 			}
 
-			if(ballOrWall){
-				if(addOrEditBoolean){
+			if(type.equals("Ball")){
+				if(tool.equals("Add: Drag")){
 
 					if(spaceFree){
 						if(System.currentTimeMillis()-lastAddedBallTime>minTimeToAddNewBall){
@@ -962,6 +984,30 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 							lastAddedBallTime = System.currentTimeMillis();
 						}
 					}
+				}
+				else if(tool.equals("Edit: Drag")){
+					//TODO
+				}
+				else if(tool.equals("Select")){
+					//TODO
+				}
+			}
+			else if(type.equals("Inanimate")){
+				
+				if(tool.equals("Add: Drag")){
+					//TODO
+				}
+				else if(tool.equals("Edit: Drag")){
+					//TODO
+				}
+				else if(tool.equals("Select")){
+					//TODO
+				}
+			}
+			else if(type.equals("Arrow")){
+				
+				if(tool.equals("Select")){
+					//TODO
 				}
 			}
 		}
@@ -1045,8 +1091,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			}
 			final Ball ballInSpace = temp;
 
-			if (ballOrWall) {
-				if (addOrEditBoolean) {
+			if (type.equals("Ball")) {
+				if (tool.equals("Add: Place")) {
 					if (spaceFree) {
 						if(hostProgram.getJFrameById("Add Ball")==null){
 							final boolean ballsWhereMoving;
@@ -1103,12 +1149,12 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 					}
 
 
-					else { //addOrEditBoolean = true, but spaceFree = false.
+					else { //tool = Add: Place, but spaceFree = false.
 						messages.addMessage("Cannot add ball here, space is already occupied by another ball.",
 								onScreenMessage.CENTER);}
 
 				}
-				else {//addOrEditBoolean = false.
+				else if(tool.equals("Edit: Popup")){
 					if(!spaceFree) {
 						if(hostProgram.getJFrameById("Edit Ball")==null) {
 							final boolean ballsWhereMoving;
@@ -1139,39 +1185,47 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 					}
 				}
 
-			} else {//ballOrWall = false;
-				if (hostProgram.getJFrameById("Add Inanimate") == null) {
-					final boolean ballsWhereMoving;
+			} else if(type.equals("Inanimate")){
+				if(tool.equals("Add: Place")){
+					if (hostProgram.getJFrameById("Add Inanimate") == null) {
+						final boolean ballsWhereMoving;
 
-					if (ballsMoving) {getBallStart().simulateClick();ballsWhereMoving = true;}//Always pause.
-					else ballsWhereMoving = false;
+						if (ballsMoving) {getBallStart().simulateClick();ballsWhereMoving = true;}//Always pause.
+						else ballsWhereMoving = false;
 
-					hostProgram.createJFrame(50, 25, "Add Inanimate", new Color(255,153,0), false, "Add Inanimate");
+						hostProgram.createJFrame(50, 25, "Add Inanimate", new Color(255,153,0), false, "Add Inanimate");
 
-					final JFrame editBallF = hostProgram.getJFrameById("Add Inanimate");
-					editBallF.addWindowListener(new java.awt.event.WindowAdapter() {
-						@Override
-						public void windowClosing (java.awt.event.WindowEvent windowEvent) {
-							if (ballsWhereMoving && !ballsMoving) {
-								getBallStart().simulateClick();
+						final JFrame editBallF = hostProgram.getJFrameById("Add Inanimate");
+						editBallF.addWindowListener(new java.awt.event.WindowAdapter() {
+							@Override
+							public void windowClosing (java.awt.event.WindowEvent windowEvent) {
+								if (ballsWhereMoving && !ballsMoving) {
+									getBallStart().simulateClick();
+								}
+								hostProgram.framesId.remove("Add Inanimate");
+								hostProgram.frames.remove(editBallF);
+								verticesOfBeingAddedInAnimate = new ArrayList<Point>();
 							}
-							hostProgram.framesId.remove("Add Inanimate");
-							hostProgram.frames.remove(editBallF);
-							verticesOfBeingAddedInAnimate = new ArrayList<Point>();
-						}
-					});
+						});
 
-					Display editBallD = new addInanimateDisplay(editBallF.getWidth(), editBallF.getHeight(),
-							editBallF, hostProgram, this);
-					editBallF.add(editBallD);
-					verticesOfBeingAddedInAnimate.add(new Point(a.getX(), a.getY()));
+						Display editBallD = new addInanimateDisplay(editBallF.getWidth(), editBallF.getHeight(),
+								editBallF, hostProgram, this);
+						editBallF.add(editBallD);
+						verticesOfBeingAddedInAnimate.add(new Point(a.getX(), a.getY()));
 
-				} else {
-					//hostProgram.getJFrameById("Edit Ball").toFront();
-					//In this case we don't bring to front, because it will always be up when we click
-					//to add more vertecies and we don't want user to keep jumping between windows.
+					} else {
+						//hostProgram.getJFrameById("Edit Ball").toFront();
+						//In this case we don't bring to front, because it will always be up when we click
+						//to add more vertecies and we don't want user to keep jumping between windows.
 
-					verticesOfBeingAddedInAnimate.add(new Point(a.getX(), a.getY()));
+						verticesOfBeingAddedInAnimate.add(new Point(a.getX(), a.getY()));
+					}
+				} 
+				else if(tool.equals("Edit: Popup")){
+					//TODO
+				}
+				else if(tool.equals("Delete")){
+					//TODO
 				}
 			}
 		}
