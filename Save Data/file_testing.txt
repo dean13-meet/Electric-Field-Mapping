@@ -17,3 +17,12 @@ voltageCalcing: true
 drawVoltage: true
 drawBalls: true
 elasticWalls: 50
+8
+ballStart 0
+reset 0
+elasticWallsButton 0
+Voltage 1
+addOrEdit 0
+saveToFile 0
+loadFromFile 0
+typeBallOrWall 0

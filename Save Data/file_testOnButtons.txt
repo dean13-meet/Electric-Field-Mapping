@@ -1,0 +1,25 @@
+Original Width: 1200
+Original Height: 750
+7
+1.5E-4 455.0 186.0 0.0 0.0 3.414769575546325E-5
+1.5E-4 455.0 216.0 0.0 0.0 1.9871694670156735E-5
+1.5E-4 455.0 246.0 0.0 0.0 1.9008802226075915E-5
+1.5E-4 485.0 186.0 0.0 0.0 1.153937099374691E-6
+1.5E-4 485.0 216.0 0.0 0.0 2.5958534129712584E-5
+1.5E-4 485.0 246.0 0.0 0.0 7.773019045381525E-5
+7.5E-5 455.0 336.0 0.0 0.0 -7.799073382837734E-5
+0
+ballsMoving: false
+voltageCalcing: true
+drawVoltage: true
+drawBalls: true
+elasticWalls: 50
+8
+ballStart 0
+reset 0
+elasticWallsButton 0
+Voltage 1
+addOrEdit 0
+saveToFile 0
+loadFromFile 0
+typeBallOrWall 0

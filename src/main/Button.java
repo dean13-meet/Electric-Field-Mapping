@@ -12,10 +12,12 @@ public class Button extends JButton implements ActionListener, Cloneable{
 	ButtonCommands command;
 	String[] strs; //Contains the strings that will be displayed on the button
 	//with every click.
+	public final String name;
 
-	Button(ButtonCommands command, String[] strs, int x, int y, int w, int h) {
+	Button(String name, ButtonCommands command, String[] strs, int x, int y, int w, int h) {
 		super(strs[0]);
 		//System.out.println("Creating button: " + strs[0]);
+		this.name = name;
 
 		addActionListener(this);
 		this.command = command;
@@ -54,8 +56,9 @@ public class Button extends JButton implements ActionListener, Cloneable{
 
 			this.setFont(new Font(this.getFont().getName(), this.getFont().getStyle(), newSize));
 		}
-		command.execute(timesClicked);
 		timesClicked++;
+		command.execute(timesClicked);
+		
 	}
 
 	public void simulateClick() {

@@ -66,6 +66,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	ArrayList<Double> originalX = new ArrayList<Double>();
 	ArrayList<Double> originalY = new ArrayList<Double>();
 
+	public ArrayList<Button> buttons;
 	private Button ballStart;
 	private Button reset;
 	public Button elasticWallsButton;//Must be public so other classes can edit its text when elasticity changes.
@@ -74,7 +75,9 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	private Button saveToFile;
 	private Button loadFromFile;
 	private Button typeBallOrWall;
+	
 	public JSlider slideElastic;
+	
 
 	ArrayList<JLabel> chargeDisplay;
 	Force[][] electricField;
@@ -100,15 +103,17 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	public int elasticity;
 	boolean addOrEditBoolean;//Add - true, Edit - false.
 	boolean ballOrWall; //Ball - true, Wall - false.
-	//double elasticWalls; // 0 <= elasticity <= 1
+	public boolean drawArrowHeads;
 	private Thread voltageCalcThread;
 
 
 	private ArrayList<ArrowHead> arrowHeads = new ArrayList<ArrowHead>();
-	private boolean drawArrowHeads;
+	
 	private long lastAddedBallTime = System.currentTimeMillis();
 	private long minTimeToAddNewBall = 100;//Minimum time (in miliSec) between adding balls on drag
+	
 
+	
 	public initialDisplay(int w, int h, JFrame f, Program program) {
 		super(w, h, f, program);
 		init();
@@ -135,18 +140,18 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		int rowStartY = height/12 - buttonHeight/2;
 		int spacingBetweenButtons = buttonWidth + 10;
 		String[] startStrs = {"Start", "Pause"};
-		ballStart = (new Button( new pauseBallMovement(this), startStrs, rowStartX, rowStartY, buttonWidth, buttonHeight));
+		ballStart = (new Button("ballStart",new pauseBallMovement(this), startStrs, rowStartX, rowStartY, buttonWidth, buttonHeight));
 		add(getBallStart());
 		getBallStart().setVisible(true);
 
 		String[] resetStrs = {"Reset"};
-		reset = new Button (new Reset(this), resetStrs, rowStartX + spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
+		reset = new Button ("reset", new Reset(this), resetStrs, rowStartX + spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
 		add(reset);
 		reset.setVisible(true);
 
 		this.elasticity = 50;
 		String[] elasticWallsArray = {"Elasticity: " + this.elasticity + "%"};
-		elasticWallsButton = new Button(new slideElasticWalls(this, hostProgram), elasticWallsArray,rowStartX + 2*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
+		elasticWallsButton = new Button("elasticWallsButton", new slideElasticWalls(this, hostProgram), elasticWallsArray,rowStartX + 2*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
 		/*String[] elasticWallsArray = {"Update Elasticity"};
 		elasticWallsButton = new Button(new slideElasticWalls(this), elasticWallsArray,height/9 +325, width/20, buttonWidth, buttonHeight);
 		 */
@@ -154,29 +159,29 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		elasticWallsButton.setVisible(true);
 
 		String[] voltageOnOff = {"Voltage: Off", "Voltage: On"};
-		Voltage = new Button (new VoltageOnOff(this), voltageOnOff,rowStartX + 3*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
+		Voltage = new Button ("Voltage", new VoltageOnOff(this), voltageOnOff,rowStartX + 3*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
 		add(Voltage);
 		Voltage.setVisible(true);
 
+		String[] ballOrWallStrs = {"Type: Animate", "Type: Inanimate"};
+		typeBallOrWall = new Button ("typeBallOrWall", new ballOrWallCommand(this), ballOrWallStrs, rowStartX + 4*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
+		add(typeBallOrWall);
+		typeBallOrWall.setVisible(true);
+		
 		String[] addOrEditStrings = {"OnClick: Add", "OnClick: Edit"};
-		Voltage = new Button (new addOrEditCommand(this), addOrEditStrings,rowStartX + 4*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
-		add(Voltage);
-		Voltage.setVisible(true);
-
+		addOrEdit = new Button ("addOrEdit", new addOrEditCommand(this), addOrEditStrings,rowStartX + 5*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
+		add(addOrEdit);
+		addOrEdit.setVisible(true);
+		
 		String[] saveToFileStrings = {"Save To File"};
-		saveToFile = new Button (new SaveToFile(this), saveToFileStrings,rowStartX + 5*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
+		saveToFile = new Button ("saveToFile", new SaveToFile(this), saveToFileStrings,rowStartX + 6*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
 		add(saveToFile);
 		saveToFile.setVisible(true);
 
 		String[] loadFromFileStrings = {"Load From File"};
-		loadFromFile = new Button (new LoadFromFile(this), loadFromFileStrings, rowStartX + 6*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
+		loadFromFile = new Button ("loadFromFile", new LoadFromFile(this), loadFromFileStrings, rowStartX + 7*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
 		add(loadFromFile);
 		loadFromFile.setVisible(true);
-
-		String[] ballOrWallStrs = {"Type: Animate", "Type: Inanimate"};
-		typeBallOrWall = new Button (new ballOrWallCommand(this), ballOrWallStrs, rowStartX + 7*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
-		add(typeBallOrWall);
-		typeBallOrWall.setVisible(true);
 
 		setPresets(getAllFiles());
 		presetCB = new JComboBox<String>(getPresets());
@@ -190,6 +195,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		ballarray = new ArrayList<Ball>();
 		pendingBalls = new ArrayList<Ball>();
 		chargeDisplay = new ArrayList<JLabel>();
+		buttons = new ArrayList<Button>();
 		addMouseListener(this);
 		addMouseMotionListener(this);
 
@@ -252,6 +258,17 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		ballOrWall = true;
 		drawArrowHeads = true;
 
+	
+		buttons.add(ballStart);
+		buttons.add(reset);
+		buttons.add(elasticWallsButton);
+		buttons.add(Voltage);
+		buttons.add(addOrEdit);
+		buttons.add(saveToFile);
+		buttons.add(loadFromFile);
+		buttons.add(typeBallOrWall);
+		
+		
 		repaint();
 	}
 
@@ -914,6 +931,13 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				return false;
 		}
 		return true;
+	}
+	
+	public Button getButtonByName(String name){
+		for(Button b : this.buttons){
+			if(b.name.equals(name))return b;
+		}
+		return null;
 	}
 
 	@Override

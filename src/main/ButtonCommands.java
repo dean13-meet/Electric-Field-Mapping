@@ -37,11 +37,12 @@ class pauseBallMovement extends ButtonCommands {
 	void execute(int caseNum) {
 		switch(caseNum%2){
 		case 0:
-			newD.ballsMoving = true;
-			break;
-		case 1:
 			newD.ballsMoving = false;
 			break;
+		case 1:
+			newD.ballsMoving = true;
+			break;
+		
 		}
 	}
 }
@@ -71,16 +72,16 @@ class VoltageOnOff extends ButtonCommands{
 	void execute(int caseNum) {
 		switch(caseNum%2){
 		case 0:
-			newD.drawVoltage = true;
-			newD.voltageCalcing = true;
-			newD.voltageBarMax.setVisible(true);
-			newD.voltageBarMin.setVisible(true);
-			break;
-		case 1:
 			newD.drawVoltage = false;
 			newD.voltageCalcing = false;
 			newD.voltageBarMax.setVisible(false);
 			newD.voltageBarMin.setVisible(false);
+			break;
+		case 1:
+			newD.drawVoltage = true;
+			newD.voltageCalcing = true;
+			newD.voltageBarMax.setVisible(true);
+			newD.voltageBarMin.setVisible(true);
 			break;
 		}
 	}
@@ -169,12 +170,12 @@ class addOrEditCommand extends ButtonCommands{
 	void execute(int caseNum) {
 		switch(caseNum%2){
 		case 0:
-			newD.addOrEditBoolean = false;
-			//Going to edit.
-			break;
-		case 1:
 			newD.addOrEditBoolean = true;
 			//Going to add.
+			break;
+		case 1:
+			newD.addOrEditBoolean = false;
+			//Going to edit.
 			break;
 		}
 	}
@@ -238,6 +239,14 @@ class SaveToFile extends ButtonCommands {
 			out.write("drawVoltage: " + newD.drawVoltage + '\n');
 			out.write("drawBalls: " + newD.drawBalls + '\n');
 			out.write("elasticWalls: " + newD.elasticity + '\n');
+			
+			//Saving buttons: (Note: When saving buttons we only need to save the # of times they were
+			//clicked, and then we restore them with that number -1, and simulate a click on them!)
+			
+			out.write(newD.buttons.size() + "\n");
+			for(Button b : newD.buttons){
+				out.write(b.name + " " + b.timesClicked + "\n");
+			}
 
 
 		} 
@@ -321,6 +330,25 @@ class LoadFromFile extends ButtonCommands {
 			newD.drawBalls = in.nextBoolean();
 			in.next();
 			newD.elasticity = (int) in.nextDouble();
+			
+			//Load button states:
+			int numberButtons = in.nextInt();
+			if(newD.buttons.size()!=numberButtons){
+				newD.messages.addMessage("Error: Preset does not contain proper amount of GUI buttons. Will not load buttons!", onScreenMessage.CENTER);
+				return;
+			}
+			ArrayList<String> buttonsToIgnore = new ArrayList<String>();
+			buttonsToIgnore.add("reset");
+			buttonsToIgnore.add("elasticWallsButton");
+			buttonsToIgnore.add("saveToFile");
+			buttonsToIgnore.add("loadFromFile");
+			for(int i = 0; i < numberButtons; i++){
+				String buttonName = in.next();
+				newD.getButtonByName(buttonName).timesClicked = in.nextInt()-1;
+				if(!buttonsToIgnore.contains(buttonName))
+				newD.getButtonByName(buttonName).simulateClick();
+				
+			}
 		} catch (IOException x) {
 			System.err.format("IOException: %s%n", x);
 			newD.messages.addMessage("File not found", onScreenMessage.CENTER);
@@ -338,12 +366,12 @@ class ballOrWallCommand extends ButtonCommands{
 	void execute(int caseNum) {
 		switch(caseNum%2){
 		case 0:
-			newD.ballOrWall = false;
-			//Going to wall.
-			break;
-		case 1:
 			newD.ballOrWall = true;
 			//Going to ball.
+			break;
+		case 1:
+			newD.ballOrWall = false;
+			//Going to wall.
 			break;
 		}
 	}

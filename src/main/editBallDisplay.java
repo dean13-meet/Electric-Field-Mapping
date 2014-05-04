@@ -124,7 +124,7 @@ public class editBallDisplay extends Display{
 
 
 		String[] startStrs = {"Update Ball"};
-		Button ballEdit = new Button( new updateBallCommand(hostFrame, d, ball, ballIndex ), startStrs,width/2-50, height*7/9, 100, 50);
+		Button ballEdit = new Button("ballEdit",new updateBallCommand(hostFrame, d, ball, ballIndex ), startStrs,width/2-50, height*7/9, 100, 50);
 		add(ballEdit);
 		ballEdit.setVisible(true);
 

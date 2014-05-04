@@ -18,7 +18,7 @@ public class addInanimateDisplay extends Display {
 	void init() {
 		double charge = -0.001;
 		String[] startStrs = {"Add New Inanimate"};
-		Button ballAdd = new Button(new addInanimateCommand(initialDisplay, this.hostFrame, hostProgram, charge,
+		Button ballAdd = new Button("ballAdd", new addInanimateCommand(initialDisplay, this.hostFrame, hostProgram, charge,
 				initialDisplay.verticesOfBeingAddedInAnimate), startStrs,width/2-100, height/2-25, 200, 50);
 		add(ballAdd);
 		ballAdd.setVisible(true);
