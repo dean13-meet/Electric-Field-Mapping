@@ -15,7 +15,6 @@ public class Ball {
 	public initialDisplay d;
 	private Color color = Color.GREEN;
 	public static final Color defaultColor = Color.green;
-	private Line2D closestLine;
 
 	public Force force = new Force();
 	Line2D.Double forceVector;
@@ -58,8 +57,6 @@ public class Ball {
 		double yy = y-getRadius();
 		g.setColor(color);
 		g.fillOval((int) xx, (int) yy, (int) mySize, (int) mySize);
-		if(closestLine!=null)
-		g.drawLine((int)closestLine.getX1(), (int)closestLine.getY1(), (int)closestLine.getX2(), (int)closestLine.getY2());
 	}
 
 	public void update(Graphics g, int width, int height, int tickLength, ArrayList<inanimateObject> inani) {
@@ -77,37 +74,35 @@ public class Ball {
 
 	private void inanimateFailSafe(ArrayList<inanimateObject> inani) {
 		for(inanimateObject o : inani){
-		//Failsafe - in case balls glitched into the shape and did not collide:
-		if(o.shape.contains(getX(), getY())){
-			Line2D closestLine = new Line2D.Float(o.getVertecies().get(o.getVertecies().size()-1), o.getVertecies().get(0));
-			double distanceToClosestLine = closestLine.ptSegDist(getX(), getY());
-			for(int i = 0; i < o.getVertecies().size() - 1; i++){
-				Line2D l = new Line2D.Float(o.getVertecies().get(i), o.getVertecies().get(i+1));
-				double d = l.ptSegDist(getX(), getY());
-				if(d<distanceToClosestLine){
-					closestLine = l;
-					distanceToClosestLine = d;
+			//Failsafe - in case balls glitched into the shape and did not collide:
+			if(o.shape.contains(getX(), getY())){
+				Line2D closestLine = new Line2D.Float(o.getVertecies().get(o.getVertecies().size()-1), o.getVertecies().get(0));
+				double distanceToClosestLine = closestLine.ptSegDist(getX(), getY());
+				for(int i = 0; i < o.getVertecies().size() - 1; i++){
+					Line2D l = new Line2D.Float(o.getVertecies().get(i), o.getVertecies().get(i+1));
+					double d = l.ptSegDist(getX(), getY());
+					if(d<distanceToClosestLine){
+						closestLine = l;
+						distanceToClosestLine = d;
+					}
 				}
+				double m1 = (closestLine.getY2()-closestLine.getY1())/(closestLine.getX2()-closestLine.getX1());
+				double m2 = -1/m1;
+				//Line2D normalToLine = new Line2D.Float((float)getX(), (float)getY(), (float)getX()+100, (float)(getY()+100*m2));
+				//Line2D xAxis = new Line2D.Float((float)getX(), (float)getY(), (float)getX()+10, (float)getY());
+				double degreeBetweenLines = Math.atan(m2);//Degree between normal to inAnimate line and the x axis
+				//System.out.println("Setting from: " + getX() + "," + getY() + " To: " + getX()+distanceToClosestLine*Math.cos(degreeBetweenLines) + "," +getY() + distanceToClosestLine*Math.sin(degreeBetweenLines));
+				this.setX(getX()+distanceToClosestLine*Math.cos(degreeBetweenLines));
+				this.setY(getY() + distanceToClosestLine*Math.sin(degreeBetweenLines));
 			}
-			double m1 = (closestLine.getY2()-closestLine.getY1())/(closestLine.getX2()-closestLine.getX1());
-			double m2 = -1/m1;
-			//Line2D normalToLine = new Line2D.Float((float)getX(), (float)getY(), (float)getX()+100, (float)(getY()+100*m2));
-			//Line2D xAxis = new Line2D.Float((float)getX(), (float)getY(), (float)getX()+10, (float)getY());
-			double degreeBetweenLines = Math.atan(m2);//Degree between normal to inAnimate line and the x axis
-			//System.out.println("Setting from: " + getX() + "," + getY() + " To: " + getX()+distanceToClosestLine*Math.cos(degreeBetweenLines) + "," +getY() + distanceToClosestLine*Math.sin(degreeBetweenLines));
-			this.setX(getX()+distanceToClosestLine*Math.cos(degreeBetweenLines));
-			this.setY(getY() + distanceToClosestLine*Math.sin(degreeBetweenLines));
-			this.setColor(Color.red);
-			this.closestLine = closestLine;
 		}
-		}
-		
+
 	}
 
 	private void inanimateCollisions(ArrayList<inanimateObject> inani) {
 		for(inanimateObject o : inani){
-			
-			
+
+
 			for(int i = 0; i < o.getVertecies().size(); i++){
 				Line2D l;
 				if(i<o.getVertecies().size()-1)l = new Line2D.Float(o.getVertecies().get(i), o.getVertecies().get(i+1));
@@ -118,9 +113,9 @@ public class Ball {
 					dy = 0;
 				}
 			}
-			
+
 		}
-		
+
 	}
 
 	public void updateAcceleration() {
