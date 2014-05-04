@@ -415,6 +415,24 @@ class addInanimateCommand extends ButtonCommands{
 
 	@Override
 	void execute(int caseNum) {
+		//TODO
+		/*
+		 * Make sure no overlapping inanimates:
+		 * Check to see if there is an inanimate at the location before adding this new one
+		 * 
+		 * To do this, loop over all inanimates, and determine if any of the lines of 
+		 * the inanimate being added intersects any of the lines of any of the 
+		 * existing inanimates.
+		 * 
+		 * IMPORTANT NOTE: You MUST take all the vertecies in the inanimate and 
+		 * convert them to Line2D then check to see if their LINE SEGMENTS intersect
+		 * (not the lines themselves). This is due to the fact that lines are endless
+		 * and will always intersect (unless parallel, which is usually not the case here).
+		 * Instead, our inanimates are defined by LINE SEGMENTS and you must check
+		 * to see if the segments intersect, not their lines. (NOTE: Line2D has
+		 * a method to check intersection of 2 SEGMENTS).
+		 * 
+		 */
 		if(v.size()>2)
 			d.inAnimates.add(new inanimateObject(p, d, charge, v));
 		else

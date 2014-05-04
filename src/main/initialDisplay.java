@@ -112,13 +112,13 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	 * Arrow - Tools: Select
 	 * 
 	 */
-	
-	
+
+
 	public final String[] types = {"Ball", "Inanimate", "Arrow"};
 	public final String[] ballTools = {"Add: Place", "Add: Drag", "Edit: Popup", "Edit: Drag", "Delete", "Select"};
 	public final String[] inanimateTools = {"Add: Place", "Add: Drag", "Edit: Popup", "Edit: Drag", "Delete", "Select"};
 	public final String[] arrowTools = {"Select"};
-	
+
 	private Thread voltageCalcThread;
 
 
@@ -186,7 +186,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		add(typeButton);
 		typeButton.setVisible(true);
 
-		
+
 		String[] toolStrings = new String[ballTools.length];
 		for(int i = 0; i < toolStrings.length; i++){
 			toolStrings[i] = "Tool: " + ballTools[i];
@@ -968,17 +968,17 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		if (a.getX() /*+radius*/ <= width*5/6 && a.getX() /*-radius*/ >= width/6 + 3 && a.getY()/*+radius*/
 				<= height*9/10 && a.getY()/*-radius*/ >= height/6 + 3) {//If in ball pit
 
-			boolean spaceFree = true;
+			boolean spaceFreeOfBalls = true;
 			for(Ball b : ballarray){
 				if(a.getX()>=b.getX()-b.getRadius()&&a.getX()<=b.getX()+b.getRadius()
 						&&a.getY()>=b.getY()-b.getRadius()&&a.getY()<=b.getY()+b.getRadius())
-					spaceFree = false;
+					spaceFreeOfBalls = false;
 			}
 
 			if(type.equals("Ball")){
 				if(tool.equals("Add: Drag")){
 
-					if(spaceFree){
+					if(spaceFreeOfBalls){
 						if(System.currentTimeMillis()-lastAddedBallTime>minTimeToAddNewBall){
 							this.toAdd.add(new Ball(this, 0.00010, (int)a.getX(), (int)a.getY(), 0, 0, Math.max((Math.random()*100/1000000), 200/1000000)));
 							lastAddedBallTime = System.currentTimeMillis();
@@ -987,27 +987,54 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				}
 				else if(tool.equals("Edit: Drag")){
 					//TODO
+					/*
+					 * If there is a ball here (spaceFreeOfBalls == false):
+					 * Set the x and y coords of the ball to wherever the mouse is (a.getX(), a.getY())
+					 */
 				}
 				else if(tool.equals("Select")){
 					//TODO
+					/*
+					 * Creates a rectangle from the starting point of drag to the end point of drag.
+					 * Draws that rectangle with low opacity (transparency)
+					 * Loops through all balls to see if they are in the rectangle
+					 * If a ball is in, it changes its color to Color.cyan
+					 * If there is 1 or more balls selected: 
+					 * 		Open a popup with what can be done to the selected balls (in a JComboBox), and a button in the popup to perform that action
+					 * 		For now, the only action the popup will have is: Delete All -> When used, all the balls selected are deleted
+					 */
 				}
 			}
 			else if(type.equals("Inanimate")){
-				
+
 				if(tool.equals("Add: Drag")){
 					//TODO
+					/*
+					 * If there is no inanimate in the place (check all inanimates to make sure that inanimate.shape.contains(a.getX(), a.getY()) is false)
+					 * 		Then it adds a small 20*20 square inanimate, with top left coord at a.getX(), a.getY()
+					 */
 				}
 				else if(tool.equals("Edit: Drag")){
 					//TODO
+					/* If there is an inanimate at a.getX(), a.getY()
+					 * If that inanimate has a vertex (inanimate.vertecies) at a.getX(), a.getY(), then that vertex is set to be a.getX(), a.getY() -- changes the location of the vertex by drag 
+					 */
+
 				}
 				else if(tool.equals("Select")){
 					//TODO
+					/*
+					 * Does same as ball select, just with inanimates.
+					 */
 				}
 			}
 			else if(type.equals("Arrow")){
-				
+
 				if(tool.equals("Select")){
 					//TODO
+					/*
+					 * Does same as ball select, just with arrows.
+					 */
 				}
 			}
 		}
@@ -1059,6 +1086,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		 */
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public void mouseClicked(MouseEvent a) {
 		//System.out.println("X: " + a.getX() + " Y: " + a.getY());
@@ -1184,48 +1212,87 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 						} else {hostProgram.getJFrameById("Edit Ball").toFront();}
 					}
 				}
+				else if(tool.equals("Delete")){
+					if(!spaceFree&&ballInSpace!=null){
+						int index = ballarray.indexOf(ballInSpace);
+						ballarray.remove(ballInSpace);
+						this.remove(chargeDisplay.get(index));
+						chargeDisplay.remove(index);
+					}
+				}
 
 			} else if(type.equals("Inanimate")){
+				boolean spaceFreeOfInanimates = true;
+				inanimateObject occupyingInanimate = null;
+				//TODO
+				/*
+				 * Loop over all inanimates and make sure that they do not contain a.getX(), a.getY()
+				 * 	(inanimate.shape.contains(a.getX(), a.getY())
+				 * 
+				 * If any inanimate contains this point, spaceFreeOfInanimates is set to false,
+				 * AND occupyingInanimate is set to whatever inanimate this is
+				 */
+
 				if(tool.equals("Add: Place")){
-					if (hostProgram.getJFrameById("Add Inanimate") == null) {
-						final boolean ballsWhereMoving;
+					//TODO
+					/*
+					 * Check that verticiesOfBeingAdded inanimate does not include a.getX(), a.getY()
+					 * --That is to make sure that the same inanimate doesnt get a new
+					 * vertex which is exactly as an old one.
+					 * 
 
-						if (ballsMoving) {getBallStart().simulateClick();ballsWhereMoving = true;}//Always pause.
-						else ballsWhereMoving = false;
+					 */
+					if(spaceFreeOfInanimates){
+						if (hostProgram.getJFrameById("Add Inanimate") == null) {
+							final boolean ballsWhereMoving;
 
-						hostProgram.createJFrame(50, 25, "Add Inanimate", new Color(255,153,0), false, "Add Inanimate");
+							if (ballsMoving) {getBallStart().simulateClick();ballsWhereMoving = true;}//Always pause.
+							else ballsWhereMoving = false;
 
-						final JFrame editBallF = hostProgram.getJFrameById("Add Inanimate");
-						editBallF.addWindowListener(new java.awt.event.WindowAdapter() {
-							@Override
-							public void windowClosing (java.awt.event.WindowEvent windowEvent) {
-								if (ballsWhereMoving && !ballsMoving) {
-									getBallStart().simulateClick();
+							hostProgram.createJFrame(50, 25, "Add Inanimate", new Color(255,153,0), false, "Add Inanimate");
+
+							final JFrame editBallF = hostProgram.getJFrameById("Add Inanimate");
+							editBallF.addWindowListener(new java.awt.event.WindowAdapter() {
+								@Override
+								public void windowClosing (java.awt.event.WindowEvent windowEvent) {
+									if (ballsWhereMoving && !ballsMoving) {
+										getBallStart().simulateClick();
+									}
+									hostProgram.framesId.remove("Add Inanimate");
+									hostProgram.frames.remove(editBallF);
+									verticesOfBeingAddedInAnimate = new ArrayList<Point>();
 								}
-								hostProgram.framesId.remove("Add Inanimate");
-								hostProgram.frames.remove(editBallF);
-								verticesOfBeingAddedInAnimate = new ArrayList<Point>();
-							}
-						});
+							});
 
-						Display editBallD = new addInanimateDisplay(editBallF.getWidth(), editBallF.getHeight(),
-								editBallF, hostProgram, this);
-						editBallF.add(editBallD);
-						verticesOfBeingAddedInAnimate.add(new Point(a.getX(), a.getY()));
+							Display editBallD = new addInanimateDisplay(editBallF.getWidth(), editBallF.getHeight(),
+									editBallF, hostProgram, this);
+							editBallF.add(editBallD);
+							verticesOfBeingAddedInAnimate.add(new Point(a.getX(), a.getY()));
 
-					} else {
-						//hostProgram.getJFrameById("Edit Ball").toFront();
-						//In this case we don't bring to front, because it will always be up when we click
-						//to add more vertecies and we don't want user to keep jumping between windows.
+						} else {
+							//hostProgram.getJFrameById("Edit Ball").toFront();
+							//In this case we don't bring to front, because it will always be up when we click
+							//to add more vertecies and we don't want user to keep jumping between windows.
 
-						verticesOfBeingAddedInAnimate.add(new Point(a.getX(), a.getY()));
+							verticesOfBeingAddedInAnimate.add(new Point(a.getX(), a.getY()));
+						}
 					}
 				} 
 				else if(tool.equals("Edit: Popup")){
 					//TODO
+					if(!spaceFreeOfInanimates && occupyingInanimate!=null){
+						/*
+						 * Creates a popup to edit occupyingInanimate:
+						 * 		The charge of the inanimate
+						 * 		Any of the inanimates vertecies -- Each vertex is listed in a JComboBox
+						 * 			and there is 2 text boxes next to the JComboBox that allow changing its X and Y
+						 */
+					}
 				}
 				else if(tool.equals("Delete")){
-					//TODO
+					if(!spaceFreeOfInanimates && occupyingInanimate!=null){
+						inAnimates.remove(occupyingInanimate);
+					}
 				}
 			}
 		}
