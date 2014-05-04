@@ -1,4 +1,4 @@
-package main;
+package src.main;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.WindowEvent;
@@ -42,7 +42,7 @@ class pauseBallMovement extends ButtonCommands {
 		case 1:
 			newD.ballsMoving = true;
 			break;
-		
+
 		}
 	}
 }
@@ -231,17 +231,17 @@ class SaveToFile extends ButtonCommands {
 			out.write("drawVoltage: " + newD.drawVoltage + '\n');
 			out.write("drawBalls: " + newD.drawBalls + '\n');
 			out.write("elasticWalls: " + newD.elasticity + '\n');
-			
+
 			//Saving buttons: (Note: When saving buttons we only need to save the # of times they were
 			//clicked, and then we restore them with that number -1, and simulate a click on them!)
-			
+
 			out.write(newD.buttons.size() + "\n");
 			for(Button b : newD.buttons){
 				out.write(b.name + " " + b.timesClicked + "\n");
 			}
 
 
-		} 
+		}
 
 		catch (IOException e) {
 			e.printStackTrace();
@@ -276,9 +276,9 @@ class LoadFromFile extends ButtonCommands {
 			newD.ballarray.clear();
 			for (int i = 0; i < numberBalls; i++) {
 
-				newD.ballarray.add(new Ball(newD, 
-						in.nextDouble(), 
-						(int) (in.nextDouble()*widthRatio), 
+				newD.ballarray.add(new Ball(newD,
+						in.nextDouble(),
+						(int) (in.nextDouble()*widthRatio),
 						(int) (in.nextDouble()*heightRatio),
 						in.nextDouble(), in.nextDouble(), in.nextDouble()));
 			}
@@ -322,7 +322,7 @@ class LoadFromFile extends ButtonCommands {
 			newD.drawBalls = in.nextBoolean();
 			in.next();
 			newD.elasticity = (int) in.nextDouble();
-			
+
 			//Load button states:
 			int numberButtons = in.nextInt();
 			if(newD.buttons.size()!=numberButtons){
@@ -339,7 +339,7 @@ class LoadFromFile extends ButtonCommands {
 				newD.getButtonByName(buttonName).timesClicked = in.nextInt()-1;
 				if(!buttonsToIgnore.contains(buttonName))
 				newD.getButtonByName(buttonName).simulateClick();
-				
+
 			}
 		} catch (IOException x) {
 			System.err.format("IOException: %s%n", x);
@@ -358,7 +358,7 @@ class ballOrWallCommand extends ButtonCommands{
 	void execute(int caseNum) {
 		Button b = newD.getButtonByName("typeButton");
 		newD.type = b.getText().replace("Type: ", "");
-		
+
 		Button tool = newD.getButtonByName("toolButton");//After changing the type, we will change the tool button to match the appropriate tools!
 		if(newD.type.equals("Ball")){
 			String[] toolStrings = new String[newD.ballTools.length];
@@ -393,8 +393,8 @@ class ballOrWallCommand extends ButtonCommands{
 			//Now, set the tool being used to match one of the optional tools available
 			tool.simulateClick();
 		}
-		
-		
+
+
 	}
 }
 class addInanimateCommand extends ButtonCommands{
@@ -419,19 +419,19 @@ class addInanimateCommand extends ButtonCommands{
 		/*
 		 * Make sure no overlapping inanimates:
 		 * Check to see if there is an inanimate at the location before adding this new one
-		 * 
-		 * To do this, loop over all inanimates, and determine if any of the lines of 
-		 * the inanimate being added intersects any of the lines of any of the 
+		 *
+		 * To do this, loop over all inanimates, and determine if any of the lines of
+		 * the inanimate being added intersects any of the lines of any of the
 		 * existing inanimates.
-		 * 
-		 * IMPORTANT NOTE: You MUST take all the vertecies in the inanimate and 
+		 *
+		 * IMPORTANT NOTE: You MUST take all the vertecies in the inanimate and
 		 * convert them to Line2D then check to see if their LINE SEGMENTS intersect
 		 * (not the lines themselves). This is due to the fact that lines are endless
 		 * and will always intersect (unless parallel, which is usually not the case here).
 		 * Instead, our inanimates are defined by LINE SEGMENTS and you must check
 		 * to see if the segments intersect, not their lines. (NOTE: Line2D has
 		 * a method to check intersection of 2 SEGMENTS).
-		 * 
+		 *
 		 */
 		if(v.size()>2)
 			d.inAnimates.add(new inanimateObject(p, d, charge, v));

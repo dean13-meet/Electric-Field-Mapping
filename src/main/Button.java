@@ -1,4 +1,4 @@
-package main;
+package src.main;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -58,13 +58,13 @@ public class Button extends JButton implements ActionListener, Cloneable{
 		}
 		timesClicked++;
 		command.execute(timesClicked);
-		
+
 	}
 
 	public void simulateClick() {
 		actionPerformed(new ActionEvent(this, 0, ""));
 	}
-	
+
 	public Button getClone(){
 		try {
 			return (Button) this.clone();

@@ -1,9 +1,8 @@
-package main;
+package src.main;
 /**
- *
- * @author Dean Leitersdorf, William Lee, Ophir Sneh
- *
- */
+ * @author Dean Leitersdorf, William Lee, Ophir Sneh, Lilia Tang
+*
+  */
 
 import java.awt.AWTException;
 
@@ -53,7 +52,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	public ArrayList<inanimateObject> inAnimates;
 
 
-
 	private String[] presets;
 	private JComboBox<String> presetCB;
 	private String presetSelected;
@@ -77,7 +75,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	private Button typeButton;
 
 	public JSlider slideElastic;
-
 
 	ArrayList<JLabel> chargeDisplay;
 	Force[][] electricField;
@@ -106,11 +103,11 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	public String tool = "";
 	/*
 	 * Types:
-	 * 
+	 *
 	 * Ball - Tools: Add: Place, Add: Drag, Edit: Popup, Edit: Drag, Delete, Select
 	 * Inanimate - Tools: Add: Place, Add: Drag, Edit: Popup, Edit: Drag, Delete, Select
 	 * Arrow - Tools: Select
-	 * 
+	 *
 	 */
 
 
@@ -577,7 +574,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public void calcVoltage(){
 		if(timeCounter%50==0){
@@ -683,7 +680,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		voltageBarMin.setText(sb.toString());
 	}
 
-	private void printVoltages() {
+	/*private void printVoltages() {
 		for(int x = 0; x <width; x++) {
 			for (int y = 0; y < height; y++) {
 				double v = voltageValue[x][y];
@@ -692,7 +689,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				}
 			}
 		}
-	}
+	}*/
 
 	private void drawVoltageGrid(Graphics g) {
 		if(voltageValue!=null && voltageValue.length!=0 && voltageValue[0].length!=0){
@@ -999,7 +996,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 					 * Draws that rectangle with low opacity (transparency)
 					 * Loops through all balls to see if they are in the rectangle
 					 * If a ball is in, it changes its color to Color.cyan
-					 * If there is 1 or more balls selected: 
+					 * If there is 1 or more balls selected:
 					 * 		Open a popup with what can be done to the selected balls (in a JComboBox), and a button in the popup to perform that action
 					 * 		For now, the only action the popup will have is: Delete All -> When used, all the balls selected are deleted
 					 */
@@ -1017,7 +1014,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				else if(tool.equals("Edit: Drag")){
 					//TODO
 					/* If there is an inanimate at a.getX(), a.getY()
-					 * If that inanimate has a vertex (inanimate.vertecies) at a.getX(), a.getY(), then that vertex is set to be a.getX(), a.getY() -- changes the location of the vertex by drag 
+					 * If that inanimate has a vertex (inanimate.vertecies) at a.getX(), a.getY(), then that vertex is set to be a.getX(), a.getY() -- changes the location of the vertex by drag
 					 */
 
 				}
@@ -1228,7 +1225,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				/*
 				 * Loop over all inanimates and make sure that they do not contain a.getX(), a.getY()
 				 * 	(inanimate.shape.contains(a.getX(), a.getY())
-				 * 
+				 *
 				 * If any inanimate contains this point, spaceFreeOfInanimates is set to false,
 				 * AND occupyingInanimate is set to whatever inanimate this is
 				 */
@@ -1239,7 +1236,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 					 * Check that verticiesOfBeingAdded inanimate does not include a.getX(), a.getY()
 					 * --That is to make sure that the same inanimate doesnt get a new
 					 * vertex which is exactly as an old one.
-					 * 
+					 *
 
 					 */
 					if(spaceFreeOfInanimates){
@@ -1277,7 +1274,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 							verticesOfBeingAddedInAnimate.add(new Point(a.getX(), a.getY()));
 						}
 					}
-				} 
+				}
 				else if(tool.equals("Edit: Popup")){
 					//TODO
 					if(!spaceFreeOfInanimates && occupyingInanimate!=null){

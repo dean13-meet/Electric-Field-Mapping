@@ -1,4 +1,4 @@
-package main;
+package src.main;
 /**
  * @author Dean Leitersdorf, William Lee, Ophir Sneh
 */

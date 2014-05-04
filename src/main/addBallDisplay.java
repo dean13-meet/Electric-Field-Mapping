@@ -1,4 +1,4 @@
-package main;
+package src.main;
 import java.awt.Graphics;
 
 import javax.swing.JFrame;
@@ -23,14 +23,10 @@ public class addBallDisplay extends Display{
 
 	@Override
 	void init() {
-
 		String[] startStrs = {"Add New Ball"};
 		Button ballAdd = new Button("ballAdd", new addBallCommand(hostFrame,this.initialDisplay, 0.00010, ballX, ballY, 0, 0, Math.max((Math.random()*100/1000000), 200/1000000), pendingBallArraySizeBeforeAddingOurBall), startStrs, width/2-100, height/2-25, 200, 50);
 		add(ballAdd);
 		ballAdd.setVisible(true);
-
-
-
 	}
 
 	@Override

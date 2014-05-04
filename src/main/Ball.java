@@ -1,4 +1,4 @@
-package main;
+package src.main;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Line2D;
@@ -100,22 +100,36 @@ public class Ball {
 	}
 
 	private void inanimateCollisions(ArrayList<inanimateObject> inani) {
-		for(inanimateObject o : inani){
-
-
-			for(int i = 0; i < o.getVertecies().size(); i++){
+		for (inanimateObject o : inani) {
+			for (int i = 0; i < o.getVerticies().size(); i++) {
 				Line2D l;
-				if(i<o.getVertecies().size()-1)l = new Line2D.Float(o.getVertecies().get(i), o.getVertecies().get(i+1));
-				else l = new Line2D.Float(o.getVertecies().get(i), o.getVertecies().get(0));//Gets line connecting end and start of inanimate
-
-				if(l.ptSegDist(getX(), getY())<=3){//If the ball is less than or equal to 3 pixels from the line -- this is because balls can "skip" the line due to miscalculations
-					dx = 0; 
-					dy = 0;
+				if (i < o.getVerticies().size() - 1)
+					l = new Line2D.Float(o.getVerticies().get(i), o.getVerticies().get(i+1));
+				else
+					l = new Line2D.Float(o.getVerticies().get(i), o.getVerticies().get(0));//Gets line connecting end and start of inanimate
+				//System.out.println(l.ptSegDist(getX(), getY()));
+				if (l.ptSegDist(getX(), getY()) < 3) { //If the ball is less than 3 pixels from the line
+					double slope = (l.getY1() - l.getY2()) / (l.getX1() - l.getX2());
+					double normalSlope = -1/slope;
+					// determines whether ball is above or below line
+					double ball_pos = y - l.getY1() - slope * (x - l.getX1());
+					// dot product to find cosine between vectors
+					double dot;
+					// since only direction matters, we can assume that the x component is 1
+					if (ball_pos > 0)
+						dot = dy * normalSlope - dx;
+					else
+						dot = dx - dy * normalSlope;
+					double mag_normal = Math.sqrt(Math.pow(normalSlope, 2) + 1);
+					double mag_ball = Math.sqrt(dx*dx + dy*dy);
+					// reflected angle
+					double angle = Math.PI - Math.acos(dot / (mag_normal * mag_ball));
+					double elastic = (double) d.elasticity/(double) 100;
+					dx = elastic * mag_ball * Math.cos(angle);
+					dy = elastic * mag_ball * Math.sin(angle);
 				}
 			}
-
 		}
-
 	}
 
 	public void updateAcceleration() {
@@ -218,7 +232,7 @@ public class Ball {
 			return Math.atan(dy/dx);
 		if (dy > 0)
 			return Math.PI/2;
-		if (dy < 0) 
+		if (dy < 0)
 			return -Math.PI/2;
 		return 0;
 	}

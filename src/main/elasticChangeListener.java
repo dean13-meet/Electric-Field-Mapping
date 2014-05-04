@@ -1,4 +1,4 @@
-package main;
+package src.main;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -7,7 +7,7 @@ import javax.swing.event.ChangeListener;
 public class elasticChangeListener implements ChangeListener {
 
 	private final initialDisplay d;
-	
+
 	public elasticChangeListener(initialDisplay d){
 		this.d = d;
 	}

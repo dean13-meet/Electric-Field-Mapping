@@ -1,4 +1,4 @@
-package main;
+package src.main;
 import java.awt.Graphics;
 
 import javax.swing.JFrame;
@@ -122,12 +122,10 @@ public class editBallDisplay extends Display{
 		dyU.setVisible(true);
 
 
-
 		String[] startStrs = {"Update Ball"};
 		Button ballEdit = new Button("ballEdit",new updateBallCommand(hostFrame, d, ball, ballIndex ), startStrs,width/2-50, height*7/9, 100, 50);
 		add(ballEdit);
 		ballEdit.setVisible(true);
-
 
 		repaint();
 	}
@@ -144,8 +142,5 @@ public class editBallDisplay extends Display{
 		catch(Exception e){
 
 		}
-
 	}
-
-
 }
