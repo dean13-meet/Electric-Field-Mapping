@@ -34,8 +34,8 @@ import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 import javax.swing.JSlider;
 
-import Utils.ArrowHead;
-import Utils.Force;
+import src.Utils.ArrowHead;
+import src.Utils.Force;
 
 public class initialDisplay extends Display implements MouseListener, MouseMotionListener {
 	public onScreenMessage messages;

@@ -5,7 +5,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Line2D.Float;
 import java.util.ArrayList;
 
-import Utils.Force;
+import src.Utils.Force;
 
 
 public class Ball {
