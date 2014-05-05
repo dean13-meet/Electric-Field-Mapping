@@ -158,6 +158,7 @@ class addBallCommand extends ButtonCommands {
 		callingFrame.dispatchEvent(new WindowEvent(callingFrame, WindowEvent.WINDOW_CLOSING));
 	}
 }
+//TODO: Make sure that when adding a ball, there is no inanimate in the location it is being added.
 
 class addOrEditCommand extends ButtonCommands{
 
