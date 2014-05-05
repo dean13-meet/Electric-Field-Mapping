@@ -1,4 +1,4 @@
-package src.main;
+package main;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;

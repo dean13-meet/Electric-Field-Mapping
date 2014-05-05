@@ -1,4 +1,4 @@
-package src.main;
+package main;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;

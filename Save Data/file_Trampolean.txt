@@ -1,0 +1,20 @@
+Original Width: 1200
+Original Height: 750
+1
+1.0E-4 577.0 153.0 0.0 0.0 5.960212595695439E-5
+1
+-0.001 4 309 270 303 607 895 618 874 280 
+ballsMoving: false
+voltageCalcing: false
+drawVoltage: false
+drawBalls: true
+elasticWalls: 100
+8
+ballStart 2
+reset -3
+elasticWallsButton 2
+Voltage 4
+toolButton 0
+saveToFile 1
+loadFromFile 0
+typeButton 3

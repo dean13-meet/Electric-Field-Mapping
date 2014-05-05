@@ -1,4 +1,4 @@
-package src.main;
+package main;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Line2D;
@@ -76,10 +76,10 @@ public class Ball {
 		for(inanimateObject o : inani){
 			//Failsafe - in case balls glitched into the shape and did not collide:
 			if(o.shape.contains(getX(), getY())){
-				Line2D closestLine = new Line2D.Float(o.getVertecies().get(o.getVertecies().size()-1), o.getVertecies().get(0));
+				Line2D closestLine = new Line2D.Float(o.getVerticies().get(o.getVerticies().size()-1), o.getVerticies().get(0));
 				double distanceToClosestLine = closestLine.ptSegDist(getX(), getY());
-				for(int i = 0; i < o.getVertecies().size() - 1; i++){
-					Line2D l = new Line2D.Float(o.getVertecies().get(i), o.getVertecies().get(i+1));
+				for(int i = 0; i < o.getVerticies().size() - 1; i++){
+					Line2D l = new Line2D.Float(o.getVerticies().get(i), o.getVerticies().get(i+1));
 					double d = l.ptSegDist(getX(), getY());
 					if(d<distanceToClosestLine){
 						closestLine = l;
@@ -108,7 +108,7 @@ public class Ball {
 				else
 					l = new Line2D.Float(o.getVerticies().get(i), o.getVerticies().get(0));//Gets line connecting end and start of inanimate
 				//System.out.println(l.ptSegDist(getX(), getY()));
-				if (l.ptSegDist(getX(), getY()) < 3) { //If the ball is less than 3 pixels from the line
+				if (l.ptSegDist(getX(), getY()) < 1) { //If the ball is less than 3 pixels from the line
 					double slope = (l.getY1() - l.getY2()) / (l.getX1() - l.getX2());
 					double normalSlope = -1/slope;
 					// determines whether ball is above or below line
@@ -127,6 +127,9 @@ public class Ball {
 					double elastic = (double) d.elasticity/(double) 100;
 					dx = elastic * mag_ball * Math.cos(angle);
 					dy = elastic * mag_ball * Math.sin(angle);
+					//To move ball a little so it doesn't bump into the inanimate again:
+					this.x+= dx*0.1;
+					this.y+= dy*0.1;
 				}
 			}
 		}

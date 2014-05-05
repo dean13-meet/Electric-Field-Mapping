@@ -1,5 +1,5 @@
-package src.Utils;
-import src.main.Ball;
+package Utils;
+import main.Ball;
 
 public class Force {
 	public double magnitude;
