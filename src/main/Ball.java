@@ -1,11 +1,12 @@
 package main;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.geom.Line2D;
 import java.awt.geom.Line2D.Float;
 import java.util.ArrayList;
 
-import src.Utils.Force;
+import Utils.Force;
 
 
 public class Ball {
@@ -66,7 +67,17 @@ public class Ball {
 		//g.drawLine((int)forceVector.x1, (int)forceVector.y1, (int)forceVector.x2, (int)forceVector.y2);
 		dx+=Math.cos(accelerationD)*acceleration*tickLength/1000;
 		dy+=Math.sin(accelerationD)*acceleration*tickLength/1000;
-		inanimateCollisions(inani);
+		/*
+		 * Represents the THEORETICAL point this ball will move to after this method exits. However, this shall only be used for inanimate
+		 * collision check, as the collision with the inaniamates may alter dx and dy, changing the actual point the ball will move to.
+		 * Lines: 
+		 * x = (x+dx*tickLength/1000);
+		 * y = (y+dy*tickLength/1000);
+		 * 
+		 * Must not be removed!
+		 */
+		Point nextPoint = new Point((int)(x+dx*tickLength/1000), (int)(y+dy*tickLength/1000));
+		inanimateCollisions(inani, nextPoint);
 		x = (x+dx*tickLength/1000);
 		y = (y+dy*tickLength/1000);
 		inanimateFailSafe(inani);
@@ -99,40 +110,62 @@ public class Ball {
 
 	}
 
-	private void inanimateCollisions(ArrayList<inanimateObject> inani) {
-		for (inanimateObject o : inani) {
+	private void inanimateCollisions(ArrayList<inanimateObject> inani, Point nextPoint) {
+		
+		Point currentLoc = new Point((int)x, (int)y);
+		
+		Line2D hereToNextPoint = new Line2D.Float(currentLoc, nextPoint);
+		
+		ArrayList<Line2D> intersectingLines = new ArrayList<Line2D>();
+		
+		for(inanimateObject o : inani){
 			for (int i = 0; i < o.getVerticies().size(); i++) {
 				Line2D l;
 				if (i < o.getVerticies().size() - 1)
 					l = new Line2D.Float(o.getVerticies().get(i), o.getVerticies().get(i+1));
 				else
 					l = new Line2D.Float(o.getVerticies().get(i), o.getVerticies().get(0));//Gets line connecting end and start of inanimate
-				//System.out.println(l.ptSegDist(getX(), getY()));
-				if (l.ptSegDist(getX(), getY()) < 1) { //If the ball is less than 3 pixels from the line
-					double slope = (l.getY1() - l.getY2()) / (l.getX1() - l.getX2());
-					double normalSlope = -1/slope;
-					// determines whether ball is above or below line
-					double ball_pos = y - l.getY1() - slope * (x - l.getX1());
-					// dot product to find cosine between vectors
-					double dot;
-					// since only direction matters, we can assume that the x component is 1
-					if (ball_pos > 0)
-						dot = dy * normalSlope - dx;
-					else
-						dot = dx - dy * normalSlope;
-					double mag_normal = Math.sqrt(Math.pow(normalSlope, 2) + 1);
-					double mag_ball = Math.sqrt(dx*dx + dy*dy);
-					// reflected angle
-					double angle = Math.PI - Math.acos(dot / (mag_normal * mag_ball));
-					double elastic = (double) d.elasticity/(double) 100;
-					dx = elastic * mag_ball * Math.cos(angle);
-					dy = elastic * mag_ball * Math.sin(angle);
-					//To move ball a little so it doesn't bump into the inanimate again:
-					this.x+= dx*0.1;
-					this.y+= dy*0.1;
-				}
+			
+				
+			if(l.intersectsLine(hereToNextPoint)){
+				intersectingLines.add(l);
+			}
+				
 			}
 		}
+		
+		double shortestDistance = Integer.MAX_VALUE;
+		Line2D closestLine = null;
+		
+		for(Line2D l : intersectingLines){
+			if(l.ptSegDist(currentLoc)<shortestDistance){
+				closestLine = l;
+			}
+		}
+		
+		if(closestLine!=null){
+			Line2D l = closestLine;
+			double slope = (l.getY1() - l.getY2()) / (l.getX1() - l.getX2());
+			double normalSlope = -1/slope;
+			// determines whether ball is above or below line
+			double ball_pos = y - l.getY1() - slope * (x - l.getX1());
+			// dot product to find cosine between vectors
+			double dot;
+			// since only direction matters, we can assume that the x component is 1
+			if (ball_pos > 0)
+				dot = dy * normalSlope - dx;
+			else
+				dot = dx - dy * normalSlope;
+			double mag_normal = Math.sqrt(Math.pow(normalSlope, 2) + 1);
+			double mag_ball = Math.sqrt(dx*dx + dy*dy);
+			// reflected angle
+			double angle = Math.PI - Math.acos(dot / (mag_normal * mag_ball));
+			double elastic = (double) d.elasticity/(double) 100;
+			dx = elastic * mag_ball * Math.cos(angle);
+			dy = elastic * mag_ball * Math.sin(angle);
+		}
+		
+		
 	}
 
 	public void updateAcceleration() {

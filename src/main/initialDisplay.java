@@ -34,8 +34,8 @@ import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 import javax.swing.JSlider;
 
-import src.Utils.ArrowHead;
-import src.Utils.Force;
+import Utils.ArrowHead;
+import Utils.Force;
 
 public class initialDisplay extends Display implements MouseListener, MouseMotionListener {
 	public onScreenMessage messages;
@@ -182,6 +182,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		typeButton = new Button ("typeButton", new ballOrWallCommand(this), typeStrings, rowStartX + 4*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
 		add(typeButton);
 		typeButton.setVisible(true);
+		
+		
 
 
 		String[] toolStrings = new String[ballTools.length];
@@ -191,6 +193,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		toolButton = new Button ("toolButton", new addOrEditCommand(this), toolStrings,rowStartX + 5*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
 		add(toolButton);
 		toolButton.setVisible(true);
+		
+		
 
 		String[] saveToFileStrings = {"Save To File"};
 		saveToFile = new Button ("saveToFile", new SaveToFile(this), saveToFileStrings,rowStartX + 6*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
@@ -273,8 +277,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		drawBalls = true;
 		voltageBarMax.setVisible(false);
 		voltageBarMin.setVisible(false);
-		tool = "Add";
-		type = "Ball";
+		this.type = typeButton.getText().replace("Type: ", "");
+		this.tool = toolButton.getText().replace("Tool: ", "");
 		drawArrowHeads = true;
 
 
@@ -1114,9 +1118,11 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 						temp = b;
 				}
 			}
+			
 			final Ball ballInSpace = temp;
 
 			if (type.equals("Ball")) {
+				System.out.println(tool);
 				if (tool.equals("Add: Place")) {
 					if (spaceFree) {
 						if(hostProgram.getJFrameById("Add Ball")==null){
