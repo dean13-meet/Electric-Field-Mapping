@@ -80,7 +80,7 @@ public class Ball {
 		inanimateCollisions(inani, nextPoint);
 		x = (x+dx*tickLength/1000);
 		y = (y+dy*tickLength/1000);
-		inanimateFailSafe(inani);
+		//inanimateFailSafe(inani);
 	}
 
 	private void inanimateFailSafe(ArrayList<inanimateObject> inani) {
@@ -145,6 +145,13 @@ public class Ball {
 		
 		if(closestLine!=null){
 			Line2D l = closestLine;
+			Line2D h = hereToNextPoint;
+			//Move ball close to inanimate before a collision:
+			double slopeL = (l.getY1() - l.getY2()) / (l.getX1() - l.getX2());
+			double slopeU = (h.getY1() - h.getY2()) / (h.getX1() - h.getX2());
+			
+			
+			
 			double slope = (l.getY1() - l.getY2()) / (l.getX1() - l.getX2());
 			double normalSlope = -1/slope;
 			// determines whether ball is above or below line
