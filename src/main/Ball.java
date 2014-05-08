@@ -110,8 +110,8 @@ public class Ball {
 				//Line2D xAxis = new Line2D.Float((float)getX(), (float)getY(), (float)getX()+10, (float)getY());
 				double degreeBetweenLines = Math.atan(m2);//Degree between normal to inAnimate line and the x axis
 				//System.out.println("Setting from: " + getX() + "," + getY() + " To: " + getX()+distanceToClosestLine*Math.cos(degreeBetweenLines) + "," +getY() + distanceToClosestLine*Math.sin(degreeBetweenLines));
-				this.setX(getX()+distanceToClosestLine *Math.cos(degreeBetweenLines));
-				this.setY(getY() + distanceToClosestLine*Math.sin(degreeBetweenLines));
+				this.setX(getX()+(distanceToClosestLine*Math.cos(degreeBetweenLines)*1.3));
+				this.setY(getY() + (distanceToClosestLine*Math.sin(degreeBetweenLines)*1.3));
 			}
 		}
 
