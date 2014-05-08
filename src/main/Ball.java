@@ -6,6 +6,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Line2D.Float;
 import java.util.ArrayList;
 
+import main.inanimateObject;
 import Utils.Force;
 
 
@@ -80,7 +81,13 @@ public class Ball {
 		inanimateCollisions(inani, nextPoint);
 		x = (x+dx*tickLength/1000);
 		y = (y+dy*tickLength/1000);
-		//inanimateFailSafe(inani);
+		inanimateFailSafe(inani);
+		this.setColor(this.defaultColor);
+		for(inanimateObject o : inani){
+			if(o.shape.contains(new Point((int)x, (int)y))){
+				this.setColor(Color.red);
+			}
+		}
 	}
 
 	private void inanimateFailSafe(ArrayList<inanimateObject> inani) {
@@ -103,7 +110,7 @@ public class Ball {
 				//Line2D xAxis = new Line2D.Float((float)getX(), (float)getY(), (float)getX()+10, (float)getY());
 				double degreeBetweenLines = Math.atan(m2);//Degree between normal to inAnimate line and the x axis
 				//System.out.println("Setting from: " + getX() + "," + getY() + " To: " + getX()+distanceToClosestLine*Math.cos(degreeBetweenLines) + "," +getY() + distanceToClosestLine*Math.sin(degreeBetweenLines));
-				this.setX(getX()+distanceToClosestLine*Math.cos(degreeBetweenLines));
+				this.setX(getX()+distanceToClosestLine *Math.cos(degreeBetweenLines));
 				this.setY(getY() + distanceToClosestLine*Math.sin(degreeBetweenLines));
 			}
 		}
@@ -113,8 +120,10 @@ public class Ball {
 	private void inanimateCollisions(ArrayList<inanimateObject> inani, Point nextPoint) {
 		
 		Point currentLoc = new Point((int)x, (int)y);
-		
+		if(!currentLoc.equals(nextPoint)){
 		Line2D hereToNextPoint = new Line2D.Float(currentLoc, nextPoint);
+		//Thats a line between current position and the position that we will move to in 
+		//next frame.
 		
 		ArrayList<Line2D> intersectingLines = new ArrayList<Line2D>();
 		
@@ -148,9 +157,16 @@ public class Ball {
 			Line2D h = hereToNextPoint;
 			//Move ball close to inanimate before a collision:
 			double slopeL = (l.getY1() - l.getY2()) / (l.getX1() - l.getX2());
-			double slopeU = (h.getY1() - h.getY2()) / (h.getX1() - h.getX2());
-			
-			
+			double slopeH = (h.getY1() - h.getY2()) / (h.getX1() - h.getX2());
+			double yIntL = l.getY1() - (slopeL*l.getX1());
+			double yIntH = h.getY1() - (slopeH*h.getX1());
+			Point moveTo = new Point((int)((yIntH - yIntL)/(slopeL-slopeH)), (int)(yIntL + (slopeL*((yIntH - yIntL)/(slopeL-slopeH)))));
+			System.out.println(slopeL + " " + slopeH + " " + yIntL + " " + yIntH);
+			System.out.println(this.x + " " + moveTo.x + " " + this.y + " " + moveTo.y);
+			if(moveTo.x> 0 && moveTo.x < Integer.MAX_VALUE && moveTo.y > 0 && moveTo.y < Integer.MAX_VALUE){//Incase either of the slopes is +-Infinity or NaN
+			this.x = moveTo.x;
+			this.y = moveTo.y;}
+		
 			
 			double slope = (l.getY1() - l.getY2()) / (l.getX1() - l.getX2());
 			double normalSlope = -1/slope;
@@ -171,7 +187,7 @@ public class Ball {
 			dx = elastic * mag_ball * Math.cos(angle);
 			dy = elastic * mag_ball * Math.sin(angle);
 		}
-		
+	}
 		
 	}
 
