@@ -1,4 +1,4 @@
-package main;
+package src.Main;
 import java.awt.Graphics;
 
 import javax.swing.JFrame;
