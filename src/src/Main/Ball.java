@@ -3,11 +3,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.geom.Line2D;
-import java.awt.geom.Line2D.Float;
 import java.util.ArrayList;
+import src.Utils.Force;
 
-import main.inanimateObject;
-import Utils.Force;
 
 
 public class Ball {
