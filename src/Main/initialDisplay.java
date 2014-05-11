@@ -110,7 +110,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	 *
 	 */
 
-
 	public final String[] types = {"Ball", "Inanimate", "Arrow"};
 	public final String[] ballTools = {"Add: Place", "Add: Drag", "Edit: Popup", "Edit: Drag", "Delete", "Select"};
 	public final String[] inanimateTools = {"Add: Place", "Add: Drag", "Edit: Popup", "Edit: Drag", "Delete", "Select"};
@@ -118,13 +117,10 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 	private Thread voltageCalcThread;
 
-
 	private ArrayList<ArrowHead> arrowHeads = new ArrayList<ArrowHead>();
 
 	private long lastAddedBallTime = System.currentTimeMillis();
 	private long minTimeToAddNewBall = 100;//Minimum time (in miliSec) between adding balls on drag
-
-
 
 	public initialDisplay(int w, int h, JFrame f, Program program) {
 		super(w, h, f, program);
@@ -182,8 +178,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		typeButton = new Button ("typeButton", new ballOrWallCommand(this), typeStrings, rowStartX + 4*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
 		add(typeButton);
 		typeButton.setVisible(true);
-		
-		
 
 
 		String[] toolStrings = new String[ballTools.length];
@@ -193,8 +187,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		toolButton = new Button ("toolButton", new addOrEditCommand(this), toolStrings,rowStartX + 5*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
 		add(toolButton);
 		toolButton.setVisible(true);
-		
-		
+
 
 		String[] saveToFileStrings = {"Save To File"};
 		saveToFile = new Button ("saveToFile", new SaveToFile(this), saveToFileStrings,rowStartX + 6*spacingBetweenButtons, rowStartY, buttonWidth, buttonHeight);
@@ -281,7 +274,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		this.tool = toolButton.getText().replace("Tool: ", "");
 		drawArrowHeads = true;
 
-
 		buttons.add(ballStart);
 		buttons.add(reset);
 		buttons.add(elasticWallsButton);
@@ -290,7 +282,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		buttons.add(saveToFile);
 		buttons.add(loadFromFile);
 		buttons.add(typeButton);
-
 
 		repaint();
 	}
@@ -315,7 +306,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		}
 		return new String[] {""};
 	}
-
 
 	/**
 	 * @return the presets
@@ -346,7 +336,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	}
 
 	public void paintComponent(Graphics g) {
-
 		setPresetSelected(getPresets()[presetCB.getSelectedIndex()].replaceFirst("file_", ""));
 		if(getPresets().length != getAllFiles().length) {//More presets where saved
 
@@ -356,7 +345,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				presetCB.addItem(s);
 			}
 		}
-
 
 		while(!messages.isEmpty()){
 			messages.printMessage();
@@ -382,11 +370,11 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 		//ballStart.repaint();
 
-		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,  RenderingHints.VALUE_ANTIALIAS_ON);
+		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		if (paintloop) {
 			long beginPaintLoopTime = System.currentTimeMillis();
 
-			if(toAdd!=null&&!toAdd.isEmpty()) {
+			if(toAdd != null && !toAdd.isEmpty()) {
 				addBallsFromQueue();
 			}
 			if(ballsMoving) {
@@ -406,16 +394,15 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				}
 			}
 
-			if(drawVoltage) {
-
+			if (drawVoltage) {
 				drawVoltageGrid(g);
 				drawVoltageScale(g);
 			}
-			if(drawBalls) {
-				for(inanimateObject j : inAnimates){
+			if (drawBalls) {
+				for (inanimateObject j : inAnimates){
 					j.draw(g);
 				}
-				for(int i = 0; i <ballarray.size(); i++) {
+				for (int i = 0; i <ballarray.size(); i++) {
 					ballarray.get(i).draw(g);
 					if(this.timeCounter%(10*this.TIME_BETWEEN_REPLOTS)==0){
 						if(drawArrowHeads && ballsMoving)
@@ -423,17 +410,16 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 					}
 				}
 				ArrayList<ArrowHead> toRemove = new ArrayList<ArrowHead>();
-				for(ArrowHead a : arrowHeads){
+				for (ArrowHead a : arrowHeads){
 					if(a.getOpacity()<=0)toRemove.add(a);
 					else if(drawArrowHeads && ballsMoving)a.draw(g);
 				}
 				arrowHeads.removeAll(toRemove);
 
-
-				for(int i = 0; i< chargeDisplay.size(); i++) {
+				for (int i = 0; i< chargeDisplay.size(); i++) {
 					updateJLabel(chargeDisplay.get(i), i);
 				}
-				for(int i = 0; i < pendingBalls.size(); i++) {
+				for (int i = 0; i < pendingBalls.size(); i++) {
 					if(pendingBalls.get(i) != null) {//There may be nulls in pendingBalls.
 						//For issues described when adding the balls through adding new ball window,
 						//when a pending ball is 'removed' from the list, it is not truly removed,
@@ -443,11 +429,11 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				}
 			}
 
-			for(Point v: verticesOfBeingAddedInAnimate){//Draw temp circles when adding an inanimate.
+			for (Point v: verticesOfBeingAddedInAnimate) {//Draw temp circles when adding an inanimate.
 				g.setColor(new Color(255, 111, 0));
 				g.fillOval(v.x, v.y, 5, 5);
 			}
-			for(int v = 0; v < verticesOfBeingAddedInAnimate.size(); v++){
+			for (int v = 0; v < verticesOfBeingAddedInAnimate.size(); v++) {
 				g.setColor(new Color(255, 111, 0));
 				g.fillOval(verticesOfBeingAddedInAnimate.get(v).x, verticesOfBeingAddedInAnimate.get(v).y, 5, 5);
 				if(v<verticesOfBeingAddedInAnimate.size()-1){
@@ -457,10 +443,9 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				}
 			}
 
-
 			//System.out.println("TOT TIME TAKEN: " + (System.currentTimeMillis()-beginPaintLoopTime));
 			long timeTaken = System.currentTimeMillis()-beginPaintLoopTime;
-			if(timeTaken<TIME_BETWEEN_REPLOTS){
+			if (timeTaken<TIME_BETWEEN_REPLOTS) {
 				try {
 					Thread.sleep(TIME_BETWEEN_REPLOTS - timeTaken);
 
@@ -469,10 +454,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				}
 			}
 
-
-			timeCounter+=TIME_BETWEEN_REPLOTS;
+			timeCounter += TIME_BETWEEN_REPLOTS;
 			repaint();
-
 		}
 		repaint();
 	}
@@ -487,11 +470,11 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		Ball waiting = toAdd.peek();
 		boolean spaceFree = true;
 		for(Ball b : ballarray) {
-			if(waiting.getX()>=b.getX()-b.getRadius()&&waiting.getX()<=b.getX()+b.getRadius()
-					&&waiting.getY()>=b.getY()-b.getRadius()&&waiting.getY()<=b.getY()+b.getRadius()
-					)spaceFree=false;
+			if(waiting.getX() >= b.getX() - b.getRadius() && waiting.getX() <= b.getX() + b.getRadius()
+					&& waiting.getY() >= b.getY() - b.getRadius() && waiting.getY() <= b.getY() + b.getRadius())
+				spaceFree=false;
 		}
-		if(!spaceFree) {
+		if (!spaceFree) {
 			/*
 			 * This is activated if the ball in the top of toAdd cannot be added during this method call.
 			 * If so, then the ball is removed and added at the end of the queue.
@@ -505,7 +488,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			toAdd.add(b);
 			numBallsToDoInNextCall++;
 		}
-		while(toAdd.size()>numBallsToDoInNextCall) {
+		while (toAdd.size()>numBallsToDoInNextCall) {
 			Ball b = toAdd.poll();
 			ballarray.add(b);
 			originalX.add((double) ballarray.get(ballarray.size()-1).getX());
@@ -518,7 +501,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			str+=(int)(ballarray.get(ballarray.size()-1).charge*1000000);
 			str+="µ";
 			temp.setText(str);
-			temp.setBounds((int)ballarray.get(ballarray.size()-1).getX(), (int)ballarray.get(ballarray.size()-1).getY(), 50, 25);
+			temp.setBounds((int)ballarray.get(ballarray.size()-1).getX(), (int) ballarray.get(ballarray.size()-1).getY(), 50, 25);
 			chargeDisplay.add(temp);
 			add(chargeDisplay.get(chargeDisplay.size()-1));
 			temp.setVisible(true);
@@ -537,21 +520,19 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		return ballStart;
 	}
 
-
-
 	public void ballMovement(Graphics g) {
-		for(int k = 0; k <ballarray.size(); k++) {
+		for (int k = 0; k <ballarray.size(); k++) {
 			Ball temp = ballarray.get(k);
 			temp.force = new Force();
 
-			for(int j = 0; j <ballarray.size(); j++){
-				if(k!=j){
+			for (int j = 0; j <ballarray.size(); j++){
+				if (k!=j) {
 
 					temp.force.add(CalculateForce(ballarray.get(j), ballarray.get(k)));
 					//System.out.println("Calced: " + j + " on: " + k);
 				}
 			}
-			for(inanimateObject o : inAnimates){
+			for (inanimateObject o : inAnimates) {
 				//We represent the inAnimates as BALL objects around their centroid. This makes no difference for force calculations.
 				Ball likeABall = new Ball(this, 0, o.getCentroid().x, o.getCentroid().y, 0, 0, -o.getCharge());
 				temp.force.add(CalculateForce(temp, likeABall));
@@ -560,11 +541,11 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 		for (int i = 0; i<ballarray.size(); i++) {
 			ballarray.get(i).update(g, width, height, TIME_BETWEEN_REPLOTS, inAnimates);
-			if (ballarray.get(i).hitWall == true) {
-				if (xdif<0) {
+			if (ballarray.get(i).hitWall) {
+				if (xdif < 0) {
 					ballarray.get(i).setX(ballarray.get(i).getX()+xdif);
 				}
-				if (ydif<0) {
+				if (ydif < 0) {
 					ballarray.get(i).setY(ballarray.get(i).getY()+ydif);
 				}
 			}
@@ -577,9 +558,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		}*/
 	}
 
-	/**
-	 *
-	 */
 	public void calcVoltage(){
 		if(timeCounter%50==0){
 			//calculateElectricFieldOnScreen();
@@ -597,81 +575,75 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 	private void printSigmaKineticEnergyAndElectric() {
 		double totE = 0;
-		for(Ball b : ballarray) {
-			totE+=Math.pow(b.getSpeed() , 2)*b.mass*0.5;
+		for (Ball b : ballarray) {
+			totE += Math.pow(b.getSpeed() , 2) * b.mass * 0.5;
 		}
 
-		for(int k = 0; k <ballarray.size(); k++) {
-
-
-			for(int j = 0; j <ballarray.size(); j++) {
-				if(k!=j){
-
-
-					totE+=(Force.CalculatePotentialEnergy(ballarray.get(j), ballarray.get(k)));
-				}
+		for (int k = 0; k < ballarray.size(); k++) {
+			for (int j = 0; j < ballarray.size(); j++) {
+				if (k!=j)
+					totE += Force.CalculatePotentialEnergy(ballarray.get(j), ballarray.get(k));
 			}
 		}
 		//System.out.println(totE);
 	}
 
 	private void updateVoltageScaleText(ArrayList<Double> list) {
-		if(list==null||list.size()==0)return;
+		if (list == null || list.size() == 0) return;
 		StringBuilder sb = new StringBuilder();
 		sb.append("<html> Max: ");
 		sb.append("<br>");
-		try{
+		try {
 			Double n = list.get(list.size()-1);
 			int numZerosToAdd = 0;
-			if(Math.abs(n) >= 999) {
-				while(Math.abs(n)>=10){
-					n/=10;
+			if (Math.abs(n) >= 999) {
+				while (Math.abs(n) >= 10) {
+					n /= 10;
 					numZerosToAdd++;
 				}
 			}
-			else if(Math.abs(n)<.1) {
-				while(Math.abs(n)<1) {
-					n*=10;
-					numZerosToAdd--;
-				}
-			}
-			sb.append(n.toString().substring(0, 5));
-
-			if(numZerosToAdd!=0){
-				sb.append("<br>");
-				sb.append("E ");
-				sb.append(numZerosToAdd);
-			}
-		}
-		catch(IndexOutOfBoundsException e) {
-			e.printStackTrace();
-		}
-
-		voltageBarMax.setText(sb.toString());
-
-
-		sb = new StringBuilder();
-		sb.append("<html> Min: ");
-		sb.append("<br>");
-		try{
-			Double n = list.get(0);
-
-			int numZerosToAdd = 0;
-			if(Math.abs(n) >= 999) {
-				while(Math.abs(n) >= 10) {
-					n/=10;
-					numZerosToAdd++;
-				}
-			}
-			else if(Math.abs(n) < .1) {
-				while(Math.abs(n) < 10) {
+			else if (Math.abs(n) < .1) {
+				while (Math.abs(n) < 1) {
 					n *= 10;
 					numZerosToAdd--;
 				}
 			}
 			sb.append(n.toString().substring(0, 5));
 
-			if(numZerosToAdd != 0) {
+			if (numZerosToAdd != 0){
+				sb.append("<br>");
+				sb.append("E ");
+				sb.append(numZerosToAdd);
+			}
+		}
+		catch (IndexOutOfBoundsException e) {
+			e.printStackTrace();
+		}
+
+		voltageBarMax.setText(sb.toString());
+
+		sb = new StringBuilder();
+		sb.append("<html> Min: ");
+		sb.append("<br>");
+		try {
+			Double n = list.get(0);
+
+			int numZerosToAdd = 0;
+			if (Math.abs(n) >= 999) {
+				while (Math.abs(n) >= 10) {
+					n/=10;
+					numZerosToAdd++;
+				}
+			}
+			else if (Math.abs(n) < .1) {
+				while (Math.abs(n) < 10) {
+					n *= 10;
+					numZerosToAdd--;
+				}
+			}
+			sb.append(n.toString().substring(0, 5));
+
+			if (numZerosToAdd != 0) {
 				sb.append("<br>");
 				sb.append("E ");
 				sb.append(numZerosToAdd);
@@ -696,15 +668,13 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	}*/
 
 	private void drawVoltageGrid(Graphics g) {
-		if(voltageValue!=null && voltageValue.length!=0 && voltageValue[0].length!=0){
+		if(voltageValue != null && voltageValue.length != 0 && voltageValue[0].length != 0) {
 			// Copying the reference to the current voltageValue matrix so that if it gets
 			// replaced by calcVoltage() we don't get screwed.
 			double[][] voltageValue = new double[this.voltageValue.length][this.voltageValue[0].length];
-			for(int i = 0; i < voltageValue.length; i++){
-				System.arraycopy(this.voltageValue[i], 0, voltageValue[i], 0,
-						voltageValue[i].length);
+			for (int i = 0; i < voltageValue.length; i++) {
+				System.arraycopy(this.voltageValue[i], 0, voltageValue[i], 0, voltageValue[i].length);
 			}
-
 
 			ArrayList<Double> voltageValuesList = makeList(voltageValue);
 			Collections.sort(voltageValuesList);
@@ -713,47 +683,43 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			double exactlyZero  = getZeroAmount(voltageValuesList);
 			double aboveZero = getPositiveAmount(voltageValuesList);
 
-
-
-			for(int x = width/6 +5; x < width*5/6 -10; x+=pixel) {
-				for (int y = height/6+5; y <height*5/6 + height/10 -30; y+=pixel) {
+			for (int x = width/6 + 5; x < width*5/6 - 10; x += pixel) {
+				for (int y = height/6 + 5; y <height*5/6 + height/10 - 30; y += pixel) {
 					double value = voltageValue[x][y];
 
 					int colorVal = 128;
 					boolean hot = false;
 
 					int valueIdx = Collections.binarySearch(voltageValuesList, value);
-					if(value < 0) {
+					if (value < 0) {
 						colorVal = (int)((belowZero - valueIdx)/belowZero*128);
 						colorVal = Math.min(colorVal, 128);
 						hot = false;
 
-					}else if(value>0){
+					}
+					else if (value > 0) {
 						colorVal = (int)((valueIdx-belowZero+2)/aboveZero*128);
 						colorVal = Math.min(colorVal, 128);
 						hot = true;
 					}
 
-					if(!hot){
+					if (!hot) {
 						g.setColor(new Color(128-colorVal, 0, colorVal+127));
 					}
-					else if(hot){
+					else if (hot) {
 						g.setColor(new Color(colorVal+127, 0, 128-colorVal));
 					}
-
 					g.fillRect(x, y, 7, 7);
 				}
 			}
-
-
 			updateVoltageScaleText(voltageValuesList);
 		}
 	}
 
 	private int getZeroAmount(ArrayList<Double> list) {
 		int counter = 0;
-		for(int i = 0; i < list.size(); i++) {
-			if(list.get(i) == 0) {
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i) == 0) {
 				counter++;
 			}
 		}
@@ -762,8 +728,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 	private int getPositiveAmount(ArrayList<Double> list) {
 		int counter = 0;
-		for(int i = 0; i < list.size(); i++){
-			if(list.get(i) > 0) {
+		for (int i = 0; i < list.size(); i++){
+			if (list.get(i) > 0) {
 				counter++;
 			}
 		}
@@ -772,8 +738,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 	private int getNegativeAmount(ArrayList<Double> list) {
 		int counter = 0;
-		for(int i = 0; i < list.size(); i++) {
-			if(list.get(i) < 0){
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i) < 0) {
 				counter++;
 			}
 		}
@@ -784,7 +750,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		ArrayList<Double> retval = new ArrayList<Double>();
 		for(int i = 0; i < a.length; i++) {
 			for (int j = 0; j < a[i].length; j++) {
-				if(a[i][j]!=0) {
+				if (a[i][j] != 0) {
 					retval.add(a[i][j]);
 				}
 			}
@@ -799,13 +765,13 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		int height = 1;
 		double length = voltageBarLength/2;
 		//For hot:
-		for(double i = length; i >=0; i--) {
+		for (double i = length; i >= 0; i--) {
 			int colorVal = (int) (i/length*128);
 			g.setColor(new Color(colorVal+127, 0, 128-colorVal));
 			colorVal = Math.min(colorVal, 128);
 			g.fillRect(x, (int) (y+length-i), width, height);
 		}
-		for(double i = 1; i <=length; i++) {
+		for (double i = 1; i <= length; i++) {
 			int colorVal = (int) (i/length*128);
 			g.setColor(new Color(128-colorVal, 0, colorVal+127));
 			colorVal = Math.min(colorVal, 128);
@@ -816,44 +782,41 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	private void calculateVoltageOnScreen() {
 		double[][] voltageValue = new double[width][height];
 
-		for(int x = width/6 +5; x < width*5/6-10; x+=pixel) {
-
-			for (int y = height/6+5; y <height*5/6 + height/10-30; y+=pixel) {
-				for(int i = 0; i <ballarray.size(); i++){
+		for (int x = width/6+5; x < width*5/6-10; x += pixel) {
+			for (int y = height/6+5; y < height*5/6 + height/10-30; y += pixel) {
+				for (int i = 0; i <ballarray.size(); i++) {
 					Ball ball = ballarray.get(i);
 					voltageValue[x][y] += calculateVoltage(ball, new Point(x, y));
-
 				}
-				for(inanimateObject o : inAnimates){
+				for (inanimateObject o : inAnimates) {
 					voltageValue[x][y] += calculateVoltage(o, new Point(x,y));
 				}
 			}
 		}
-
 		this.voltageValue = voltageValue;
 	}
 
 	private double calculateVoltage(Ball ball, Point point) {
 		double distance = Force.distance(ball.getX(), ball.getY(), point.x, point.y);
-		if(distance!=0)//Ball does not produce voltage on itself
+		if (distance != 0)//Ball does not produce voltage on itself
 			return ball.charge/distance/(4*Math.PI*Force.permitivity_of_free_space);
 		else return 0;
 	}
 
-	private double calculateVoltage (inanimateObject o, Point point){
+	private double calculateVoltage(inanimateObject o, Point point) {
 		double distance = Force.distance(o.getCentroid().x, o.getCentroid().y, point.x, point.y);
-		if(distance!=0)//Does not produce voltage on itself
+		if (distance != 0)//Does not produce voltage on itself
 			return o.getCharge()/distance/(4*Math.PI*Force.permitivity_of_free_space);
 		else return 0;
 	}
+
 	private void calculateElectricFieldOnScreen() {
-		for(int x = width/6+5; x < width*5/6-10; x+=pixel) {
-			for (int y = height/6+5; y <height*5/6 + height/10-30; y+=pixel) {
+		for (int x = width/6+5; x < width*5/6-10; x += pixel) {
+			for (int y = height/6+5; y <height*5/6 + height/10-30; y += pixel) {
 				electricField[x][y] = new Force();
 				for(int i = 0; i <ballarray.size(); i++) {
 					Ball ball = ballarray.get(i);
-
-					electricField[x][y].add(calculateElectricField(ball,  new Point (x, y)));
+					electricField[x][y].add(calculateElectricField(ball, new Point(x, y)));
 				}
 			}
 		}
@@ -861,7 +824,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 	private Force calculateElectricField(Ball ball, Point point) {
 		double magnitude = ball.charge*Force.k;
-		magnitude/=distanceSquared(ball, new Ball(this,0, point.x, point.y, 0, 0, 0));
+		magnitude /= distanceSquared(ball, new Ball(this,0, point.x, point.y, 0, 0, 0));
 
 		// Only thing that matters for distanceSquared is the x and y coords,
 		//thus all the rest can be 0s.
@@ -877,7 +840,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		jLabel.setBounds((int)ballarray.get(i).getX(), (int)ballarray.get(i).getY(), 50, 25);
 		//add(jLabel);
 		//jLabel.setVisible(true);
-
 	}
 
 	public Force CalculateForce(Ball ballA, Ball ballB) {
@@ -886,8 +848,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		magnitude *= Force.k;
 		double distSquare = distanceSquared(ballA, ballB);
 		magnitude /= distSquare;
-
-		if(Math.pow(distSquare, 0.5)<5){
+		if (Math.pow(distSquare, 0.5) < 5) {
 			magnitude = 0;//This is to get rid of the acceleration bug.
 			//It works in the sense that anyhow, the forces would cancel out when the balls cross.
 		}
@@ -899,8 +860,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		}*/
 
 		double theta = calculateTheta(ballA, ballB);
-		if(!attract) {
-			theta+=Math.PI;
+		if (!attract) {
+			theta += Math.PI;
 		}
 		Force retval = new Force(magnitude, theta);
 		return retval;
@@ -910,15 +871,16 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		double theta = 0;
 		double xComp = b1.getX() - b2.getX();
 		double yComp = b1.getY() - b2.getY();
-		if(xComp > 0) {
+		if (xComp > 0) {
 			theta = Math.atan(yComp/xComp);
 			return theta;
-		}else if(xComp < 0){
+		}
+		else if (xComp < 0) {
 			theta =  Math.atan(yComp/xComp) + Math.PI;
 			return theta;
 		}
-		else if(xComp == 0) {
-			if(yComp == 0) {
+		else if (xComp == 0) {
+			if (yComp == 0) {
 				return 00;
 			} else if (yComp > 0) {
 				return Math.PI/2;
@@ -970,30 +932,29 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				<= height*9/10 && a.getY()/*-radius*/ >= height/6 + 3) {//If in ball pit
 
 			boolean spaceFreeOfBalls = true;
-			for(Ball b : ballarray){
+			for (Ball b : ballarray){
 				if(a.getX()>=b.getX()-b.getRadius()&&a.getX()<=b.getX()+b.getRadius()
 						&&a.getY()>=b.getY()-b.getRadius()&&a.getY()<=b.getY()+b.getRadius())
 					spaceFreeOfBalls = false;
 			}
 
-			if(type.equals("Ball")){
-				if(tool.equals("Add: Drag")){
-
-					if(spaceFreeOfBalls){
-						if(System.currentTimeMillis()-lastAddedBallTime>minTimeToAddNewBall){
+			if (type.equals("Ball")) {
+				if (tool.equals("Add: Drag")) {
+					if (spaceFreeOfBalls) {
+						if (System.currentTimeMillis() - lastAddedBallTime > minTimeToAddNewBall) {
 							this.toAdd.add(new Ball(this, 0.00010, (int)a.getX(), (int)a.getY(), 0, 0, Math.max((Math.random()*100/1000000), 200/1000000)));
 							lastAddedBallTime = System.currentTimeMillis();
 						}
 					}
 				}
-				else if(tool.equals("Edit: Drag")){
+				else if (tool.equals("Edit: Drag")) {
 					//TODO
 					/*
 					 * If there is a ball here (spaceFreeOfBalls == false):
 					 * Set the x and y coords of the ball to wherever the mouse is (a.getX(), a.getY())
 					 */
 				}
-				else if(tool.equals("Select")){
+				else if (tool.equals("Select")) {
 					//TODO
 					/*
 					 * Creates a rectangle from the starting point of drag to the end point of drag.
@@ -1006,32 +967,30 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 					 */
 				}
 			}
-			else if(type.equals("Inanimate")){
-
-				if(tool.equals("Add: Drag")){
+			else if (type.equals("Inanimate")) {
+				if (tool.equals("Add: Drag")) {
 					//TODO
 					/*
 					 * If there is no inanimate in the place (check all inanimates to make sure that inanimate.shape.contains(a.getX(), a.getY()) is false)
 					 * 		Then it adds a small 20*20 square inanimate, with top left coord at a.getX(), a.getY()
 					 */
 				}
-				else if(tool.equals("Edit: Drag")){
+				else if(tool.equals("Edit: Drag")) {
 					//TODO
 					/* If there is an inanimate at a.getX(), a.getY()
 					 * If that inanimate has a vertex (inanimate.vertecies) at a.getX(), a.getY(), then that vertex is set to be a.getX(), a.getY() -- changes the location of the vertex by drag
 					 */
 
 				}
-				else if(tool.equals("Select")){
+				else if(tool.equals("Select")) {
 					//TODO
 					/*
 					 * Does same as ball select, just with inanimates.
 					 */
 				}
 			}
-			else if(type.equals("Arrow")){
-
-				if(tool.equals("Select")){
+			else if(type.equals("Arrow")) {
+				if(tool.equals("Select")) {
 					//TODO
 					/*
 					 * Does same as ball select, just with arrows.
@@ -1040,6 +999,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			}
 		}
 	}
+
 	@Override
 	public void mouseMoved(MouseEvent a) {
 		/*
@@ -1094,41 +1054,41 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 		try {
 			Robot robot = new Robot();
-			System.out.println(a.getX() + " " + a.getY() + " " + robot.getPixelColor(a.getX(), a.getY()));
+			//System.out.println(a.getX() + " " + a.getY() + " " + robot.getPixelColor(a.getX(), a.getY()));
 		} catch (AWTException e) {
 			e.printStackTrace();
 		}
 
 		if (a.getX() /*+radius*/ <= width*5/6 && a.getX() /*-radius*/ >= width/6 + 3 && a.getY()/*+radius*/
 				<= height*9/10 && a.getY()/*-radius*/ >= height/6 + 3) {
-			System.out.println("in box");
+			//System.out.println("in box");
 
 			//Make sure we are not placing this on another ball.
 			boolean spaceFree = true;
 			Ball temp = null;
-			for(Ball b : ballarray){
-				if(a.getX()>=b.getX()-b.getRadius()&&a.getX()<=b.getX()+b.getRadius()
-						&&a.getY()>=b.getY()-b.getRadius()&&a.getY()<=b.getY()+b.getRadius())
+			for (Ball b : ballarray) {
+				if (a.getX() >= b.getX() - b.getRadius() && a.getX() <= b.getX() + b.getRadius() &&
+						a.getY() >= b.getY() - b.getRadius() && a.getY() <= b.getY() + b.getRadius())
 					spaceFree = false;
 			}
-			if(!spaceFree) {
-				for(Ball b : ballarray) {
-					if(a.getX()>=b.getX()-b.getRadius()&&a.getX()<=b.getX()+b.getRadius()
-							&&a.getY()>=b.getY()-b.getRadius()&&a.getY()<=b.getY()+b.getRadius())
+			if (!spaceFree) {
+				for (Ball b : ballarray) {
+					if (a.getX() >= b.getX() - b.getRadius() && a.getX() <= b.getX() + b.getRadius() &&
+							a.getY() >= b.getY() - b.getRadius() && a.getY() <= b.getY() + b.getRadius())
 						temp = b;
 				}
 			}
-			
+
 			final Ball ballInSpace = temp;
 
 			if (type.equals("Ball")) {
 				System.out.println(tool);
 				if (tool.equals("Add: Place")) {
 					if (spaceFree) {
-						if(hostProgram.getJFrameById("Add Ball")==null){
+						if (hostProgram.getJFrameById("Add Ball") == null) {
 							final boolean ballsWhereMoving;
 
-							if(ballsMoving) {getBallStart().simulateClick();ballsWhereMoving =true;}//Always pause.
+							if (ballsMoving) {getBallStart().simulateClick();ballsWhereMoving = true;}//Always pause.
 							else ballsWhereMoving = false;
 							hostProgram.createJFrame(50, 25, "Add Ball", new Color(255,153,0), false, "Add Ball");
 
@@ -1137,8 +1097,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 							addBallF.addWindowListener(new java.awt.event.WindowAdapter() {
 								@Override
 								public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-									if(ballsWhereMoving){
-										if(!ballsMoving)getBallStart().simulateClick();
+									if (ballsWhereMoving) {
+										if (!ballsMoving) getBallStart().simulateClick();
 									}
 									hostProgram.framesId.remove("Add Ball");
 									hostProgram.frames.remove(addBallF);
@@ -1165,32 +1125,27 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 									//data storage which is typically available.
 								}
 							});
-
 							Display addBallD = new addBallDisplay(addBallF.getWidth(), addBallF.getHeight(), addBallF, hostProgram, a.getX(), a.getY(), this, pendingBallsSize);
 							addBallF.add(addBallD);
 
 							pendingBalls.add(new Ball(this, 0.00040, a.getX(), a.getY(), 0, 0, 0));
 
-
-
-
-						} else{
+						} else {
 							hostProgram.getJFrameById("Add Ball").toFront();
 						}
 					}
-
 
 					else { //tool = Add: Place, but spaceFree = false.
 						messages.addMessage("Cannot add ball here, space is already occupied by another ball.",
 								onScreenMessage.CENTER);}
 
 				}
-				else if(tool.equals("Edit: Popup")){
-					if(!spaceFree) {
-						if(hostProgram.getJFrameById("Edit Ball")==null) {
+				else if (tool.equals("Edit: Popup")) {
+					if (!spaceFree) {
+						if (hostProgram.getJFrameById("Edit Ball") == null) {
 							final boolean ballsWhereMoving;
 
-							if (ballsMoving) {getBallStart().simulateClick();ballsWhereMoving =true;}//Always pause.
+							if (ballsMoving) {getBallStart().simulateClick();ballsWhereMoving = true;}//Always pause.
 							else ballsWhereMoving = false;
 
 							hostProgram.createJFrame(50, 50, "Edit Ball", new Color(255,153,0), false, "Edit Ball");
@@ -1215,8 +1170,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 						} else {hostProgram.getJFrameById("Edit Ball").toFront();}
 					}
 				}
-				else if(tool.equals("Delete")){
-					if(!spaceFree&&ballInSpace!=null){
+				else if (tool.equals("Delete")) {
+					if (!spaceFree&&ballInSpace != null) {
 						int index = ballarray.indexOf(ballInSpace);
 						ballarray.remove(ballInSpace);
 						this.remove(chargeDisplay.get(index));
@@ -1224,7 +1179,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 					}
 				}
 
-			} else if(type.equals("Inanimate")){
+			} else if (type.equals("Inanimate")) {
 				boolean spaceFreeOfInanimates = true;
 				inanimateObject occupyingInanimate = null;
 				//TODO
@@ -1236,7 +1191,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				 * AND occupyingInanimate is set to whatever inanimate this is
 				 */
 
-				if(tool.equals("Add: Place")){
+				if (tool.equals("Add: Place")) {
 					//TODO
 					/*
 					 * Check that verticiesOfBeingAdded inanimate does not include a.getX(), a.getY()
@@ -1245,7 +1200,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 					 *
 
 					 */
-					if(spaceFreeOfInanimates){
+					if (spaceFreeOfInanimates) {
 						if (hostProgram.getJFrameById("Add Inanimate") == null) {
 							final boolean ballsWhereMoving;
 
@@ -1281,9 +1236,9 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 						}
 					}
 				}
-				else if(tool.equals("Edit: Popup")){
+				else if (tool.equals("Edit: Popup")) {
 					//TODO
-					if(!spaceFreeOfInanimates && occupyingInanimate!=null){
+					if (!spaceFreeOfInanimates && occupyingInanimate != null) {
 						/*
 						 * Creates a popup to edit occupyingInanimate:
 						 * 		The charge of the inanimate
@@ -1292,8 +1247,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 						 */
 					}
 				}
-				else if(tool.equals("Delete")){
-					if(!spaceFreeOfInanimates && occupyingInanimate!=null){
+				else if (tool.equals("Delete")) {
+					if (!spaceFreeOfInanimates && occupyingInanimate != null) {
 						inAnimates.remove(occupyingInanimate);
 					}
 				}
