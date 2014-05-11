@@ -8,7 +8,7 @@ public class elasticChangeListener implements ChangeListener {
 
 	private final initialDisplay d;
 
-	public elasticChangeListener(initialDisplay d){
+	public elasticChangeListener(initialDisplay d) {
 		this.d = d;
 	}
 
@@ -20,5 +20,4 @@ public class elasticChangeListener implements ChangeListener {
 		d.elasticWallsButton.strs[0] = "Elasticity: " + d.elasticity + "%";
 		d.elasticWallsButton.simulateClick();//Makes sure the button changes text size when the numbers are changing (if needed).
 	}
-
 }

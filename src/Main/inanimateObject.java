@@ -1,4 +1,5 @@
 package src.Main;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -6,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.util.ArrayList;
-
 
 public class inanimateObject {
 	private final Program hostP;
@@ -61,10 +61,10 @@ public class inanimateObject {
 
 		//First, we must get the area of the polygon:
 		double areaSigma = 0;
-		for(int i = 0; i < shape.npoints; i++) {
+		for (int i = 0; i < shape.npoints; i++) {
 			Point current = new Point(shape.xpoints[i], shape.ypoints[i]);
 			Point next;
-			if (i+1 >= shape.npoints){next = new Point(shape.xpoints[0], shape.ypoints[0]);}
+			if (i+1 >= shape.npoints) {next = new Point(shape.xpoints[0], shape.ypoints[0]);}
 			else {next = new Point(shape.xpoints[i+1], shape.ypoints[i+1]);}
 			areaSigma += (current.x*next.y - next.x*current.y);
 		}
@@ -73,21 +73,21 @@ public class inanimateObject {
 		//Then, we get each of the coordinates of the centroid:
 		//x:
 		double xCoordSigma = 0;
-		for(int i = 0; i < shape.npoints; i++) {
+		for (int i = 0; i < shape.npoints; i++) {
 			Point current =  new Point(shape.xpoints[i], shape.ypoints[i]);
 			Point next;
-			if (i+1 >= shape.npoints){next = new Point(shape.xpoints[0], shape.ypoints[0]);}
+			if (i+1 >= shape.npoints) {next = new Point(shape.xpoints[0], shape.ypoints[0]);}
 			else {next = new Point(shape.xpoints[i+1], shape.ypoints[i+1]);}
 			xCoordSigma += ((current.x + next.x)*(current.x*next.y - next.x*current.y));
 		}
-		double finalXCoord = (1/(6*finalArea))*xCoordSigma;
+		double finalXCoord = (1/(6 * finalArea)) * xCoordSigma;
 
 		//y:
 		double yCoordSigma = 0;
-		for(int i = 0; i < shape.npoints; i++) {
+		for (int i = 0; i < shape.npoints; i++) {
 			Point current =  new Point(shape.xpoints[i], shape.ypoints[i]);
 			Point next;
-			if (i+1 >= shape.npoints){next = new Point(shape.xpoints[0], shape.ypoints[0]);}
+			if (i+1 >= shape.npoints) {next = new Point(shape.xpoints[0], shape.ypoints[0]);}
 			else {next = new Point(shape.xpoints[i+1], shape.ypoints[i+1]);}
 			yCoordSigma += ((current.y+next.y)*(current.x*next.y-next.x*current.y));
 		}
@@ -116,10 +116,10 @@ public class inanimateObject {
 
 		//Draw border:
 		g.setColor(new Color(0, Math.min(255, 255*d.elasticity/100),0));
-		for(int v = 0 ; v <shape.npoints; v++){
+		for (int v = 0 ; v <shape.npoints; v++) {
 			Point current = new Point(shape.xpoints[v], shape.ypoints[v]);
 			Point next;
-			if(v == shape.npoints -1) {next = new Point(shape.xpoints[0], shape.ypoints[0]);}
+			if (v == shape.npoints -1) {next = new Point(shape.xpoints[0], shape.ypoints[0]);}
 			else {next = new Point(shape.xpoints[v+1], shape.ypoints[v+1]);}
 
 			Graphics2D gg = (Graphics2D)g;
@@ -127,9 +127,9 @@ public class inanimateObject {
 			g.drawLine(current.x, current.y, next.x, next.y);
 			gg.setStroke(new BasicStroke(1));
 		}
-
 	}
-	public String toString(){
+
+	public String toString() {
 		return getCharge() + " " + this.vertices.size() + " " + getVerteciesStrings();
 	}
 

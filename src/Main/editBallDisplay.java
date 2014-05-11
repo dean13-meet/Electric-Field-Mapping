@@ -5,7 +5,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-
 public class editBallDisplay extends Display{
 
 	private final initialDisplay d;
@@ -79,7 +78,7 @@ public class editBallDisplay extends Display{
 		add(chargeL);
 		chargeL.setVisible(true);
 
-		charge = new JTextField(new Double( ( ball.getCharge()*1000000)).toString().substring(0,Math.min(10,new Double( ( ball.getCharge()*1000000)).toString().length())));//Don't want too many characters after decimal
+		charge = new JTextField(new Double((ball.getCharge()*1000000)).toString().substring(0 , Math.min(10 , new Double((ball.getCharge() * 1000000)).toString().length())));//Don't want too many characters after decimal
 		charge.setBounds(width/3-50, height*4/8 -25, 100, 25);
 		add(charge);
 		charge.setVisible(true);
@@ -132,14 +131,14 @@ public class editBallDisplay extends Display{
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		try{
-		ball.setX(Integer.parseInt(xCoord.getText()));
-		ball.setY(Integer.parseInt(yCoord.getText()));
-		ball.setMass(Double.parseDouble(mass.getText()));
-		ball.setCharge(Double.parseDouble(charge.getText())/1000000);
-		ball.setXSpeed(Double.parseDouble(dx.getText()));
-		ball.setYSpeed(Double.parseDouble(dy.getText()));}
-		catch(Exception e){
+		try {
+		 	ball.setX(Integer.parseInt(xCoord.getText()));
+			ball.setY(Integer.parseInt(yCoord.getText()));
+			ball.setMass(Double.parseDouble(mass.getText()));
+			ball.setCharge(Double.parseDouble(charge.getText())/1000000);
+			ball.setXSpeed(Double.parseDouble(dx.getText()));
+			ball.setYSpeed(Double.parseDouble(dy.getText()));
+		} catch(Exception e) {
 
 		}
 //TODO: Make sure that when moving x and y of ball, it doesn't move onto an existing ball/inanimate. If it does, return it

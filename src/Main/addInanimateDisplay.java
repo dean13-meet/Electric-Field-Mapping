@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-
 public class addInanimateDisplay extends Display {
 	private final initialDisplay initialDisplay;
 
@@ -29,4 +28,3 @@ public class addInanimateDisplay extends Display {
 
 	}
 }
-

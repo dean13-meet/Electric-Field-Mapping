@@ -46,7 +46,7 @@ public class Program {
 	}
 
 	public void createJFrame(double percentageOfScreenWidth, double percentageOfScreenHeight,
-			String title, Color background, Boolean resizable, final String id){
+			String title, Color background, Boolean resizable, final String id) {
 
 		final JFrame retVal = new JFrame();
 
@@ -65,7 +65,6 @@ public class Program {
 		});
 		framesId.add(id);
 		frames.add(retVal);
-
 	}
 
 	public JFrame getJFrameById(String id) {
@@ -77,8 +76,8 @@ public class Program {
 		return null;
 	}
 
-	public void closeAllFrames(){//Closes all frames except initialF
-		for(JFrame f : frames){
+	public void closeAllFrames() {//Closes all frames except initialF
+		for (JFrame f : frames) {
 			f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
 		}
 	}

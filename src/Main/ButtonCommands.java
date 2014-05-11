@@ -26,12 +26,10 @@ public abstract class ButtonCommands {
 class pauseBallMovement extends ButtonCommands {
 	initialDisplay newD = (initialDisplay) d;// Done to get access to stuff in initialDisplay and not just Display
 
-
 	pauseBallMovement(initialDisplay d) {
 		super(d); //Useless in this place, cuz we are using an initialDisplay.
 		//Only kept here if we need to use in future.
 	}
-
 
 	@Override
 	void execute(int caseNum) {
@@ -98,10 +96,10 @@ class slideElasticWalls extends ButtonCommands{
 
 	@Override
 	void execute(int caseNum) {
-		if(hostProgram.getJFrameById("Change Elasticity")==null) {
+		if (hostProgram.getJFrameById("Change Elasticity") == null) {
 			final boolean ballsWhereMoving;
 
-			if (newD.ballsMoving) {newD.getBallStart().simulateClick();ballsWhereMoving =true;}//Always pause.
+			if (newD.ballsMoving) {newD.getBallStart().simulateClick();ballsWhereMoving = true;}//Always pause.
 			else ballsWhereMoving = false;
 
 			hostProgram.createJFrame(50, 25, "Change Elasticity", new Color(255,153,0), false, "Change Elasticity");
@@ -110,19 +108,18 @@ class slideElasticWalls extends ButtonCommands{
 			changeElasticityF.addWindowListener(new java.awt.event.WindowAdapter() {
 				@Override
 				public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-					if (ballsWhereMoving){
-						if(!newD.ballsMoving)newD.getBallStart().simulateClick();
+					if (ballsWhereMoving) {
+						if (!newD.ballsMoving) newD.getBallStart().simulateClick();
 					}
 					hostProgram.framesId.remove("Change Elasticity");
 					hostProgram.frames.remove(changeElasticityF);
-
 				}});
 
 			Display changeElasticityD = new elasticDisplay(changeElasticityF.getWidth(), changeElasticityF.getHeight(), changeElasticityF, hostProgram, newD);
 			changeElasticityF.add(changeElasticityD);
 
-
-		} else {hostProgram.getJFrameById("Change Elasticity").toFront();}
+		}
+		else {hostProgram.getJFrameById("Change Elasticity").toFront();}
 	}
 }
 
@@ -240,8 +237,6 @@ class SaveToFile extends ButtonCommands {
 			for(Button b : newD.buttons){
 				out.write(b.name + " " + b.timesClicked + "\n");
 			}
-
-
 		}
 
 		catch (IOException e) {
@@ -267,7 +262,7 @@ class LoadFromFile extends ButtonCommands {
 				in.next();
 			}
 			int originalWidth = in.nextInt();
-			while(!in.hasNextInt()){
+			while (!in.hasNextInt()){
 				in.next();
 			}
 			int originalHeight = in.nextInt();
@@ -284,34 +279,31 @@ class LoadFromFile extends ButtonCommands {
 						in.nextDouble(), in.nextDouble(), in.nextDouble()));
 			}
 			//Do Labels:
-			for(JLabel c : newD.chargeDisplay){
+			for (JLabel c : newD.chargeDisplay) {
 				newD.remove(c);
 			}
 			newD.chargeDisplay.clear();
-			for(int i = 0; i < newD.ballarray.size(); i++){
+			for (int i = 0; i < newD.ballarray.size(); i++) {
 				JLabel l = new JLabel();
 				newD.chargeDisplay.add(l);
 				newD.add(l);
 				l.setVisible(true);
 			}
 
-
 			int numberInanimates = in.nextInt();
 			newD.inAnimates.clear();
-			for(int i = 0; i < numberInanimates; i++){
-				class vert{
+			for (int i = 0; i < numberInanimates; i++) {
+				class vert {
 					ArrayList<Point> getVertecies(){
 						ArrayList<Point> retval = new ArrayList<Point>();
 						int numberVertecies = in.nextInt();
 						for(int i = 0 ; i < numberVertecies; i ++){
-							retval.add(new Point((int)(in.nextInt()*widthRatio), (int)(in.nextInt()*heightRatio)));
+							retval.add(new Point((int)(in.nextInt() * widthRatio), (int)(in.nextInt() * heightRatio)));
 						}
 						return retval;
 					}
 				}
 				newD.inAnimates.add(new inanimateObject(newD.hostProgram, newD, in.nextDouble(), new vert().getVertecies()));
-
-
 			}
 			in.next();
 			newD.ballsMoving = in.nextBoolean();
@@ -326,7 +318,7 @@ class LoadFromFile extends ButtonCommands {
 
 			//Load button states:
 			int numberButtons = in.nextInt();
-			if(newD.buttons.size()!=numberButtons){
+			if (newD.buttons.size() != numberButtons) {
 				newD.messages.addMessage("Error: Preset does not contain proper amount of GUI buttons. Will not load buttons!", onScreenMessage.CENTER);
 				return;
 			}
@@ -335,9 +327,9 @@ class LoadFromFile extends ButtonCommands {
 			buttonsToIgnore.add("elasticWallsButton");
 			buttonsToIgnore.add("saveToFile");
 			buttonsToIgnore.add("loadFromFile");
-			for(int i = 0; i < numberButtons; i++){
+			for(int i = 0; i < numberButtons; i++) {
 				String buttonName = in.next();
-				newD.getButtonByName(buttonName).timesClicked = in.nextInt()-1;
+				newD.getButtonByName(buttonName).timesClicked = in.nextInt() - 1;
 				if(!buttonsToIgnore.contains(buttonName))
 				newD.getButtonByName(buttonName).simulateClick();
 
@@ -349,7 +341,7 @@ class LoadFromFile extends ButtonCommands {
 	}
 }
 
-class ballOrWallCommand extends ButtonCommands{
+class ballOrWallCommand extends ButtonCommands {
 	private final initialDisplay newD = (initialDisplay) d;
 	ballOrWallCommand(Display d) {
 		super(d);
@@ -361,7 +353,7 @@ class ballOrWallCommand extends ButtonCommands{
 		newD.type = b.getText().replace("Type: ", "");
 
 		Button tool = newD.getButtonByName("toolButton");//After changing the type, we will change the tool button to match the appropriate tools!
-		if(newD.type.equals("Ball")){
+		if (newD.type.equals("Ball")) {
 			String[] toolStrings = new String[newD.ballTools.length];
 			for(int i = 0; i < toolStrings.length; i++){
 				toolStrings[i] = "Tool: " + newD.ballTools[i];
@@ -372,9 +364,9 @@ class ballOrWallCommand extends ButtonCommands{
 			//Now, set the tool being used to match one of the optional tools available
 			tool.simulateClick();
 		}
-		else if(newD.type.equals("Inanimate")){
+		else if (newD.type.equals("Inanimate")) {
 			String[] toolStrings = new String[newD.inanimateTools.length];
-			for(int i = 0; i < toolStrings.length; i++){
+			for (int i = 0; i < toolStrings.length; i++) {
 				toolStrings[i] = "Tool: " + newD.inanimateTools[i];
 			}
 			tool.strs = toolStrings;
@@ -383,9 +375,9 @@ class ballOrWallCommand extends ButtonCommands{
 			//Now, set the tool being used to match one of the optional tools available
 			tool.simulateClick();
 		}
-		else if(newD.type.equals("Arrow")){
+		else if (newD.type.equals("Arrow")) {
 			String[] toolStrings = new String[newD.arrowTools.length];
-			for(int i = 0; i < toolStrings.length; i++){
+			for (int i = 0; i < toolStrings.length; i++) {
 				toolStrings[i] = "Tool: " + newD.arrowTools[i];
 			}
 			tool.strs = toolStrings;
@@ -394,11 +386,10 @@ class ballOrWallCommand extends ButtonCommands{
 			//Now, set the tool being used to match one of the optional tools available
 			tool.simulateClick();
 		}
-
-
 	}
 }
-class addInanimateCommand extends ButtonCommands{
+
+class addInanimateCommand extends ButtonCommands {
 	private final initialDisplay d;
 	private final Program p;
 	private final double charge;
@@ -434,7 +425,7 @@ class addInanimateCommand extends ButtonCommands{
 		 * a method to check intersection of 2 SEGMENTS).
 		 *
 		 */
-		if(v.size()>2)
+		if (v.size() > 2)
 			d.inAnimates.add(new inanimateObject(p, d, charge, v));
 		else
 			d.messages.addMessage("Error: Cannot add inanimate with less than 3 vertecies!", onScreenMessage.CENTER);

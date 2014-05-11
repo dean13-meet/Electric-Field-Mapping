@@ -4,8 +4,7 @@ import java.awt.Graphics;
 import javax.swing.JFrame;
 import javax.swing.JSlider;
 
-
-public class elasticDisplay extends Display{
+public class elasticDisplay extends Display {
 	private final initialDisplay d;
 	private final JSlider slider;
 
@@ -28,15 +27,10 @@ public class elasticDisplay extends Display{
 		startPause.setBounds(width/2-200, height/2-25-50, 400, 50);
 
 		add(startPause);
-
-
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		// TODO Auto-generated method stub
 
 	}
-
-
 }

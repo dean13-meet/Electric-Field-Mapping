@@ -12,13 +12,14 @@ public class Force {
 		this.magnitude = magnitude;
 		this.direction = direction;
 	}
+
 	public Force() {
 		this(0,0);
 	}
+
 	public String toString() {
 		return "( " + magnitude + " , " + direction + " )";
 	}
-
 	public double getX() {
 		return Math.cos(direction)*magnitude;
 	}
@@ -36,29 +37,29 @@ public class Force {
 		double newY = myY + hisY;
 		this.magnitude = Math.pow(Math.pow(newX, 2) + Math.pow(newY, 2), 0.5);
 
-		if(newX == 0) {
-			if(newY > 0) {
+		if (newX == 0) {
+			if (newY > 0) {
 				direction = Math.PI/2;
 				return;
 			}
-			if(newY < 0) {
+			if (newY < 0) {
 				direction = 3*Math.PI/2;
 				return;
 			}
 		}
 
-		if(newY == 0) {
-			if(newX > 0) {
+		if (newY == 0) {
+			if (newX > 0) {
 				direction = 0;
 				return;
 			}
-			if(newX < 0) {
+			if (newX < 0) {
 				direction = Math.PI;
 				return;
 			}
 		}
 
-		if(newX > 0) {
+		if (newX > 0) {
 			direction = Math.atan(newY/newX);
 		}
 		if (newX < 0) {

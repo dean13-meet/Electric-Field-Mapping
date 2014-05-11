@@ -30,11 +30,10 @@ public class Button extends JButton implements ActionListener, Cloneable{
 		//Make sure text fits in screen:
 
 		if (this.getFontMetrics(this.getFont()).stringWidth(this.getText())>this.getWidth()*0.85) {
-
 			//Get ratio between button width and string width
-			double ratio = (double) ((this.getWidth()*0.85)/this.getFontMetrics(this.getFont()).stringWidth(this.getText()));
+			double ratio = (double) ((this.getWidth()*0.85) / this.getFontMetrics(this.getFont()).stringWidth(this.getText()));
 			//New font size:
-			int newSize = (int) (this.getFont().getSize()*ratio);
+			int newSize = (int) (this.getFont().getSize() * ratio);
 			//Make sure font is not too high:
 			newSize = Math.min(newSize, this.getHeight());
 
@@ -46,11 +45,11 @@ public class Button extends JButton implements ActionListener, Cloneable{
 		this.setText(strs[(timesClicked+1)%roundLength]);
 		this.setFont(new Font(this.getFont().getName(), this.getFont().getStyle(), 16));
 		//Make sure text fits in screen:
-		if (this.getFontMetrics(this.getFont()).stringWidth(this.getText())>this.getWidth()*0.85) {
+		if (this.getFontMetrics(this.getFont()).stringWidth(this.getText()) > this.getWidth() * 0.85) {
 			//Get ratio between button width and string width
-			double ratio = (double) ((this.getWidth()*0.85)/this.getFontMetrics(this.getFont()).stringWidth(this.getText()));
+			double ratio = (double) ((this.getWidth() * 0.85) / this.getFontMetrics(this.getFont()).stringWidth(this.getText()));
 			//New font size:
-			int newSize = (int) (this.getFont().getSize()*ratio);
+			int newSize = (int) (this.getFont().getSize() * ratio);
 			//Make sure font is not too high:
 			newSize = Math.min(newSize, this.getHeight());
 
@@ -58,14 +57,13 @@ public class Button extends JButton implements ActionListener, Cloneable{
 		}
 		timesClicked++;
 		command.execute(timesClicked);
-
 	}
 
 	public void simulateClick() {
 		actionPerformed(new ActionEvent(this, 0, ""));
 	}
 
-	public Button getClone(){
+	public Button getClone() {
 		try {
 			return (Button) this.clone();
 		} catch (CloneNotSupportedException e) {

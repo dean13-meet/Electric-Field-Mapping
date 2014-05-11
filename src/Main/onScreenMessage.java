@@ -1,4 +1,5 @@
 package src.Main;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -35,7 +36,8 @@ public class onScreenMessage {
 		Graphics g = p.initialF.getGraphics();
 		g.setFont(f);
 		g.setColor(Color.black);
-		g.fillRect(locations.peek().x, (int)(locations.peek().y-g.getFontMetrics(f).getHeight()*0.8), g.getFontMetrics(f).stringWidth(messages.peek()), (int)(g.getFontMetrics(f).getHeight()*1.2));//*1.2 is just so that we have a small border around.
+		g.fillRect(locations.peek().x, (int)(locations.peek().y-g.getFontMetrics(f).getHeight() * 0.8),
+				g.getFontMetrics(f).stringWidth(messages.peek()), (int)(g.getFontMetrics(f).getHeight() * 1.2));//*1.2 is just so that we have a small border around.
 		g.setColor(Color.white);
 		g.drawString(messages.poll(), locations.peek().x, locations.poll().y);
 	}

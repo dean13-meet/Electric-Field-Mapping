@@ -6,8 +6,6 @@ import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import src.Utils.Force;
 
-
-
 public class Ball {
 	private double x, y;
 	public double mySize, mass, dx, dy, charge, acceleration, accelerationD;
@@ -37,15 +35,13 @@ public class Ball {
 	public double getRadius() {
 		return mySize/2;
 	}
-
-
 	public double getXSpeed() {
 		return dx;
 	}
-	public void setXSpeed(double d){
+	public void setXSpeed(double d) {
 		this.dx = d;
 	}
-	public void setYSpeed(double d){
+	public void setYSpeed(double d) {
 		this.dy = d;
 	}
 	public double getYSpeed() {
@@ -69,10 +65,10 @@ public class Ball {
 		/*
 		 * Represents the THEORETICAL point this ball will move to after this method exits. However, this shall only be used for inanimate
 		 * collision check, as the collision with the inaniamates may alter dx and dy, changing the actual point the ball will move to.
-		 * Lines: 
+		 * Lines:
 		 * x = (x+dx*tickLength/1000);
 		 * y = (y+dy*tickLength/1000);
-		 * 
+		 *
 		 * Must not be removed!
 		 */
 		Point nextPoint = new Point((int)(x+dx*tickLength/1000), (int)(y+dy*tickLength/1000));
@@ -81,23 +77,23 @@ public class Ball {
 		y = (y+dy*tickLength/1000);
 		inanimateFailSafe(inani);
 		this.setColor(this.defaultColor);
-		for(inanimateObject o : inani){
-			if(o.shape.contains(new Point((int)x, (int)y))){
+		for (inanimateObject o : inani){
+			if (o.shape.contains(new Point((int)x, (int)y))){
 				this.setColor(Color.red);
 			}
 		}
 	}
 
 	private void inanimateFailSafe(ArrayList<inanimateObject> inani) {
-		for(inanimateObject o : inani){
+		for (inanimateObject o : inani) {
 			//Failsafe - in case balls glitched into the shape and did not collide:
-			if(o.shape.contains(getX(), getY())){
+			if (o.shape.contains(getX(), getY())) {
 				Line2D closestLine = new Line2D.Float(o.getVerticies().get(o.getVerticies().size()-1), o.getVerticies().get(0));
 				double distanceToClosestLine = closestLine.ptSegDist(getX(), getY());
 				for(int i = 0; i < o.getVerticies().size() - 1; i++){
 					Line2D l = new Line2D.Float(o.getVerticies().get(i), o.getVerticies().get(i+1));
 					double d = l.ptSegDist(getX(), getY());
-					if(d<distanceToClosestLine){
+					if(d < distanceToClosestLine) {
 						closestLine = l;
 						distanceToClosestLine = d;
 					}
@@ -108,7 +104,7 @@ public class Ball {
 				//Line2D xAxis = new Line2D.Float((float)getX(), (float)getY(), (float)getX()+10, (float)getY());
 				double degreeBetweenLines = Math.atan(m2);//Degree between normal to inAnimate line and the x axis
 				//System.out.println("Setting from: " + getX() + "," + getY() + " To: " + getX()+distanceToClosestLine*Math.cos(degreeBetweenLines) + "," +getY() + distanceToClosestLine*Math.sin(degreeBetweenLines));
-				this.setX(getX()+(distanceToClosestLine*Math.cos(degreeBetweenLines)*1.3));
+				this.setX(getX() + (distanceToClosestLine*Math.cos(degreeBetweenLines)*1.3));
 				this.setY(getY() + (distanceToClosestLine*Math.sin(degreeBetweenLines)*1.3));
 			}
 		}
@@ -116,41 +112,38 @@ public class Ball {
 	}
 
 	private void inanimateCollisions(ArrayList<inanimateObject> inani, Point nextPoint) {
-		
 		Point currentLoc = new Point((int)x, (int)y);
-		if(!currentLoc.equals(nextPoint)){
+		if (!currentLoc.equals(nextPoint)) {
 		Line2D hereToNextPoint = new Line2D.Float(currentLoc, nextPoint);
-		//Thats a line between current position and the position that we will move to in 
+		//Thats a line between current position and the position that we will move to in
 		//next frame.
-		
+
 		ArrayList<Line2D> intersectingLines = new ArrayList<Line2D>();
-		
-		for(inanimateObject o : inani){
+
+		for (inanimateObject o : inani){
 			for (int i = 0; i < o.getVerticies().size(); i++) {
 				Line2D l;
 				if (i < o.getVerticies().size() - 1)
 					l = new Line2D.Float(o.getVerticies().get(i), o.getVerticies().get(i+1));
 				else
 					l = new Line2D.Float(o.getVerticies().get(i), o.getVerticies().get(0));//Gets line connecting end and start of inanimate
-			
-				
-			if(l.intersectsLine(hereToNextPoint)){
-				intersectingLines.add(l);
-			}
-				
+
+				if (l.intersectsLine(hereToNextPoint)) {
+					intersectingLines.add(l);
+				}
 			}
 		}
-		
+
 		double shortestDistance = Integer.MAX_VALUE;
 		Line2D closestLine = null;
-		
-		for(Line2D l : intersectingLines){
-			if(l.ptSegDist(currentLoc)<shortestDistance){
+
+		for (Line2D l : intersectingLines) {
+			if (l.ptSegDist(currentLoc) < shortestDistance) {
 				closestLine = l;
 			}
 		}
-		
-		if(closestLine!=null){
+
+		if (closestLine != null) {
 			Line2D l = closestLine;
 			Line2D h = hereToNextPoint;
 			//Move ball close to inanimate before a collision:
@@ -161,11 +154,10 @@ public class Ball {
 			Point moveTo = new Point((int)((yIntH - yIntL)/(slopeL-slopeH)), (int)(yIntL + (slopeL*((yIntH - yIntL)/(slopeL-slopeH)))));
 			System.out.println(slopeL + " " + slopeH + " " + yIntL + " " + yIntH);
 			System.out.println(this.x + " " + moveTo.x + " " + this.y + " " + moveTo.y);
-			if(moveTo.x> 0 && moveTo.x < Integer.MAX_VALUE && moveTo.y > 0 && moveTo.y < Integer.MAX_VALUE){//Incase either of the slopes is +-Infinity or NaN
+			if (moveTo.x > 0 && moveTo.x < Integer.MAX_VALUE && moveTo.y > 0 && moveTo.y < Integer.MAX_VALUE) {//Incase either of the slopes is +-Infinity or NaN
 			this.x = moveTo.x;
 			this.y = moveTo.y;}
-		
-			
+
 			double slope = (l.getY1() - l.getY2()) / (l.getX1() - l.getX2());
 			double normalSlope = -1/slope;
 			// determines whether ball is above or below line
@@ -186,7 +178,7 @@ public class Ball {
 			dy = elastic * mag_ball * Math.sin(angle);
 		}
 	}
-		
+
 	}
 
 	public void updateAcceleration() {
@@ -206,20 +198,20 @@ public class Ball {
 		 * checks collisions with walls
 		 */
 
-		if (x+radius >= width*5/6) {
-			if(dx>0)dx = -dx *d.elasticity/100;//If walls are inelastic, and ball is trying to move right.
+		if (x + radius >= width*5/6) {
+			if (dx>0) dx = -dx * d.elasticity/100;//If walls are inelastic, and ball is trying to move right.
 			hitWall = true;
 		}
-		if (x-radius <= width/6 + 3) {
-			if(dx<0)dx = -dx * d.elasticity/100;//If ball is trying to move left.
+		if (x - radius <= width/6 + 3) {
+			if (dx < 0) dx = -dx * d.elasticity/100;//If ball is trying to move left.
 			hitWall = true;
 		}
-		if (y+radius >= height*9/10) {
-			if(dy>0)dy = -dy * d.elasticity/100;//If ball is trying to move down.
+		if (y + radius >= height*9/10) {
+			if (dy > 0) dy = -dy * d.elasticity/100;//If ball is trying to move down.
 			hitWall = true;
 		}
-		if (y-radius <= height/6 + 3) {
-			if(dy<0)dy = -dy *d.elasticity/100;//If ball is trying to move up.
+		if (y - radius <= height/6 + 3) {
+			if (dy < 0) dy = -dy *d.elasticity/100;//If ball is trying to move up.
 			hitWall = true;
 		}
 
@@ -227,23 +219,22 @@ public class Ball {
 		 * makes sure balls wont escape if they glitch out
 		 */
 		if (x <= width*5/6) {
-			x+=radius;
+			x += radius;
 		}
 		if (x >= width/6 + 3) {
-			x-=radius;
+			x -= radius;
 		}
-		if(y >= height*9/10) {
-			y-=radius;
+		if (y >= height * 9/10) {
+			y -= radius;
 		}
-		if(y <= height/6 + 3) {
-			y+=radius;
+		if (y <= height/6 + 3) {
+			y += radius;
 		}
 	}
 
 	public double getSpeed() {
 		return Math.pow(Math.pow(dx, 2) + Math.pow(dy, 2), 0.5);
 	}
-
 	public double getY() {
 		return y;
 	}
@@ -293,5 +284,4 @@ public class Ball {
 			return -Math.PI/2;
 		return 0;
 	}
-
 }
