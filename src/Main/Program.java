@@ -2,7 +2,8 @@ package Main;
 /**
  * @author Dean Leitersdorf, William Lee, Ophir Sneh
 */
-
+//
+//This
 import java.awt.Color;
 
 import java.awt.Dimension;
@@ -11,7 +12,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
-
+//This
 public class Program {
 	ArrayList<JFrame> frames = new ArrayList<JFrame>();
 	ArrayList<String> framesId = new ArrayList<String>();
