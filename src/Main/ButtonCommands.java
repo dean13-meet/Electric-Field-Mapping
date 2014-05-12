@@ -150,22 +150,18 @@ class addBallCommand extends ButtonCommands {
 
 	@Override
 	void execute(int caseNum) {
-		//TODO: Make sure that when adding a ball, there is no inanimate in the location it is being added.
 		for(inanimateObject obj: d.inAnimates) {
-			//add code to check if coords of ball are in inanimate
-			//ArrayList<Point> points = new ArrayList<Point>();
-			//points = new Ball(d, mass, (int)X, (int)Y, xspeed, yspeed, charge).
 			Point p = new Point((int)X, (int)Y);
 			if(obj.shape.contains(p)) {
 				//don't add
+				d.messages.addMessage("You cannot place a ball on top of an inanimate", onScreenMessage.CENTER);
 				callingFrame.dispatchEvent(new WindowEvent(callingFrame, WindowEvent.WINDOW_CLOSING));
-			}else{
-				//add
-				d.toAdd.add(new Ball(d, mass, (int)X, (int)Y, xspeed, yspeed, charge));
-				callingFrame.dispatchEvent(new WindowEvent(callingFrame, WindowEvent.WINDOW_CLOSING));
+				return;
 			}
 		}
-		
+		//add
+		d.toAdd.add(new Ball(d, mass, (int)X, (int)Y, xspeed, yspeed, charge));
+		callingFrame.dispatchEvent(new WindowEvent(callingFrame, WindowEvent.WINDOW_CLOSING));
 	}
 }
 
