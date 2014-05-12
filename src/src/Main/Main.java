@@ -2,10 +2,12 @@
  * @Authors William Lee, Dean Leitersdorf, Ophir Sneh, and Lilia Tang
  */
 package src.Main;
+/*
+ * This class does not do much, but contains the main method of this program.
+ */
 public class Main {
 	public static void main(String[] args) { 
-		// Bring up a JFrame with squares to represent the cells
-		//Don't need a full on declaration (Program p = new Program), updated it -William Lee
+		//Makes a new Program object, starting the program
 		new Program();
 	}
 }
