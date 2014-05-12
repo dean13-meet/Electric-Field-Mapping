@@ -139,7 +139,7 @@ public class Ball {
 				}
 			}
 
-			double shortestDistance = Integer.MAX_VALUE;
+			double shortestDistance = this.getRadius();
 			Line2D closestLine = null;
 
 			for (Line2D l : intersectingLines) {
@@ -157,8 +157,8 @@ public class Ball {
 				double yIntL = l.getY1() - (slopeL*l.getX1());
 				double yIntH = h.getY1() - (slopeH*h.getX1());
 				Point moveTo = new Point((int)((yIntH - yIntL)/(slopeL-slopeH)), (int)(yIntL + (slopeL*((yIntH - yIntL)/(slopeL-slopeH)))));
-				System.out.println(slopeL + " " + slopeH + " " + yIntL + " " + yIntH);
-				System.out.println(this.x + " " + moveTo.x + " " + this.y + " " + moveTo.y);
+				//System.out.println(slopeL + " " + slopeH + " " + yIntL + " " + yIntH);
+				//System.out.println(this.x + " " + moveTo.x + " " + this.y + " " + moveTo.y);
 				if (moveTo.x > 0 && moveTo.x < Integer.MAX_VALUE && moveTo.y > 0 && moveTo.y < Integer.MAX_VALUE) {//Incase either of the slopes is +-Infinity or NaN
 					this.x = moveTo.x;
 					this.y = moveTo.y;
