@@ -12,7 +12,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
-//This
+//update
 public class Program {
 	ArrayList<JFrame> frames = new ArrayList<JFrame>();
 	ArrayList<String> framesId = new ArrayList<String>();

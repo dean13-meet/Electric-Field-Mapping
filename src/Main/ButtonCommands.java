@@ -27,7 +27,8 @@ class pauseBallMovement extends ButtonCommands {
 	initialDisplay newD = (initialDisplay) d;// Done to get access to stuff in initialDisplay and not just Display
 
 	pauseBallMovement(initialDisplay d) {
-		super(d); //Useless in this place, cuz we are using an initialDisplay.
+		super(d);
+		//Useless in this place, cuz we are using an initialDisplay.
 		//Only kept here if we need to use in future.
 	}
 
@@ -329,7 +330,7 @@ class LoadFromFile extends ButtonCommands {
 				String buttonName = in.next();
 				newD.getButtonByName(buttonName).timesClicked = in.nextInt() - 1;
 				if(!buttonsToIgnore.contains(buttonName))
-				newD.getButtonByName(buttonName).simulateClick();
+					newD.getButtonByName(buttonName).simulateClick();
 
 			}
 		} catch (IOException x) {
