@@ -150,11 +150,25 @@ class addBallCommand extends ButtonCommands {
 
 	@Override
 	void execute(int caseNum) {
-		d.toAdd.add(new Ball(d, mass, (int)X, (int)Y, xspeed, yspeed, charge));
-		callingFrame.dispatchEvent(new WindowEvent(callingFrame, WindowEvent.WINDOW_CLOSING));
+		//TODO: Make sure that when adding a ball, there is no inanimate in the location it is being added.
+		for(inanimateObject obj: d.inAnimates) {
+			//add code to check if coords of ball are in inanimate
+			//ArrayList<Point> points = new ArrayList<Point>();
+			//points = new Ball(d, mass, (int)X, (int)Y, xspeed, yspeed, charge).
+			Point p = new Point((int)X, (int)Y);
+			if(obj.shape.contains(p)) {
+				//don't add
+				callingFrame.dispatchEvent(new WindowEvent(callingFrame, WindowEvent.WINDOW_CLOSING));
+			}else{
+				//add
+				d.toAdd.add(new Ball(d, mass, (int)X, (int)Y, xspeed, yspeed, charge));
+				callingFrame.dispatchEvent(new WindowEvent(callingFrame, WindowEvent.WINDOW_CLOSING));
+			}
+		}
+		
 	}
 }
-//TODO: Make sure that when adding a ball, there is no inanimate in the location it is being added.
+
 
 class addOrEditCommand extends ButtonCommands{
 
