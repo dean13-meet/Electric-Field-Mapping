@@ -4,10 +4,15 @@ import java.awt.Graphics;
 import javax.swing.JFrame;
 
 public class addBallDisplay extends Display{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final int ballX;
 	private final int ballY;
 	private final initialDisplay initialDisplay;
-	private final int pendingBallArraySizeBeforeAddingOurBall;//Describes the amount of balls pending before our ball - used when drawing the "TEMPORARY BALL" when this window is open
+	private final int pendingBallArraySizeBeforeAddingOurBall;
+	//Describes the amount of balls pending before our ball - used when drawing the "TEMPORARY BALL" when this window is open
 
 	public addBallDisplay(int w, int h, JFrame f, Program program, int ballX, int ballY,
 			initialDisplay initialDisplay, int pendingBallArraySize) {

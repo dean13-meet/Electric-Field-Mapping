@@ -5,6 +5,10 @@ import javax.swing.JFrame;
 import javax.swing.JSlider;
 
 public class elasticDisplay extends Display {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final initialDisplay d;
 	private final JSlider slider;
 

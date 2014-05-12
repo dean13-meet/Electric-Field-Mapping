@@ -38,10 +38,13 @@ import src.Utils.Force;
 import src.Utils.ArrowHead;
 
 public class initialDisplay extends Display implements MouseListener, MouseMotionListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public onScreenMessage messages;
 	private boolean paintloop = true;
 	public int TIME_BETWEEN_REPLOTS = 50;
-	private ballTextField balltextfield;
 
 	public ArrayList<Ball> ballarray;
 	public Queue<Ball> toAdd;//Includes the balls that are waiting to be added from "click on screen"
@@ -136,8 +139,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		this.voltageBarY = height/6 + height/100;
 		this.electricField = new Force[width][height];
 		this.voltageValue = new double[width][height];
-
-		balltextfield = new ballTextField();
 
 		setSize(width, height);
 		paintloop = true;
@@ -574,18 +575,21 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	}
 
 	private void printSigmaKineticEnergyAndElectric() {
-		double totE = 0;
-		for (Ball b : ballarray) {
-			totE += Math.pow(b.getSpeed() , 2) * b.mass * 0.5;
-		}
-
-		for (int k = 0; k < ballarray.size(); k++) {
-			for (int j = 0; j < ballarray.size(); j++) {
-				if (k!=j)
-					totE += Force.CalculatePotentialEnergy(ballarray.get(j), ballarray.get(k));
-			}
-		}
-		//System.out.println(totE);
+		/**
+		 * Uncomment to println, temporarily commented out to organize console
+		 */
+//		double totE = 0;
+//		for (Ball b : ballarray) {
+//			totE += Math.pow(b.getSpeed() , 2) * b.mass * 0.5;
+//		}
+//
+//		for (int k = 0; k < ballarray.size(); k++) {
+//			for (int j = 0; j < ballarray.size(); j++) {
+//				if (k!=j)
+//					totE += Force.CalculatePotentialEnergy(ballarray.get(j), ballarray.get(k));
+//			}
+//		}
+//		System.out.println(totE);
 	}
 
 	private void updateVoltageScaleText(ArrayList<Double> list) {
@@ -680,7 +684,6 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			Collections.sort(voltageValuesList);
 
 			double belowZero = getNegativeAmount(voltageValuesList);
-			double exactlyZero  = getZeroAmount(voltageValuesList);
 			double aboveZero = getPositiveAmount(voltageValuesList);
 
 			for (int x = width/6 + 5; x < width*5/6 - 10; x += pixel) {
@@ -716,6 +719,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		}
 	}
 
+	//Is this used? Added Suppress Warning because I don't think it is.. -William Lee
+	@SuppressWarnings("unused")
 	private int getZeroAmount(ArrayList<Double> list) {
 		int counter = 0;
 		for (int i = 0; i < list.size(); i++) {
@@ -810,6 +815,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		else return 0;
 	}
 
+	//Is this used? Added Suppress Warning because I don't think it is.. -William Lee
+	@SuppressWarnings("unused")
 	private void calculateElectricFieldOnScreen() {
 		for (int x = width/6+5; x < width*5/6-10; x += pixel) {
 			for (int y = height/6+5; y <height*5/6 + height/10-30; y += pixel) {
@@ -891,6 +898,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		return theta;
 	}
 
+	//Is this used? Added Suppress Warning because I don't think it is.. -William Lee
+	@SuppressWarnings("unused")
 	private double calculateTheta2(Ball b1, Ball b2) {
 		return Math.atan2(b1.getX()-b2.getX(), b1.getY()-b2.getY());
 	}
@@ -1275,8 +1284,14 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	public Display getSelf(){
 		return this;
 	}
-
+	//Is this used? Added Suppress Warning because I don't think it is.. -William Lee
+	//Also, eclipse lets hou declare classes in the same file as other classes?!?
+	@SuppressWarnings("unused")
 	private class ballTextField extends JFormattedTextField implements PropertyChangeListener {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private JLabel Size;
 		private JLabel Force;
 
@@ -1292,6 +1307,11 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		}
 
 		class ballDocument extends PlainDocument {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 		}
 
 		@Override

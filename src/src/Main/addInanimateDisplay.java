@@ -2,9 +2,12 @@ package src.Main;
 import java.awt.Graphics;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 public class addInanimateDisplay extends Display {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final initialDisplay initialDisplay;
 
 	public addInanimateDisplay(int w, int h, JFrame f, Program program, initialDisplay initialDisplay) {
@@ -25,6 +28,6 @@ public class addInanimateDisplay extends Display {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-
+		//empty 
 	}
 }

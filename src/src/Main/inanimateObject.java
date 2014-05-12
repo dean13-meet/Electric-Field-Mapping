@@ -9,7 +9,6 @@ import java.awt.Polygon;
 import java.util.ArrayList;
 
 public class inanimateObject {
-	private final Program hostP;
 	private final initialDisplay d;
 
 	private double charge;
@@ -31,7 +30,6 @@ public class inanimateObject {
 	private final Point centroid;
 
 	public inanimateObject(Program p, initialDisplay d, double charge, ArrayList<Point> vertices){
-		this.hostP = p;
 		this.d = d;
 		this.charge = charge;
 		this.vertices = vertices; //Used for saving to file

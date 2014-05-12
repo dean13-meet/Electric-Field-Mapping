@@ -7,6 +7,10 @@ import javax.swing.JTextField;
 
 public class editBallDisplay extends Display{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final initialDisplay d;
 	private final int ballIndex;
 	private Ball ball;
