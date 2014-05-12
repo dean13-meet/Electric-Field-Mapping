@@ -1199,6 +1199,17 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				 * If any inanimate contains this point, spaceFreeOfInanimates is set to false,
 				 * AND occupyingInanimate is set to whatever inanimate this is
 				 */
+				/**
+				 * Finished todo
+				 */
+				for(inanimateObject obj: inAnimates) {
+					Point p = new Point(a.getX(), a.getY());
+					if(obj.shape.contains(p)) {
+						//don't add
+						spaceFreeOfInanimates = false;
+						occupyingInanimate = obj;
+					}
+				}
 
 				if (tool.equals("Add: Place")) {
 					//TODO
