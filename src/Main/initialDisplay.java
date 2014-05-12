@@ -10,6 +10,7 @@ import javax.swing.JComboBox;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -53,6 +54,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	//Balls are in here only while they are being created using creation window.
 	public ArrayList<Point> verticesOfBeingAddedInAnimate;//Temp representation of vertecies of being added inanimate
 	public ArrayList<inanimateObject> inAnimates;
+	private ArrayList<Ball> tempBalls;
 
 
 	private String[] presets;
@@ -124,6 +126,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 	private long lastAddedBallTime = System.currentTimeMillis();
 	private long minTimeToAddNewBall = 100;//Minimum time (in miliSec) between adding balls on drag
+	
 
 	public initialDisplay(int w, int h, JFrame f, Program program) {
 		super(w, h, f, program);
@@ -210,6 +213,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		verticesOfBeingAddedInAnimate = new ArrayList<Point>();
 		toAdd = new LinkedList<Ball>();
 		ballarray = new ArrayList<Ball>();
+		tempBalls = new ArrayList<Ball>();
 		pendingBalls = new ArrayList<Ball>();
 		chargeDisplay = new ArrayList<JLabel>();
 		buttons = new ArrayList<Button>();
@@ -240,7 +244,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 				String str = "";
 				str+=(int)(ballarray.get(ballarray.size()-1).charge*1000000);
-				str+="µ";
+				str+="Âµ";
 				temp.setText(str);
 				temp.setBounds((int)ballarray.get(ballarray.size()-1).getX(), (int)ballarray.get(ballarray.size()-1).getY(), 50, 25);
 				chargeDisplay.add(temp);
@@ -257,7 +261,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		JLabel temp = new JLabel();
 		String str = "";
 		str+=(int)(ballarray.get(ballarray.size()-1).charge*1000000);
-		str+="µ";
+		str+="Âµ";
 		temp.setText(str);
 		temp.setBounds((int)ballarray.get(ballarray.size()-1).getX(), (int)ballarray.get(ballarray.size()-1).getY(), 50, 25);
 		chargeDisplay.add(temp);
@@ -410,6 +414,9 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 							this.arrowHeads.add(new ArrowHead((int) Math.toDegrees(ballarray.get(i).getDirection()), 10, new Point((int)ballarray.get(i).getX(), (int)ballarray.get(i).getY())));
 					}
 				}
+				for (Ball b : tempBalls){
+					b.draw(g);
+				}
 				ArrayList<ArrowHead> toRemove = new ArrayList<ArrowHead>();
 				for (ArrowHead a : arrowHeads){
 					if(a.getOpacity()<=0)toRemove.add(a);
@@ -500,7 +507,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 			String str = "";
 			str+=(int)(ballarray.get(ballarray.size()-1).charge*1000000);
-			str+="µ";
+			str+="Âµ";
 			temp.setText(str);
 			temp.setBounds((int)ballarray.get(ballarray.size()-1).getX(), (int) ballarray.get(ballarray.size()-1).getY(), 50, 25);
 			chargeDisplay.add(temp);
@@ -842,7 +849,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	private void updateJLabel(JLabel jLabel, int i) {
 		String str = "";
 		str += (int)(ballarray.get(i).charge*1000000);
-		str += "µ";
+		str += "Âµ";
 		jLabel.setText(str);
 		jLabel.setBounds((int)ballarray.get(i).getX(), (int)ballarray.get(i).getY(), 50, 25);
 		//add(jLabel);
@@ -1159,6 +1166,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 							hostProgram.createJFrame(50, 50, "Edit Ball", new Color(255,153,0), false, "Edit Ball");
 
+							final Ball nextPointBallWillBeIn = ballInSpace.clone();
 							final JFrame editBallF = hostProgram.getJFrameById("Edit Ball");
 							editBallF.addWindowListener(new java.awt.event.WindowAdapter() {
 								@Override
@@ -1169,13 +1177,19 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 									hostProgram.framesId.remove("Edit Ball");
 									hostProgram.frames.remove(editBallF);
 									ballInSpace.setColor(Ball.defaultColor);
+									tempBalls.remove(nextPointBallWillBeIn);
 								}});
 
 							Display editBallD = new editBallDisplay(editBallF.getWidth(), editBallF.getHeight(),
 									editBallF, hostProgram, this, ballarray.indexOf(ballInSpace));
 							editBallF.add(editBallD);
 							ballInSpace.setColor(Color.cyan);
-
+							
+							nextPointBallWillBeIn.update(this.getGraphics(), this.width, this.height, this.TIME_BETWEEN_REPLOTS, this.inAnimates);
+							nextPointBallWillBeIn.setColor(Color.orange);
+							tempBalls.add(nextPointBallWillBeIn);
+							
+							
 						} else {hostProgram.getJFrameById("Edit Ball").toFront();}
 					}
 				}
@@ -1191,17 +1205,14 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			} else if (type.equals("Inanimate")) {
 				boolean spaceFreeOfInanimates = true;
 				inanimateObject occupyingInanimate = null;
-				//TODO
 				/*
 				 * Loop over all inanimates and make sure that they do not contain a.getX(), a.getY()
 				 * 	(inanimate.shape.contains(a.getX(), a.getY())
 				 *
 				 * If any inanimate contains this point, spaceFreeOfInanimates is set to false,
-				 * AND occupyingInanimate is set to whatever inanimate this is
+				 * AND occupyingInanimate is set to whatever inanimate this is.
 				 */
-				/**
-				 * Finished todo
-				 */
+				
 				for(inanimateObject obj: inAnimates) {
 					Point p = new Point(a.getX(), a.getY());
 					if(obj.shape.contains(p)) {
