@@ -1,4 +1,4 @@
-package src.Main;
+package Main;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

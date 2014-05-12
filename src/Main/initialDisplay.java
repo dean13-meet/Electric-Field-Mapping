@@ -1,4 +1,4 @@
-package src.Main;
+package Main;
 /**
  * @author Dean Leitersdorf, William Lee, Ophir Sneh, Lilia Tang
 *
@@ -34,8 +34,8 @@ import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 import javax.swing.JSlider;
 
-import src.Utils.Force;
-import src.Utils.ArrowHead;
+import Utils.ArrowHead;
+import Utils.Force;
 
 public class initialDisplay extends Display implements MouseListener, MouseMotionListener {
 	/**

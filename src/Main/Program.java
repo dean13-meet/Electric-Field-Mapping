@@ -1,4 +1,4 @@
-package src.Main;
+package Main;
 /**
  * @author Dean Leitersdorf, William Lee, Ophir Sneh
 */

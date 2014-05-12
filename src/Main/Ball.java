@@ -1,10 +1,11 @@
-package src.Main;
+package Main;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
-import src.Utils.Force;
+
+import Utils.Force;
 
 public class Ball {
 	
