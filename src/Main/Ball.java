@@ -139,7 +139,7 @@ public class Ball {
 				}
 			}
 
-			double shortestDistance = this.getRadius();
+			double shortestDistance = Integer.MAX_VALUE;
 			Line2D closestLine = null;
 
 			for (Line2D l : intersectingLines) {
