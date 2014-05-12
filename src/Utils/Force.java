@@ -1,6 +1,8 @@
 package Utils;
 import Main.Ball;
-
+/*
+ * 
+ */
 public class Force {
 	public double magnitude;
 	public double direction;
