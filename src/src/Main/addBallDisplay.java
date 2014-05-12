@@ -1,12 +1,9 @@
 package src.Main;
 import java.awt.Graphics;
-
 import javax.swing.JFrame;
 
 public class addBallDisplay extends Display{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private final int ballX;
 	private final int ballY;
@@ -36,6 +33,6 @@ public class addBallDisplay extends Display{
 
 	@Override
 	protected void paintComponent(Graphics g) {
-
+		//empty
 	}
 }

@@ -1,12 +1,9 @@
 package src.Main;
 import java.awt.Graphics;
-
 import javax.swing.JFrame;
 
 public class addInanimateDisplay extends Display {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private final initialDisplay initialDisplay;
 
