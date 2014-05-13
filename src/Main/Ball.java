@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import Utils.Force;
 
-public class Ball {
+public class Ball{
 	
 	private double x, y;
 	public double mySize, mass, dx, dy, charge, acceleration, accelerationD;
@@ -296,4 +296,16 @@ public class Ball {
 			return -Math.PI/2;
 		return 0;
 	}
+	public Ball clone(){
+		Ball newBall = new Ball (d, mass, (int)x, (int)y, dx, dy, charge);
+		newBall.mySize = this.mySize;
+		newBall.acceleration = this.acceleration;
+		newBall.accelerationD = this.accelerationD;
+		newBall.hitWall = this.hitWall;
+		newBall.color = this.color;
+		newBall.force = this.force;
+		newBall.forceVector = this.forceVector;
+		return newBall;
+	}
+	
 }
