@@ -1,8 +1,8 @@
 package Main;
 /**
  * @author Dean Leitersdorf, William Lee, Ophir Sneh, Lilia Tang
-*
-  */
+ *
+ */
 
 import java.awt.AWTException;
 
@@ -578,18 +578,18 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		/**
 		 * Uncomment to println, temporarily commented out to organize console
 		 */
-//		double totE = 0;
-//		for (Ball b : ballarray) {
-//			totE += Math.pow(b.getSpeed() , 2) * b.mass * 0.5;
-//		}
-//
-//		for (int k = 0; k < ballarray.size(); k++) {
-//			for (int j = 0; j < ballarray.size(); j++) {
-//				if (k!=j)
-//					totE += Force.CalculatePotentialEnergy(ballarray.get(j), ballarray.get(k));
-//			}
-//		}
-//		System.out.println(totE);
+		//		double totE = 0;
+		//		for (Ball b : ballarray) {
+		//			totE += Math.pow(b.getSpeed() , 2) * b.mass * 0.5;
+		//		}
+		//
+		//		for (int k = 0; k < ballarray.size(); k++) {
+		//			for (int j = 0; j < ballarray.size(); j++) {
+		//				if (k!=j)
+		//					totE += Force.CalculatePotentialEnergy(ballarray.get(j), ballarray.get(k));
+		//			}
+		//		}
+		//		System.out.println(totE);
 	}
 
 	private void updateVoltageScaleText(ArrayList<Double> list) {
@@ -1200,7 +1200,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				 * AND occupyingInanimate is set to whatever inanimate this is
 				 */
 				/**
-				 * Finished todo
+				 * Finished TODO
 				 */
 				for(inanimateObject obj: inAnimates) {
 					Point p = new Point(a.getX(), a.getY());
@@ -1212,6 +1212,9 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				}
 
 				if (tool.equals("Add: Place")) {
+					/**
+					 * done
+					 */
 					//TODO
 					/*
 					 * Check that verticiesOfBeingAdded inanimate does not include a.getX(), a.getY()
@@ -1220,6 +1223,15 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 					 *
 
 					 */
+					for(Point point: verticesOfBeingAddedInAnimate) {
+						if(point.equals(new Point((int)a.getX(), (int)a.getY()))) {
+							return;
+						}
+					}
+
+
+
+
 					if (spaceFreeOfInanimates) {
 						if (hostProgram.getJFrameById("Add Inanimate") == null) {
 							final boolean ballsWhereMoving;
