@@ -10,7 +10,6 @@ import javax.swing.JComboBox;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -1326,7 +1325,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		return this;
 	}
 	//Is this used? Added Suppress Warning because I don't think it is.. -William Lee
-	//Also, eclipse lets hou declare classes in the same file as other classes?!?
+	//Also, eclipse lets you declare classes in the same file as other classes?!?
 	@SuppressWarnings("unused")
 	private class ballTextField extends JFormattedTextField implements PropertyChangeListener {
 		/**

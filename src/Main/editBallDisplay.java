@@ -7,7 +7,7 @@ import javax.swing.JTextField;
 
 public class editBallDisplay extends Display{
 
-	
+	private static final long serialVersionUID = 1L;
 	private final initialDisplay d;
 	private final int ballIndex;
 	private Ball ball;
@@ -26,7 +26,6 @@ public class editBallDisplay extends Display{
 
 	@Override
 	void init() {
-
 		xCoordL = new JLabel("X Coordinate:");
 		xCoordL.setBounds(width/3 - 175, height/8 -25, 100, 25);
 		add(xCoordL);
@@ -121,7 +120,6 @@ public class editBallDisplay extends Display{
 		add(dyU);
 		dyU.setVisible(true);
 
-
 		String[] startStrs = {"Update Ball"};
 		Button ballEdit = new Button("ballEdit", new updateBallCommand(hostFrame, d, ball, ballIndex ), startStrs,width/2-50, height*7/9, 100, 50);
 		add(ballEdit);
@@ -143,6 +141,8 @@ public class editBallDisplay extends Display{
 
 		}
 		repaint();
+		
+		//I think this is a duplicate TODO, someone check with Dean to make sure if you want to do this one
 //TODO: Make sure that when moving x and y of ball, it doesn't move onto an existing ball/inanimate. If it does, return it
 //it's previous position, and launch an onScreenMessage to
 //saying that the ball cannot be moved into another object.
