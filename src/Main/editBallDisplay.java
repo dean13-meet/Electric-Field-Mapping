@@ -141,7 +141,7 @@ public class editBallDisplay extends Display{
 
 		}
 		repaint();
-		
+
 		//I think this is a duplicate TODO, someone check with Dean to make sure if you want to do this one
 //TODO: Make sure that when moving x and y of ball, it doesn't move onto an existing ball/inanimate. If it does, return it
 //it's previous position, and launch an onScreenMessage to

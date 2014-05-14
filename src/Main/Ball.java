@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 import Utils.Force;
 
-public class Ball{
-	
+public class Ball {
+
 	private double x, y;
 	public double mySize, mass, dx, dy, charge, acceleration, accelerationD;
 	public boolean hitWall;
@@ -125,7 +125,7 @@ public class Ball{
 
 			ArrayList<Line2D> intersectingLines = new ArrayList<Line2D>();
 
-			for (inanimateObject o : inani){
+			for (inanimateObject o : inani) {
 				for (int i = 0; i < o.getVerticies().size(); i++) {
 					Line2D l;
 					if (i < o.getVerticies().size() - 1)
@@ -139,7 +139,7 @@ public class Ball{
 				}
 			}
 
-			double shortestDistance = Integer.MAX_VALUE;
+			double shortestDistance = Double.MAX_VALUE;
 			Line2D closestLine = null;
 
 			for (Line2D l : intersectingLines) {
@@ -169,19 +169,19 @@ public class Ball{
 				// determines whether ball is above or below line
 				double ball_pos = y - l.getY1() - slope * (x - l.getX1());
 				// dot product to find cosine between vectors
-				double dot;
+				double dot = dy * normalSlope - dx;
 				// since only direction matters, we can assume that the x component is 1
-				if (ball_pos > 0)
-					dot = dy * normalSlope - dx;
-				else
+				if (ball_pos < 0)
 					dot = dx - dy * normalSlope;
-				double mag_normal = Math.sqrt(Math.pow(normalSlope, 2) + 1);
-				double mag_ball = Math.sqrt(dx*dx + dy*dy);
+				double magNormal = Math.sqrt(Math.pow(normalSlope, 2) + 1);
+				double magBall = Math.sqrt(dx*dx + dy*dy);
 				// reflected angle
-				double angle = Math.PI - Math.acos(dot / (mag_normal * mag_ball));
+				double angleRef = Math.PI - Math.acos(dot / (magNormal * magBall));
+				double axisAngle = Math.atan(dy / dx);
+				double angle = angleRef + axisAngle;
 				double elastic = (double) d.elasticity/(double) 100;
-				dx = elastic * mag_ball * Math.cos(angle);
-				dy = elastic * mag_ball * Math.sin(angle);
+				dx = elastic * magBall * Math.cos(angle);
+				dy = elastic * magBall * Math.sin(angle);
 			}
 		}
 	}
@@ -190,7 +190,7 @@ public class Ball{
 		acceleration = force.magnitude/mass;
 		accelerationD = force.direction;
 	}
-	
+
 	public void updateForceVector() {
 		forceVector = new Line2D.Double(x, y, x +
 				Math.cos(force.direction)*force.magnitude,
@@ -208,17 +208,17 @@ public class Ball{
 			if (dx>0) dx = -dx * d.elasticity/100;//If walls are inelastic, and ball is trying to move right.
 			hitWall = true;
 		}
-		
+
 		if (x - radius <= width/6 + 3) {
 			if (dx < 0) dx = -dx * d.elasticity/100;//If ball is trying to move left.
 			hitWall = true;
 		}
-		
+
 		if (y + radius >= height*9/10) {
 			if (dy > 0) dy = -dy * d.elasticity/100;//If ball is trying to move down.
 			hitWall = true;
 		}
-		
+
 		if (y - radius <= height/6 + 3) {
 			if (dy < 0) dy = -dy *d.elasticity/100;//If ball is trying to move up.
 			hitWall = true;
@@ -230,15 +230,15 @@ public class Ball{
 		if (x <= width*5/6) {
 			x += radius;
 		}
-		
+
 		if (x >= width/6 + 3) {
 			x -= radius;
 		}
-		
+
 		if (y >= height * 9/10) {
 			y -= radius;
 		}
-		
+
 		if (y <= height/6 + 3) {
 			y += radius;
 		}
@@ -307,5 +307,5 @@ public class Ball{
 		newBall.forceVector = this.forceVector;
 		return newBall;
 	}
-	
+
 }

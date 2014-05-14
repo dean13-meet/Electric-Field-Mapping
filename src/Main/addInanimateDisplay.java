@@ -25,6 +25,6 @@ public class addInanimateDisplay extends Display {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		//empty 
+		//empty
 	}
 }

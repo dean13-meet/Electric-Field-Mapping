@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 abstract class Display extends JComponent {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	Program hostProgram;

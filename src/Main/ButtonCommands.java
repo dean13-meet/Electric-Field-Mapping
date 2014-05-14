@@ -418,11 +418,11 @@ class addInanimateCommand extends ButtonCommands {
 
 	@Override
 	void execute(int caseNum) {
-		
+
 		for(inanimateObject in: d.inAnimates) {
 			for(Point p: v) {
 				//NOT COMPLETED, Line2D.Float is used here to remind to use Line2D.Float, NOT Line2D
-				new Line2D.Float(p, p);	
+				new Line2D.Float(p, p);
 			}
 		}
 		//TODO

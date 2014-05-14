@@ -7,7 +7,7 @@ import javax.swing.JButton;
 
 public class Button extends JButton implements ActionListener, Cloneable{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	public int timesClicked = 0;

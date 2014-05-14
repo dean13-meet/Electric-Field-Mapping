@@ -40,7 +40,7 @@ import Utils.Force;
 
 public class initialDisplay extends Display implements MouseListener, MouseMotionListener {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	public onScreenMessage messages;
@@ -126,7 +126,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 	private long lastAddedBallTime = System.currentTimeMillis();
 	private long minTimeToAddNewBall = 100;//Minimum time (in miliSec) between adding balls on drag
-	
+
 
 
 	public initialDisplay(int w, int h, JFrame f, Program program) {
@@ -1235,21 +1235,10 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 									editBallF, hostProgram, this, ballarray.indexOf(ballInSpace));
 							editBallF.add(editBallD);
 							ballInSpace.setColor(Color.cyan);
-<<<<<<< HEAD
-
 							nextPointBallWillBeIn.update(this.getGraphics(), this.width, this.height, this.TIME_BETWEEN_REPLOTS, this.inAnimates);
 							nextPointBallWillBeIn.setColor(Color.orange);
 							tempBalls.add(nextPointBallWillBeIn);
 
-
-=======
-							
-							nextPointBallWillBeIn.update(this.getGraphics(), this.width, this.height, this.TIME_BETWEEN_REPLOTS, this.inAnimates);
-							nextPointBallWillBeIn.setColor(Color.orange);
-							tempBalls.add(nextPointBallWillBeIn);
-							
-							
->>>>>>> 4db886b56208256c82d2ab94d48cae582a9ce8be
 						} else {hostProgram.getJFrameById("Edit Ball").toFront();}
 					}
 				}
@@ -1270,22 +1259,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				 * 	(inanimate.shape.contains(a.getX(), a.getY())
 				 *
 				 * If any inanimate contains this point, spaceFreeOfInanimates is set to false,
-<<<<<<< HEAD
 				 * AND occupyingInanimate is set to whatever inanimate this is.
 				 */
-
-=======
-<<<<<<< HEAD
-				 * AND occupyingInanimate is set to whatever inanimate this is
-				 */
-				/**
-				 * Finished TODO
-=======
-				 * AND occupyingInanimate is set to whatever inanimate this is.
->>>>>>> FETCH_HEAD
-				 */
-				
->>>>>>> 4db886b56208256c82d2ab94d48cae582a9ce8be
 				for(inanimateObject obj: inAnimates) {
 					Point p = new Point(a.getX(), a.getY());
 					if(obj.shape.contains(p)) {
@@ -1396,7 +1371,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	@SuppressWarnings("unused")
 	private class ballTextField extends JFormattedTextField implements PropertyChangeListener {
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 		private JLabel Size;
@@ -1416,7 +1391,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		class ballDocument extends PlainDocument {
 
 			/**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 1L;
 		}
