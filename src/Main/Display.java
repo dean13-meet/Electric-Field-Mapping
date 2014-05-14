@@ -30,6 +30,7 @@ abstract class Display extends JComponent {
 		hostFrame = f;
 		hostProgram = program;
 		this.setBounds(0,0,width, height);
+
 	}
 
 	abstract void init();

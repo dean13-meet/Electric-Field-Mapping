@@ -126,6 +126,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 	private long lastAddedBallTime = System.currentTimeMillis();
 	private long minTimeToAddNewBall = 100;//Minimum time (in miliSec) between adding balls on drag
+	
 
 
 	public initialDisplay(int w, int h, JFrame f, Program program) {
@@ -244,7 +245,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 				String str = "";
 				str+=(int)(ballarray.get(ballarray.size()-1).charge*1000000);
-				str+="µ";
+				str+="Âµ";
 				temp.setText(str);
 				temp.setBounds((int)ballarray.get(ballarray.size()-1).getX(), (int)ballarray.get(ballarray.size()-1).getY(), 50, 25);
 				chargeDisplay.add(temp);
@@ -261,7 +262,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		JLabel temp = new JLabel();
 		String str = "";
 		str+=(int)(ballarray.get(ballarray.size()-1).charge*1000000);
-		str+="µ";
+		str+="Âµ";
 		temp.setText(str);
 		temp.setBounds((int)ballarray.get(ballarray.size()-1).getX(), (int)ballarray.get(ballarray.size()-1).getY(), 50, 25);
 		chargeDisplay.add(temp);
@@ -515,7 +516,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 			String str = "";
 			str+=(int)(ballarray.get(ballarray.size()-1).charge*1000000);
-			str+="µ";
+			str+="Âµ";
 			temp.setText(str);
 			temp.setBounds((int)ballarray.get(ballarray.size()-1).getX(), (int) ballarray.get(ballarray.size()-1).getY(), 50, 25);
 			chargeDisplay.add(temp);
@@ -899,7 +900,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	private void updateJLabel(JLabel jLabel, int i) {
 		String str = "";
 		str += (int)(ballarray.get(i).charge*1000000);
-		str += "µ";
+		str += "Âµ";
 		jLabel.setText(str);
 		jLabel.setBounds((int)ballarray.get(i).getX(), (int)ballarray.get(i).getY(), 50, 25);
 		//add(jLabel);
@@ -1234,12 +1235,21 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 									editBallF, hostProgram, this, ballarray.indexOf(ballInSpace));
 							editBallF.add(editBallD);
 							ballInSpace.setColor(Color.cyan);
+<<<<<<< HEAD
 
 							nextPointBallWillBeIn.update(this.getGraphics(), this.width, this.height, this.TIME_BETWEEN_REPLOTS, this.inAnimates);
 							nextPointBallWillBeIn.setColor(Color.orange);
 							tempBalls.add(nextPointBallWillBeIn);
 
 
+=======
+							
+							nextPointBallWillBeIn.update(this.getGraphics(), this.width, this.height, this.TIME_BETWEEN_REPLOTS, this.inAnimates);
+							nextPointBallWillBeIn.setColor(Color.orange);
+							tempBalls.add(nextPointBallWillBeIn);
+							
+							
+>>>>>>> 4db886b56208256c82d2ab94d48cae582a9ce8be
 						} else {hostProgram.getJFrameById("Edit Ball").toFront();}
 					}
 				}
@@ -1260,9 +1270,22 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				 * 	(inanimate.shape.contains(a.getX(), a.getY())
 				 *
 				 * If any inanimate contains this point, spaceFreeOfInanimates is set to false,
+<<<<<<< HEAD
 				 * AND occupyingInanimate is set to whatever inanimate this is.
 				 */
 
+=======
+<<<<<<< HEAD
+				 * AND occupyingInanimate is set to whatever inanimate this is
+				 */
+				/**
+				 * Finished TODO
+=======
+				 * AND occupyingInanimate is set to whatever inanimate this is.
+>>>>>>> FETCH_HEAD
+				 */
+				
+>>>>>>> 4db886b56208256c82d2ab94d48cae582a9ce8be
 				for(inanimateObject obj: inAnimates) {
 					Point p = new Point(a.getX(), a.getY());
 					if(obj.shape.contains(p)) {
@@ -1273,6 +1296,9 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				}
 
 				if (tool.equals("Add: Place")) {
+					/**
+					 * done
+					 */
 					//TODO
 					/*
 					 * Check that verticiesOfBeingAdded inanimate does not include a.getX(), a.getY()
@@ -1281,6 +1307,15 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 					 *
 
 					 */
+					for(Point point: verticesOfBeingAddedInAnimate) {
+						if(point.equals(new Point((int)a.getX(), (int)a.getY()))) {
+							return;
+						}
+					}
+
+
+
+
 					if (spaceFreeOfInanimates) {
 						if (hostProgram.getJFrameById("Add Inanimate") == null) {
 							final boolean ballsWhereMoving;
@@ -1357,7 +1392,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		return this;
 	}
 	//Is this used? Added Suppress Warning because I don't think it is.. -William Lee
-	//Also, eclipse lets hou declare classes in the same file as other classes?!?
+	//Also, eclipse lets you declare classes in the same file as other classes?!?
 	@SuppressWarnings("unused")
 	private class ballTextField extends JFormattedTextField implements PropertyChangeListener {
 		/**

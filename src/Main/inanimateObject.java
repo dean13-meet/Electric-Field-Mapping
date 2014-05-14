@@ -138,7 +138,9 @@ public class inanimateObject {
 		}
 		return retval;
 	}
-
+	public void setVerticies(ArrayList<Point> newVertices) {
+		vertices = newVertices;
+	}
 	public ArrayList<Point> getVerticies() {
 		return vertices;
 	}

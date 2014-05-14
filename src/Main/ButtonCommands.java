@@ -2,6 +2,7 @@ package Main;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.WindowEvent;
+import java.awt.geom.Line2D;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,6 +15,7 @@ import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+//TODO If you have time, (after doing all other TODOs) change buttons to add inanimates/balls to drop down menus.
 public abstract class ButtonCommands {
 	Display d;
 	ButtonCommands(Display d) {
@@ -416,10 +418,18 @@ class addInanimateCommand extends ButtonCommands {
 
 	@Override
 	void execute(int caseNum) {
+		
+		for(inanimateObject in: d.inAnimates) {
+			for(Point p: v) {
+				//NOT COMPLETED, Line2D.Float is used here to remind to use Line2D.Float, NOT Line2D
+				new Line2D.Float(p, p);	
+			}
+		}
 		//TODO
 		/*
 		 * Make sure no overlapping inanimates:
 		 * Check to see if there is an inanimate at the location before adding this new one
+		 *
 		 *
 		 * To do this, loop over all inanimates, and determine if any of the lines of
 		 * the inanimate being added intersects any of the lines of any of the
