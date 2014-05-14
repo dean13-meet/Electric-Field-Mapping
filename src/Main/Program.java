@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 public class Program {
 	ArrayList<JFrame> frames = new ArrayList<JFrame>();
 	ArrayList<String> framesId = new ArrayList<String>();
+	fieldDealer dealer;
 
 	JFrame initialF = new JFrame();
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -36,6 +37,7 @@ public class Program {
 			DISPLAY_HEIGHT - (2*yOffSet), initialF, this);
 
 		initialF.add(initialD);
+		this.dealer = new fieldDealer(initialD.getClass().getDeclaredFields());
 		initialF.setVisible(true);
 		initialF.setResizable(false);
 		System.out.println(this.DISPLAY_WIDTH + " " + this.DISPLAY_HEIGHT);

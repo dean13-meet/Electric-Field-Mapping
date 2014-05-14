@@ -1,8 +1,8 @@
 package Main;
 /**
  * @author Dean Leitersdorf, William Lee, Ophir Sneh, Lilia Tang
-*
-  */
+ *
+ */
 
 import java.awt.AWTException;
 
@@ -10,6 +10,7 @@ import javax.swing.JComboBox;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -53,6 +54,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	//Balls are in here only while they are being created using creation window.
 	public ArrayList<Point> verticesOfBeingAddedInAnimate;//Temp representation of vertecies of being added inanimate
 	public ArrayList<inanimateObject> inAnimates;
+	private ArrayList<Ball> tempBalls;
 
 
 	private String[] presets;
@@ -124,6 +126,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 	private long lastAddedBallTime = System.currentTimeMillis();
 	private long minTimeToAddNewBall = 100;//Minimum time (in miliSec) between adding balls on drag
+
 
 	public initialDisplay(int w, int h, JFrame f, Program program) {
 		super(w, h, f, program);
@@ -210,6 +213,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		verticesOfBeingAddedInAnimate = new ArrayList<Point>();
 		toAdd = new LinkedList<Ball>();
 		ballarray = new ArrayList<Ball>();
+		tempBalls = new ArrayList<Ball>();
 		pendingBalls = new ArrayList<Ball>();
 		chargeDisplay = new ArrayList<JLabel>();
 		buttons = new ArrayList<Button>();
@@ -379,7 +383,15 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				addBallsFromQueue();
 			}
 			if(ballsMoving) {
-				ballMovement(g);
+				try {
+					ballMovement(g);
+				} catch (NoSuchFieldException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 			if(voltageCalcing) {
@@ -409,6 +421,9 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 						if(drawArrowHeads && ballsMoving)
 							this.arrowHeads.add(new ArrowHead((int) Math.toDegrees(ballarray.get(i).getDirection()), 10, new Point((int)ballarray.get(i).getX(), (int)ballarray.get(i).getY())));
 					}
+				}
+				for (Ball b : tempBalls){
+					b.draw(g);
 				}
 				ArrayList<ArrowHead> toRemove = new ArrayList<ArrowHead>();
 				for (ArrowHead a : arrowHeads){
@@ -521,7 +536,9 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		return ballStart;
 	}
 
-	public void ballMovement(Graphics g) {
+	public void ballMovement(Graphics g) throws NoSuchFieldException, SecurityException {
+		this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("ballarray"), true);
+		this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("inAnimates"), true);
 		for (int k = 0; k <ballarray.size(); k++) {
 			Ball temp = ballarray.get(k);
 			temp.force = new Force();
@@ -557,12 +574,23 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				ballarray.get(i).getSpeed()*=Math.sqrt(lastvolume/volume);
 			}
 		}*/
+		
+		this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("ballarray"));
+		this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("inAnimates"));
 	}
 
 	public void calcVoltage(){
 		if(timeCounter%50==0){
 			//calculateElectricFieldOnScreen();
-			calculateVoltageOnScreen();
+			try {
+				calculateVoltageOnScreen();
+			} catch (NoSuchFieldException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			//printVoltages();
 		}
 		/*
@@ -578,18 +606,18 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		/**
 		 * Uncomment to println, temporarily commented out to organize console
 		 */
-//		double totE = 0;
-//		for (Ball b : ballarray) {
-//			totE += Math.pow(b.getSpeed() , 2) * b.mass * 0.5;
-//		}
-//
-//		for (int k = 0; k < ballarray.size(); k++) {
-//			for (int j = 0; j < ballarray.size(); j++) {
-//				if (k!=j)
-//					totE += Force.CalculatePotentialEnergy(ballarray.get(j), ballarray.get(k));
-//			}
-//		}
-//		System.out.println(totE);
+		//		double totE = 0;
+		//		for (Ball b : ballarray) {
+		//			totE += Math.pow(b.getSpeed() , 2) * b.mass * 0.5;
+		//		}
+		//
+		//		for (int k = 0; k < ballarray.size(); k++) {
+		//			for (int j = 0; j < ballarray.size(); j++) {
+		//				if (k!=j)
+		//					totE += Force.CalculatePotentialEnergy(ballarray.get(j), ballarray.get(k));
+		//			}
+		//		}
+		//		System.out.println(totE);
 	}
 
 	private void updateVoltageScaleText(ArrayList<Double> list) {
@@ -675,9 +703,28 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		if(voltageValue != null && voltageValue.length != 0 && voltageValue[0].length != 0) {
 			// Copying the reference to the current voltageValue matrix so that if it gets
 			// replaced by calcVoltage() we don't get screwed.
+			try {
+				this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("voltageValue"), true);
+			} catch (NoSuchFieldException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			double[][] voltageValue = new double[this.voltageValue.length][this.voltageValue[0].length];
 			for (int i = 0; i < voltageValue.length; i++) {
 				System.arraycopy(this.voltageValue[i], 0, voltageValue[i], 0, voltageValue[i].length);
+			}
+
+			try {
+				this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("voltageValue"));
+			} catch (NoSuchFieldException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
 			ArrayList<Double> voltageValuesList = makeList(voltageValue);
@@ -784,21 +831,31 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		}
 	}
 
-	private void calculateVoltageOnScreen() {
+	private void calculateVoltageOnScreen() throws NoSuchFieldException, SecurityException {
 		double[][] voltageValue = new double[width][height];
 
 		for (int x = width/6+5; x < width*5/6-10; x += pixel) {
 			for (int y = height/6+5; y < height*5/6 + height/10-30; y += pixel) {
+				this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("ballarray"), true);
 				for (int i = 0; i <ballarray.size(); i++) {
 					Ball ball = ballarray.get(i);
 					voltageValue[x][y] += calculateVoltage(ball, new Point(x, y));
 				}
+				this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("ballarray"));
+				this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("inAnimates"), true);
 				for (inanimateObject o : inAnimates) {
 					voltageValue[x][y] += calculateVoltage(o, new Point(x,y));
 				}
+				this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("inAnimates"));
 			}
 		}
+
+		this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("voltageValue"), true);
+
 		this.voltageValue = voltageValue;
+
+		this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("voltageValue"));
+
 	}
 
 	private double calculateVoltage(Ball ball, Point point) {
@@ -1159,6 +1216,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 							hostProgram.createJFrame(50, 50, "Edit Ball", new Color(255,153,0), false, "Edit Ball");
 
+							final Ball nextPointBallWillBeIn = ballInSpace.clone();
 							final JFrame editBallF = hostProgram.getJFrameById("Edit Ball");
 							editBallF.addWindowListener(new java.awt.event.WindowAdapter() {
 								@Override
@@ -1169,12 +1227,18 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 									hostProgram.framesId.remove("Edit Ball");
 									hostProgram.frames.remove(editBallF);
 									ballInSpace.setColor(Ball.defaultColor);
+									tempBalls.remove(nextPointBallWillBeIn);
 								}});
 
 							Display editBallD = new editBallDisplay(editBallF.getWidth(), editBallF.getHeight(),
 									editBallF, hostProgram, this, ballarray.indexOf(ballInSpace));
 							editBallF.add(editBallD);
 							ballInSpace.setColor(Color.cyan);
+
+							nextPointBallWillBeIn.update(this.getGraphics(), this.width, this.height, this.TIME_BETWEEN_REPLOTS, this.inAnimates);
+							nextPointBallWillBeIn.setColor(Color.orange);
+							tempBalls.add(nextPointBallWillBeIn);
+
 
 						} else {hostProgram.getJFrameById("Edit Ball").toFront();}
 					}
@@ -1191,17 +1255,14 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			} else if (type.equals("Inanimate")) {
 				boolean spaceFreeOfInanimates = true;
 				inanimateObject occupyingInanimate = null;
-				//TODO
 				/*
 				 * Loop over all inanimates and make sure that they do not contain a.getX(), a.getY()
 				 * 	(inanimate.shape.contains(a.getX(), a.getY())
 				 *
 				 * If any inanimate contains this point, spaceFreeOfInanimates is set to false,
-				 * AND occupyingInanimate is set to whatever inanimate this is
+				 * AND occupyingInanimate is set to whatever inanimate this is.
 				 */
-				/**
-				 * Finished todo
-				 */
+
 				for(inanimateObject obj: inAnimates) {
 					Point p = new Point(a.getX(), a.getY());
 					if(obj.shape.contains(p)) {
