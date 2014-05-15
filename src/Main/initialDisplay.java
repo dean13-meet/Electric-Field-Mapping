@@ -64,6 +64,10 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	int xdif = 0;
 	int ydif = 0;
 
+	private int pitTopLeftX = width/6+5;
+	private int pitTopLeftY = height/6+5;
+	private int pitWidth = Math.abs(pitTopLeftX - width*5/6-10);//They are flipped cuz I just felt like it. That's why there is Math.abs
+	private int pitHeight = Math.abs(pitTopLeftY - (height*5/6 + height/10-30));
 	double volume;
 	double lastvolume;
 	ArrayList<Double> originalX = new ArrayList<Double>();
@@ -135,6 +139,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	}
 
 	public void init() {
+		//System.out.println(pitTopLeftX + " " + pitTopLeftY + " " + pitWidth + " " + pitHeight);
 		//hostProgram.closeAllFrames();//Closes stuff like "Add New Ball"...
 		if(hostProgram.getJFrameById("Add Ball")!=null)
 			hostProgram.getJFrameById("Add Ball").dispatchEvent(new WindowEvent(hostProgram.getJFrameById("Add Ball"), WindowEvent.WINDOW_CLOSING));
@@ -142,7 +147,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		this.voltageBarX = (int)(width/1.18);
 		this.voltageBarY = height/6 + height/100;
 		this.electricField = new Force[width][height];
-		this.voltageValue = new double[width][height];
+		this.voltageValue = new double[pitWidth/pixel][pitHeight/pixel];
 
 		setSize(width, height);
 		paintloop = true;
@@ -387,10 +392,10 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				try {
 					ballMovement(g);
 				} catch (NoSuchFieldException e) {
-					// TODO Auto-generated catch block
+
 					e.printStackTrace();
 				} catch (SecurityException e) {
-					// TODO Auto-generated catch block
+
 					e.printStackTrace();
 				}
 			}
@@ -409,7 +414,15 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			}
 
 			if (drawVoltage) {
-				drawVoltageGrid(g);
+				try {
+					drawVoltageGrid(g);
+				} catch (NoSuchFieldException e) {
+
+					e.printStackTrace();
+				} catch (SecurityException e) {
+
+					e.printStackTrace();
+				}
 				drawVoltageScale(g);
 			}
 			if (drawBalls) {
@@ -575,7 +588,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 				ballarray.get(i).getSpeed()*=Math.sqrt(lastvolume/volume);
 			}
 		}*/
-		
+
 		this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("ballarray"));
 		this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("inAnimates"));
 	}
@@ -586,10 +599,10 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			try {
 				calculateVoltageOnScreen();
 			} catch (NoSuchFieldException e) {
-				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
+				// 
 				e.printStackTrace();
 			}
 			//printVoltages();
@@ -700,33 +713,21 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		}
 	}*/
 
-	private void drawVoltageGrid(Graphics g) {
+	private void drawVoltageGrid(Graphics g) throws NoSuchFieldException, SecurityException {
 		if(voltageValue != null && voltageValue.length != 0 && voltageValue[0].length != 0) {
 			// Copying the reference to the current voltageValue matrix so that if it gets
 			// replaced by calcVoltage() we don't get screwed.
-			try {
-				this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("voltageValue"), true);
-			} catch (NoSuchFieldException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+			this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("voltageValue"), true);
+
 			double[][] voltageValue = new double[this.voltageValue.length][this.voltageValue[0].length];
 			for (int i = 0; i < voltageValue.length; i++) {
 				System.arraycopy(this.voltageValue[i], 0, voltageValue[i], 0, voltageValue[i].length);
 			}
 
-			try {
-				this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("voltageValue"));
-			} catch (NoSuchFieldException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+			this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("voltageValue"));
+
 
 			ArrayList<Double> voltageValuesList = makeList(voltageValue);
 			Collections.sort(voltageValuesList);
@@ -734,8 +735,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			double belowZero = getNegativeAmount(voltageValuesList);
 			double aboveZero = getPositiveAmount(voltageValuesList);
 
-			for (int x = width/6 + 5; x < width*5/6 - 10; x += pixel) {
-				for (int y = height/6 + 5; y <height*5/6 + height/10 - 30; y += pixel) {
+			for (int x = 0; x < pitWidth/pixel; x ++) {
+				for (int y = 0; y <pitHeight/pixel; y ++) {
 					double value = voltageValue[x][y];
 
 					int colorVal = 128;
@@ -760,7 +761,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 					else if (hot) {
 						g.setColor(new Color(colorVal+127, 0, 128-colorVal));
 					}
-					g.fillRect(x, y, 7, 7);
+					g.fillRect(pitTopLeftX + x*pixel, pitTopLeftY + y*pixel, pixel, pixel);
 				}
 			}
 			updateVoltageScaleText(voltageValuesList);
@@ -833,30 +834,38 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	}
 
 	private void calculateVoltageOnScreen() throws NoSuchFieldException, SecurityException {
-		double[][] voltageValue = new double[width][height];
+		long start = System.currentTimeMillis();
+		double[][] voltageValue = new double[pitWidth/pixel][pitHeight/pixel];
+		this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("ballarray"), true);
+		long afterFirst = System.currentTimeMillis();
+		this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("inAnimates"), true);
+		long afterSecond = System.currentTimeMillis();
+		for (int x = 0; x < pitWidth/pixel; x ++) {
+			for (int y = 0; y < pitHeight/pixel; y ++) {
 
-		for (int x = width/6+5; x < width*5/6-10; x += pixel) {
-			for (int y = height/6+5; y < height*5/6 + height/10-30; y += pixel) {
-				this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("ballarray"), true);
 				for (int i = 0; i <ballarray.size(); i++) {
 					Ball ball = ballarray.get(i);
-					voltageValue[x][y] += calculateVoltage(ball, new Point(x, y));
+					voltageValue[x][y] += calculateVoltage(ball, new Point(pitTopLeftX + x*pixel, pitTopLeftY + y*pixel));
 				}
-				this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("ballarray"));
-				this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("inAnimates"), true);
+				
 				for (inanimateObject o : inAnimates) {
-					voltageValue[x][y] += calculateVoltage(o, new Point(x,y));
+					voltageValue[x][y] += calculateVoltage(o, new Point(pitTopLeftX + x*pixel, pitTopLeftY + y*pixel));
 				}
-				this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("inAnimates"));
+				
 			}
 		}
 
+		long third = System.currentTimeMillis();
+		this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("ballarray"));
+		this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("inAnimates"));
+		
 		this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("voltageValue"), true);
 
 		this.voltageValue = voltageValue;
 
 		this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("voltageValue"));
 
+		//System.out.println("Total runtime: " + (afterFirst - start) + " " + (afterSecond - afterFirst) + " " + (third - afterSecond));
 	}
 
 	private double calculateVoltage(Ball ball, Point point) {
@@ -1121,7 +1130,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 
 		try {
 			Robot robot = new Robot();
-			//System.out.println(a.getX() + " " + a.getY() + " " + robot.getPixelColor(a.getX(), a.getY()));
+			System.out.println(a.getX() + " " + a.getY() + " " + robot.getPixelColor(a.getX(), a.getY()));
 		} catch (AWTException e) {
 			e.printStackTrace();
 		}

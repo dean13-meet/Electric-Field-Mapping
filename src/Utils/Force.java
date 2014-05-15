@@ -1,5 +1,5 @@
-package src.Utils;
-import src.Main.Ball;
+package Utils;
+import Main.Ball;
 /*
  *
  */

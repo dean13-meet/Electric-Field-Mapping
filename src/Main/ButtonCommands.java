@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.ArrayList;
@@ -268,6 +269,18 @@ class LoadFromFile extends ButtonCommands {
 		File directory = new File("Save Data/file_");
 		Path file = Paths.get(directory.getAbsolutePath() + newD.getPresetSelected());
 
+		for(Field f : newD.getClass().getDeclaredFields()){
+				newD.hostProgram.dealer.getAccess(Thread.currentThread(), f, true);
+				
+				/*
+				 * Note: Theoretically, we would need to make sure we are not gaining exclusive
+				 * access to hostProgram, as that may collide with us trying to use it to get access
+				 * to itself. 
+				 * However, hostProgram is declared in a super class of initialDisplay (it's declared
+				 * in Display), and therefore getDeclaredFields() would not return it.
+				 */
+		
+		}
 		try (Scanner in = new Scanner(file);) {
 			while(!in.hasNextInt()){//Scrolls past text to the next int
 				in.next();
@@ -349,6 +362,7 @@ class LoadFromFile extends ButtonCommands {
 			System.err.format("IOException: %s%n", x);
 			newD.messages.addMessage("File not found", onScreenMessage.CENTER);
 		}
+		newD.hostProgram.dealer.releaseAllLocks(Thread.currentThread().getName());
 	}
 }
 

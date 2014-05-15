@@ -9,6 +9,8 @@ public class fieldQueue {
 	private final LinkedList<String> threadQueue;
 	private final LinkedList<Boolean> booleanQueue;
 	private boolean isInUse;
+	private String currentlyUsing = "";
+	private long lastLocked = System.currentTimeMillis();
 	
 	public fieldQueue(Field f){
 		this.field = f;
@@ -18,23 +20,40 @@ public class fieldQueue {
 	}
 	
 	public void addToQueue(String s, boolean b){
-		threadQueue.add(s);
-		booleanQueue.add(b);
+		int size = threadQueue.size();
+		threadQueue.add(size, s);
+		booleanQueue.add(size, b);
 	}
 	public String getNext(){
-		if(!isInUse) {
-			if(this.threadQueue.size()>0){
+		if(!isInUse){
 			String next = this.threadQueue.pop();
+			this.currentlyUsing = next;
 			isInUse = this.booleanQueue.pop();
-			return next;}
+			lastLocked = System.currentTimeMillis();
+			return next;
 		}
 		return null;
 	}
-	public void releaseAccess(){
+	/**
+	 * 
+	 * @return How long access was held for
+	 */
+	public long releaseAccess(){
 		this.isInUse = false;
+		this.currentlyUsing = "";
+		return System.currentTimeMillis() - this.lastLocked;
 	}
 	public boolean isInUse(){
 		return this.isInUse;
+	}
+	public String getCurrentlyUsing(){
+		return this.currentlyUsing;
+	}
+	public Field getField(){
+		return this.field;
+	}
+	public String peekNext(){
+		return this.threadQueue.peek();
 	}
 
 }
