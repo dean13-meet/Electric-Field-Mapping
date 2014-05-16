@@ -7,6 +7,8 @@ public class fieldDealer {
 
 	private final Field[] fields;
 	private final fieldQueue[] queues;
+	private final ArrayList<String> threads = new ArrayList<String>();
+	private final ArrayList<ArrayList<Field>> threadHoldings = new ArrayList<ArrayList<Field>>();
 
 	public fieldDealer(Field[] declaredFields) {
 		this.fields = declaredFields;
@@ -19,6 +21,17 @@ public class fieldDealer {
 
 
 	public void getAccess(Thread t, Field f, boolean a){
+		if(!threads.contains(t.getName())){
+			threads.add(t.getName());
+			ArrayList<Field> toAdd = new ArrayList<Field>();
+			toAdd.add(f);
+			threadHoldings.add(toAdd);
+		}else{
+			ArrayList<Field> holdings = threadHoldings.get(threads.indexOf(t.getName()));
+			if(holdings.get(holdings.size()-1).getName().compareTo(f.getName()) <= 0){
+				
+			}
+		}
 		int index = getIndex(f, fields);
 		queues[index].addToQueue(t.getName(), a);
 
