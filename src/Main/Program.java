@@ -1,22 +1,27 @@
 package Main;
 /**
  * @author Dean Leitersdorf, William Lee, Ophir Sneh
-*/
+ */
 //
 //This
 import java.awt.Color;
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import javax.swing.JFrame;
 //update
 public class Program {
 	ArrayList<JFrame> frames = new ArrayList<JFrame>();
 	ArrayList<String> framesId = new ArrayList<String>();
-	fieldDealer dealer;
+	private fieldDealer dealer;
+	private Thread dealerThread;
+	private final LinkedList<ArrayList<Object>> callsToDealer = new LinkedList<ArrayList<Object>>();
+	private String finishedDealingFor = "";
 
 	JFrame initialF = new JFrame();
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -28,19 +33,96 @@ public class Program {
 	final int yOffSet = xOffSet;
 
 	Program() { initialF.setSize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
-		initialF.setLayout(null);
-		initialF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		initialF.setTitle("Particles in Electric Field Simulator");
-		initialF.getContentPane().setBackground(new Color(96,96,96));
+	initialF.setLayout(null);
+	initialF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	initialF.setTitle("Particles in Electric Field Simulator");
+	initialF.getContentPane().setBackground(new Color(96,96,96));
 
-		Display initialD = createDisplay(xOffSet, yOffSet, DISPLAY_WIDTH - (2*xOffSet),
+	Display initialD = createDisplay(xOffSet, yOffSet, DISPLAY_WIDTH - (2*xOffSet),
 			DISPLAY_HEIGHT - (2*yOffSet), initialF, this);
 
-		initialF.add(initialD);
-		this.dealer = new fieldDealer(initialD.getClass().getDeclaredFields());
-		initialF.setVisible(true);
-		initialF.setResizable(false);
-		System.out.println(this.DISPLAY_WIDTH + " " + this.DISPLAY_HEIGHT);
+	initialF.add(initialD);
+	this.dealer = new fieldDealer(initialD.getClass().getDeclaredFields());
+	initialF.setVisible(true);
+	initialF.setResizable(false);
+	System.out.println(this.DISPLAY_WIDTH + " " + this.DISPLAY_HEIGHT);
+
+	startDealing();
+	}
+
+	private void startDealing() {
+		Method[] mm = dealer.getClass().getDeclaredMethods();
+		for(Method m : mm){
+			System.out.println(m);
+		}
+		dealerThread = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					maintainDealer();
+				} catch (NoSuchMethodException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					
+				} catch (SecurityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+
+		});
+		dealerThread.start();
+
+	}
+	public void maintainDealer() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InterruptedException{
+		while(true){
+			Thread.sleep(1);
+			if(!callsToDealer.isEmpty()){
+				ArrayList<Object> methodToRun = callsToDealer.pop();
+				System.out.println("Processing call: " + methodToRun);
+				Object[] args = new Object[methodToRun.size()-2];
+				Class<?>[] typesOfArgs = new Class<?>[methodToRun.size()-2];
+				for(int i = 2; i < methodToRun.size(); i++){
+					args[i-2] = methodToRun.get(i);
+					typesOfArgs[i-2] = args[i-2].getClass();
+				}
+				
+				Method m = dealer.getClass().getMethod((String)methodToRun.get(1), typesOfArgs);
+				m.invoke(dealer, args);
+				this.finishedDealingFor = methodToRun.toString();
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @param objs - Object 0 is currentThread, Object 1 is the name of method to invoke.
+	 * Object 0 must be there for verification that we are done for THE GIVEN thread.
+	 */
+	public void activateDealer(ArrayList<Object> objs){
+		System.out.println("Activating dealer: " + objs);
+		callsToDealer.add(objs);
+		while(true){
+			if(this.finishedDealingFor.equals(objs.toString())){
+				this.finishedDealingFor = "";
+				break;
+			}
+		}
 	}
 
 	public Display createDisplay(int x, int y, int w, int h, JFrame f, Program p) {
@@ -60,11 +142,11 @@ public class Program {
 		retVal.setVisible(true);
 		retVal.setResizable(resizable);
 		retVal.addWindowListener(new java.awt.event.WindowAdapter() {
-		    @Override
-		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-		    	framesId.remove(id);
-		    	frames.remove(retVal);
-		    }
+			@Override
+			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+				framesId.remove(id);
+				frames.remove(retVal);
+			}
 		});
 		framesId.add(id);
 		frames.add(retVal);

@@ -23,6 +23,7 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -551,8 +552,10 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	}
 
 	public void ballMovement(Graphics g) throws NoSuchFieldException, SecurityException {
-		this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("ballarray"), true);
-		this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("inAnimates"), true);
+		this.getAccess(this.getClass().getDeclaredField("ballarray"), true);
+		this.getAccess(this.getClass().getDeclaredField("inAnimates"), true);
+		
+		
 		for (int k = 0; k <ballarray.size(); k++) {
 			Ball temp = ballarray.get(k);
 			temp.force = new Force();
@@ -589,8 +592,8 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			}
 		}*/
 
-		this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("ballarray"));
-		this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("inAnimates"));
+		this.releaseAccess(this.getClass().getDeclaredField("ballarray"));
+		this.releaseAccess(this.getClass().getDeclaredField("inAnimates"));
 	}
 
 	public void calcVoltage(){
@@ -718,7 +721,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			// Copying the reference to the current voltageValue matrix so that if it gets
 			// replaced by calcVoltage() we don't get screwed.
 
-			this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("voltageValue"), true);
+			this.getAccess(this.getClass().getDeclaredField("voltageValue"), true);
 
 			double[][] voltageValue = new double[this.voltageValue.length][this.voltageValue[0].length];
 			for (int i = 0; i < voltageValue.length; i++) {
@@ -726,7 +729,7 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 			}
 
 
-			this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("voltageValue"));
+			this.releaseAccess(this.getClass().getDeclaredField("voltageValue"));
 
 
 			ArrayList<Double> voltageValuesList = makeList(voltageValue);
@@ -836,9 +839,9 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	private void calculateVoltageOnScreen() throws NoSuchFieldException, SecurityException {
 		long start = System.currentTimeMillis();
 		double[][] voltageValue = new double[pitWidth/pixel][pitHeight/pixel];
-		this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("ballarray"), true);
+		this.getAccess(this.getClass().getDeclaredField("ballarray"), true);
 		long afterFirst = System.currentTimeMillis();
-		this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("inAnimates"), true);
+		this.getAccess(this.getClass().getDeclaredField("inAnimates"), true);
 		long afterSecond = System.currentTimeMillis();
 		for (int x = 0; x < pitWidth/pixel; x ++) {
 			for (int y = 0; y < pitHeight/pixel; y ++) {
@@ -856,14 +859,14 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		}
 
 		long third = System.currentTimeMillis();
-		this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("ballarray"));
-		this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("inAnimates"));
+		this.releaseAccess(this.getClass().getDeclaredField("ballarray"));
+		this.releaseAccess(this.getClass().getDeclaredField("inAnimates"));
 		
-		this.hostProgram.dealer.getAccess(Thread.currentThread(), this.getClass().getDeclaredField("voltageValue"), true);
+		this.getAccess(this.getClass().getDeclaredField("voltageValue"), true);
 
 		this.voltageValue = voltageValue;
 
-		this.hostProgram.dealer.releaseAccess(this.getClass().getDeclaredField("voltageValue"));
+		this.releaseAccess(this.getClass().getDeclaredField("voltageValue"));
 
 		//System.out.println("Total runtime: " + (afterFirst - start) + " " + (afterSecond - afterFirst) + " " + (third - afterSecond));
 	}
@@ -1409,4 +1412,37 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 		public void propertyChange(PropertyChangeEvent arg0) {
 		}
 	}
+	
+	
+	/*
+	 * Dealer methods:
+	 */
+	
+	public void getAccess(Field f, Boolean b){
+		ArrayList<Object> argsForDealer1 = new ArrayList<Object>();
+		argsForDealer1.add(Thread.currentThread().getName());
+		argsForDealer1.add("getAccess");
+		argsForDealer1.add(Thread.currentThread().getName());
+		argsForDealer1.add(f);
+		argsForDealer1.add(b);
+		this.hostProgram.activateDealer(argsForDealer1);
+	}
+
+	
+	public void releaseAccess(Field f){
+		ArrayList<Object> argsForDealer1 = new ArrayList<Object>();
+		argsForDealer1.add(Thread.currentThread().getName());
+		argsForDealer1.add("releaseAccess");
+		argsForDealer1.add(f);
+		this.hostProgram.activateDealer(argsForDealer1);
+	}
+	
+	public void releaseAllLocks(){
+		ArrayList<Object> argsForDealer1 = new ArrayList<Object>();
+		argsForDealer1.add(Thread.currentThread().getName());
+		argsForDealer1.add("releaseAllLocks");
+		argsForDealer1.add(Thread.currentThread().getName());
+		this.hostProgram.activateDealer(argsForDealer1);
+	}
+	
 }

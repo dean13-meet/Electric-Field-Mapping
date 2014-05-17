@@ -270,7 +270,8 @@ class LoadFromFile extends ButtonCommands {
 		Path file = Paths.get(directory.getAbsolutePath() + newD.getPresetSelected());
 
 		for(Field f : newD.getClass().getDeclaredFields()){
-				newD.hostProgram.dealer.getAccess(Thread.currentThread(), f, true);
+			
+				newD.getAccess(f, true);
 				
 				/*
 				 * Note: Theoretically, we would need to make sure we are not gaining exclusive
@@ -362,7 +363,7 @@ class LoadFromFile extends ButtonCommands {
 			System.err.format("IOException: %s%n", x);
 			newD.messages.addMessage("File not found", onScreenMessage.CENTER);
 		}
-		newD.hostProgram.dealer.releaseAllLocks(Thread.currentThread().getName());
+		newD.releaseAllLocks();
 	}
 }
 
