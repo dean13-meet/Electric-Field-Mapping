@@ -91,20 +91,38 @@ public class Program {
 	}
 	public void maintainDealer() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InterruptedException{
 		while(true){
-			Thread.sleep(1);
+			Thread.sleep(1);//So that commands don't happen at the same exact time.
 			if(!callsToDealer.isEmpty()){
-				ArrayList<Object> methodToRun = callsToDealer.pop();
+				final ArrayList<Object> methodToRun = callsToDealer.pop();
 				System.out.println("Processing call: " + methodToRun);
-				Object[] args = new Object[methodToRun.size()-2];
+				final Object[] args = new Object[methodToRun.size()-2];
 				Class<?>[] typesOfArgs = new Class<?>[methodToRun.size()-2];
 				for(int i = 2; i < methodToRun.size(); i++){
 					args[i-2] = methodToRun.get(i);
 					typesOfArgs[i-2] = args[i-2].getClass();
 				}
 				
-				Method m = dealer.getClass().getMethod((String)methodToRun.get(1), typesOfArgs);
-				m.invoke(dealer, args);
-				this.finishedDealingFor = methodToRun.toString();
+				final Method m = dealer.getClass().getMethod((String)methodToRun.get(1), typesOfArgs);
+				Thread t = new Thread(new Runnable(){
+					public void run(){
+						try {
+							m.invoke(dealer, args);
+						} catch (IllegalAccessException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IllegalArgumentException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (InvocationTargetException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						finishedDealingFor = methodToRun.toString();
+					}
+				});
+				
+				t.start();
 			}
 		}
 	}

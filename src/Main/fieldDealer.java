@@ -74,7 +74,13 @@ public class fieldDealer {
 
 			}
 
-			//System.out.println("The Thread: " + t + " is waiting to gain access to: " + f.getName() + " " + queues[index].getCurrentlyUsing() + " "+ this.getOccupiedFieldsOfAThread(queues[index].getCurrentlyUsing()));
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("The Thread: " + t + " is waiting to gain access to: " + f.getName() + " " + queues[index].getCurrentlyUsing() + " "+ this.getOccupiedFieldsOfAThread(queues[index].getCurrentlyUsing()));
 		}
 	}
 
@@ -85,7 +91,7 @@ public class fieldDealer {
 		System.out.println("      \n     Currently have: " + thread.getHoldings() + " want to remove: " + f);
 		thread.remove(f);
 		if(thread.getHoldings().size()==0)occupyingThreads.remove(thread);
-		System.out.println(Thread.currentThread().getName() + " Released access for " + 
+		System.out.println(thread.getName() + " Released access for " + 
 				f.getName() + " which was held for: " + queues[index].releaseAccess());
 
 	}

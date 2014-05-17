@@ -552,8 +552,11 @@ public class initialDisplay extends Display implements MouseListener, MouseMotio
 	}
 
 	public void ballMovement(Graphics g) throws NoSuchFieldException, SecurityException {
-		this.getAccess(this.getClass().getDeclaredField("ballarray"), true);
+		//The following accesses are NOT gained in Alphabetical Order, proving
+		//That my algorythm for deadlock solution works! :)
 		this.getAccess(this.getClass().getDeclaredField("inAnimates"), true);
+		this.getAccess(this.getClass().getDeclaredField("ballarray"), true);
+		
 		
 		
 		for (int k = 0; k <ballarray.size(); k++) {
